@@ -2,9 +2,11 @@
 ========================================
 PROJECT PHOENIX AI
 Indicator Manager
-Versione 0.7
+Versione 7.0
 ========================================
 """
+
+from Logs.logger import Logger
 
 from .ema import EMA
 from .sma import SMA
@@ -19,7 +21,7 @@ class IndicatorManager:
 
     def __init__(self):
 
-        print("Indicator Manager inizializzato.")
+        Logger.success("Indicator Manager V7 inizializzato.")
 
         self.ema = EMA()
         self.sma = SMA()
@@ -29,51 +31,73 @@ class IndicatorManager:
         self.adx = ADX()
         self.bollinger = Bollinger()
 
-    # ==========================
-    # EMA
-    # ==========================
+    # =====================================
+    # INDICATORI COMPLETI
+    # =====================================
 
-    def calculate_ema(self, data, period=20):
-        return self.ema.calculate(data, period)
+    def get_indicators(self, data):
 
-    # ==========================
-    # SMA
-    # ==========================
+        ema20 = self.ema.calculate(data, 20)
+        ema50 = self.ema.calculate(data, 50)
 
-    def calculate_sma(self, data, period=20):
-        return self.sma.calculate(data, period)
+        sma20 = self.sma.calculate(data, 20)
 
-    # ==========================
-    # RSI
-    # ==========================
+        rsi = self.rsi.calculate(data, 14)
 
-    def calculate_rsi(self, data, period=14):
-        return self.rsi.calculate(data, period)
+        macd, macd_signal, histogram = (
+            self.macd.calculate(data)
+        )
 
-    # ==========================
-    # MACD
-    # ==========================
+        atr = self.atr.calculate(data, 14)
 
-    def calculate_macd(self, data):
-        return self.macd.calculate(data)
+        adx = self.adx.calculate(data, 14)
 
-    # ==========================
-    # ATR
-    # ==========================
+        price = float(data["Close"].iloc[-1])
 
-    def calculate_atr(self, data, period=14):
-        return self.atr.calculate(data, period)
+        volume = float(data["Volume"].iloc[-1])
 
-    # ==========================
-    # ADX
-    # ==========================
+        volume_avg = float(
+            data["Volume"].tail(20).mean()
+        )
 
-    def calculate_adx(self, data, period=14):
-        return self.adx.calculate(data, period)
+        volume_ratio = (
 
-    # ==========================
-    # BOLLINGER BANDS
-    # ==========================
+            volume / volume_avg
 
-    def calculate_bollinger(self, data):
-        return self.bollinger.calculate(data)
+            if volume_avg > 0
+
+            else 1.0
+
+        )
+
+        return {
+
+            "price": price,
+
+            "ema20": float(ema20.iloc[-1]),
+            "ema50": float(ema50.iloc[-1]),
+
+            "sma20": float(sma20.iloc[-1]),
+
+            "rsi": float(rsi.iloc[-1]),
+
+            "macd": float(macd.iloc[-1]),
+            "macd_signal": float(macd_signal.iloc[-1]),
+            "macd_histogram": float(histogram.iloc[-1]),
+
+            "atr": float(atr.iloc[-1]),
+
+            "adx": float(adx.iloc[-1]),
+
+            "volume": volume,
+
+            "volume_ratio": volume_ratio,
+
+            "breakout": False,
+            "support": False,
+            "resistance_break": False,
+            "order_block": False,
+            "liquidity": False,
+            "smart_money": False
+
+        }

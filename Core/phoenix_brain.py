@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Phoenix Brain
-Versione 5.0
+Versione 7.0
 ========================================
 """
 
@@ -13,22 +13,9 @@ class PhoenixBrain:
 
     def __init__(self):
 
-        Logger.success("Phoenix Brain inizializzato.")
+        Logger.success("Phoenix Brain V7 inizializzato.")
 
     def think(self, analysis, risk):
-
-        trend = analysis["trend"]
-        trend_strength = analysis["trend_strength"]
-
-        ema_position = analysis["ema_position"]
-        sma_position = analysis["sma_position"]
-
-        macd_status = analysis["macd_status"]
-
-        rsi = analysis["rsi"]
-        momentum = analysis["momentum"]
-
-        adx = analysis["adx"]
 
         score = 50
 
@@ -39,133 +26,101 @@ class PhoenixBrain:
         # TREND
         # ==========================
 
-        if trend == "RIALZISTA":
+        if analysis["trend_bullish"]:
 
             score += 20
             reasons.append("Trend rialzista")
 
-        elif trend == "RIBASSISTA":
+        elif analysis["trend_bearish"]:
 
             score -= 20
-            reasons.append("Trend ribassista")
-
-        else:
-
-            warnings.append("Trend neutro")
-
-        # ==========================
-        # ADX
-        # ==========================
-
-        if adx >= 40:
-
-            score += 15
-            reasons.append(f"ADX molto forte ({adx})")
-
-        elif adx >= 25:
-
-            score += 10
-            reasons.append(f"ADX forte ({adx})")
-
-        elif adx >= 20:
-
-            score += 5
-            reasons.append(f"ADX discreto ({adx})")
-
-        else:
-
-            score -= 5
-            warnings.append(f"ADX debole ({adx})")
-
-        # ==========================
-        # TREND STRENGTH
-        # ==========================
-
-        if trend_strength == "MOLTO FORTE":
-
-            score += 10
-
-        elif trend_strength == "FORTE":
-
-            score += 5
-
-        elif trend_strength == "DEBOLE":
-
-            score -= 5
+            warnings.append("Trend ribassista")
 
         # ==========================
         # EMA
         # ==========================
 
-        if ema_position == "SOPRA":
+        if analysis["ema_alignment"]:
 
-            score += 5
-            reasons.append("Prezzo sopra EMA20")
-
-        else:
-
-            score -= 5
-            warnings.append("Prezzo sotto EMA20")
-
-        # ==========================
-        # SMA
-        # ==========================
-
-        if sma_position == "SOPRA":
-
-            score += 5
-            reasons.append("Prezzo sopra SMA20")
-
-        else:
-
-            score -= 5
-            warnings.append("Prezzo sotto SMA20")
+            score += 10
+            reasons.append("EMA allineate")
 
         # ==========================
         # MACD
         # ==========================
 
-        if macd_status == "POSITIVO":
+        if analysis["macd_buy"]:
 
             score += 10
-            reasons.append("MACD positivo")
+            reasons.append("MACD BUY")
 
-        else:
+        elif analysis["macd_sell"]:
 
             score -= 10
-            warnings.append("MACD negativo")
+            warnings.append("MACD SELL")
 
         # ==========================
         # RSI
         # ==========================
 
-        if rsi == "IPERVENDUTO":
+        rsi = analysis["rsi"]
 
-            score += 15
-            reasons.append("RSI ipervenduto")
+        if 45 <= rsi <= 60:
 
-        elif rsi == "IPERCOMPRATO":
+            score += 10
+            reasons.append("RSI equilibrato")
+
+        elif rsi > 70:
 
             score -= 15
             warnings.append("RSI ipercomprato")
 
-        else:
+        elif rsi < 30:
 
-            reasons.append("RSI neutrale")
+            score += 15
+            reasons.append("RSI ipervenduto")
 
         # ==========================
-        # MOMENTUM
+        # ADX
         # ==========================
 
-        if momentum == "RIALZISTA":
+        if analysis["adx_strong"]:
 
             score += 10
-            reasons.append("Momentum rialzista")
+            reasons.append("Trend forte")
 
-        else:
+        # ==========================
+        # VOLUME
+        # ==========================
 
-            score -= 10
-            warnings.append("Momentum ribassista")
+        if analysis["volume_high"]:
+
+            score += 5
+            reasons.append("Volume elevato")
+
+        # ==========================
+        # SMART MONEY
+        # ==========================
+
+        if analysis["breakout"]:
+
+            score += 5
+            reasons.append("Breakout")
+
+        if analysis["order_block"]:
+
+            score += 5
+            reasons.append("Order Block")
+
+        if analysis["liquidity"]:
+
+            score += 5
+            reasons.append("Liquidity")
+
+        if analysis["smart_money"]:
+
+            score += 10
+            reasons.append("Smart Money")
 
         # ==========================
         # LIMITI
@@ -174,7 +129,7 @@ class PhoenixBrain:
         score = max(0, min(score, 100))
 
         # ==========================
-        # ACTION
+        # AZIONE
         # ==========================
 
         if score >= 80:
@@ -190,64 +145,20 @@ class PhoenixBrain:
             action = "HOLD"
 
         # ==========================
-        # STRENGTH
-        # ==========================
-
-        if score >= 90:
-
-            strength = "ECCELLENTE"
-
-        elif score >= 80:
-
-            strength = "MOLTO FORTE"
-
-        elif score >= 70:
-
-            strength = "FORTE"
-
-        elif score >= 50:
-
-            strength = "MEDIA"
-
-        else:
-
-            strength = "DEBOLE"
-
-        # ==========================
-        # RISK
-        # ==========================
-
-        if risk["risk_level"] == "LOW":
-
-            risk_level = "BASSO"
-
-        elif risk["risk_level"] == "MEDIUM":
-
-            risk_level = "MEDIO"
-
-        else:
-
-            risk_level = "ALTO"
-
-        # ==========================
         # CONFIDENCE
         # ==========================
 
         confidence = score
 
-        if risk_level == "MEDIO":
+        if risk["risk_level"] == "MEDIO":
 
             confidence -= 10
 
-        elif risk_level == "ALTO":
+        elif risk["risk_level"] == "ALTO":
 
             confidence -= 20
 
         confidence = max(0, min(confidence, 100))
-
-        # ==========================
-        # OUTPUT
-        # ==========================
 
         return {
 
@@ -256,12 +167,6 @@ class PhoenixBrain:
             "score": score,
 
             "confidence": confidence,
-
-            "strength": strength,
-
-            "risk": risk_level,
-
-            "adx": adx,
 
             "reasons": reasons,
 

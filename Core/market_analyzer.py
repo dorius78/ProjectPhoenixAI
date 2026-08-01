@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Market Analyzer
-Versione 3.0
+Versione 7.0
 ========================================
 """
 
@@ -13,127 +13,128 @@ class MarketAnalyzer:
 
     def __init__(self):
 
-        Logger.success("Market Analyzer inizializzato.")
+        self.last_analysis = None
 
-    def analyze(
-        self,
-        data,
-        ema20,
-        sma20,
-        rsi14,
-        macd,
-        signal,
-        adx14
-    ):
+        Logger.success("Market Analyzer V7 inizializzato.")
 
-        last_close = data["Close"].iloc[-1]
+    # =====================================
+    # ANALISI MERCATO
+    # =====================================
 
-        # ==========================
-        # TREND
-        # ==========================
+    def analyze(self, indicators):
 
-        trend = "NEUTRO"
+        ema20 = float(indicators["ema20"])
+        ema50 = float(indicators["ema50"])
 
-        if (
-            last_close > ema20.iloc[-1]
-            and last_close > sma20.iloc[-1]
-        ):
-            trend = "RIALZISTA"
+        rsi = float(indicators["rsi"])
 
-        elif (
-            last_close < ema20.iloc[-1]
-            and last_close < sma20.iloc[-1]
-        ):
-            trend = "RIBASSISTA"
+        macd = float(indicators["macd"])
+        macd_signal = float(indicators["macd_signal"])
 
-        # ==========================
-        # ADX
-        # ==========================
+        adx = float(indicators["adx"])
 
-        adx_value = float(adx14.iloc[-1])
+        atr = float(indicators["atr"])
 
-        if adx_value >= 40:
-            trend_strength = "MOLTO FORTE"
+        volume_ratio = float(indicators["volume_ratio"])
 
-        elif adx_value >= 25:
-            trend_strength = "FORTE"
+        analysis = {
 
-        elif adx_value >= 20:
-            trend_strength = "MEDIA"
+            # ==========================
+            # TREND
+            # ==========================
 
-        else:
-            trend_strength = "DEBOLE"
+            "trend_bullish": ema20 > ema50,
 
-        # ==========================
-        # EMA
-        # ==========================
+            "trend_bearish": ema20 < ema50,
 
-        ema_position = (
-            "SOPRA"
-            if last_close > ema20.iloc[-1]
-            else "SOTTO"
-        )
+            "ema_alignment": abs(ema20 - ema50) > 0,
 
-        # ==========================
-        # SMA
-        # ==========================
+            # ==========================
+            # RSI
+            # ==========================
 
-        sma_position = (
-            "SOPRA"
-            if last_close > sma20.iloc[-1]
-            else "SOTTO"
-        )
+            "rsi": rsi,
 
-        # ==========================
-        # RSI
-        # ==========================
+            "rsi_ok": 30 <= rsi <= 70,
 
-        if rsi14.iloc[-1] > 70:
+            # ==========================
+            # MACD
+            # ==========================
 
-            rsi_status = "IPERCOMPRATO"
+            "macd_buy": macd > macd_signal,
 
-        elif rsi14.iloc[-1] < 30:
+            "macd_sell": macd < macd_signal,
 
-            rsi_status = "IPERVENDUTO"
+            # ==========================
+            # ADX
+            # ==========================
 
-        else:
+            "adx": adx,
 
-            rsi_status = "NEUTRALE"
+            "adx_strong": adx >= 25,
 
-        # ==========================
-        # MACD
-        # ==========================
+            # ==========================
+            # ATR
+            # ==========================
 
-        if macd.iloc[-1] > signal.iloc[-1]:
+            "atr": atr,
 
-            momentum = "RIALZISTA"
-            macd_status = "POSITIVO"
+            # ==========================
+            # PREZZO
+            # ==========================
 
-        else:
+            "price": float(indicators["price"]),
 
-            momentum = "RIBASSISTA"
-            macd_status = "NEGATIVO"
+            # ==========================
+            # VOLUME
+            # ==========================
 
-        # ==========================
-        # OUTPUT
-        # ==========================
+            "volume": float(indicators["volume"]),
 
-        return {
+            "volume_ratio": volume_ratio,
 
-            "trend": trend,
+            "volume_high": volume_ratio >= 1.20,
 
-            "trend_strength": trend_strength,
+            # ==========================
+            # SMART MONEY
+            # ==========================
 
-            "adx": round(adx_value, 2),
+            "breakout": indicators.get("breakout", False),
 
-            "ema_position": ema_position,
+            "support": indicators.get("support", False),
 
-            "sma_position": sma_position,
+            "resistance_break": indicators.get(
+                "resistance_break",
+                False
+            ),
 
-            "macd_status": macd_status,
+            "order_block": indicators.get(
+                "order_block",
+                False
+            ),
 
-            "rsi": rsi_status,
+            "liquidity": indicators.get(
+                "liquidity",
+                False
+            ),
 
-            "momentum": momentum
+            "smart_money": indicators.get(
+                "smart_money",
+                False
+            )
 
         }
+
+        self.last_analysis = analysis
+
+        Logger.info("Analisi mercato completata.")
+
+        return analysis
+
+    # =====================================
+    # EXPORT
+    # =====================================
+
+    def export(self):
+
+        return self.last_analysis

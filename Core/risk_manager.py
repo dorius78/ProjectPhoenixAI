@@ -1,9 +1,12 @@
 """
+========================================
 PROJECT PHOENIX AI
 Risk Manager
-Versione 0.1
+Versione 7.0
+========================================
 """
 
+from Config.settings import RISK_REWARD_RATIO
 from Logs.logger import Logger
 
 
@@ -11,64 +14,131 @@ class RiskManager:
 
     def __init__(self):
 
-        Logger.success("Risk Manager inizializzato.")
+        Logger.success("Risk Manager V7 inizializzato.")
 
-    def evaluate(self, analysis):
+    # =====================================
+    # COSTRUZIONE TRADE
+    # =====================================
 
-        trend = analysis["trend"]
-        rsi = analysis["rsi"]
-        momentum = analysis["momentum"]
+    def build_trade(
 
-        risk_score = 0
+        self,
+
+        symbol,
+
+        signal,
+
+        current_price,
+
+        atr
+
+    ):
+
+        signal = signal.upper()
+
+        if signal not in (
+
+            "BUY",
+
+            "SELL",
+
+            "STRONG BUY",
+
+            "STRONG SELL"
+
+        ):
+
+            Logger.info("Nessun trade generato.")
+
+            return None
+
+        atr = float(atr)
+
+        if atr <= 0:
+
+            Logger.warning("ATR non valido.")
+
+            return None
+
+        entry = float(current_price)
+
+        rr = float(RISK_REWARD_RATIO)
 
         # ==========================
-        # Trend
+        # BUY
         # ==========================
 
-        if trend == "RIALZISTA":
-            risk_score += 1
+        if "BUY" in signal:
 
-        elif trend == "RIBASSISTA":
-            risk_score += 1
+            stop_loss = entry - atr
 
-        # ==========================
-        # RSI
-        # ==========================
+            take_profit = entry + (atr * rr)
 
-        if rsi == "NORMALE":
-            risk_score += 2
-
-        elif rsi in ["IPERCOMPRATO", "IPERVENDUTO"]:
-            risk_score += 1
+            side = "BUY"
 
         # ==========================
-        # Momentum
+        # SELL
         # ==========================
-
-        if momentum in ["RIALZISTA", "RIBASSISTA"]:
-            risk_score += 2
-
-        # ==========================
-        # Livello di rischio
-        # ==========================
-
-        if risk_score >= 5:
-
-            level = "BASSO"
-            allow_trade = True
-
-        elif risk_score >= 3:
-
-            level = "MEDIO"
-            allow_trade = True
 
         else:
 
-            level = "ALTO"
-            allow_trade = False
+            stop_loss = entry + atr
 
-        return {
-            "risk_level": level,
-            "risk_score": risk_score,
-            "allow_trade": allow_trade
+            take_profit = entry - (atr * rr)
+
+            side = "SELL"
+
+        trade = {
+
+            "symbol": symbol,
+
+            "side": side,
+
+            "entry": round(entry, 6),
+
+            "stop_loss": round(stop_loss, 6),
+
+            "take_profit": round(take_profit, 6),
+
+            "atr": round(atr, 6),
+
+            "risk_reward": rr
+
         }
+
+        Logger.success(f"Trade costruito: {side}")
+
+        return trade
+
+    # =====================================
+    # REPORT
+    # =====================================
+
+    def summary(self, trade):
+
+        if trade is None:
+
+            Logger.warning("Nessun trade.")
+
+            return
+
+        Logger.separator()
+
+        Logger.title("RISK MANAGER")
+
+        Logger.info(f"Symbol       : {trade['symbol']}")
+        Logger.info(f"Side         : {trade['side']}")
+        Logger.info(f"Entry        : {trade['entry']}")
+        Logger.info(f"Stop Loss    : {trade['stop_loss']}")
+        Logger.info(f"Take Profit  : {trade['take_profit']}")
+        Logger.info(f"ATR          : {trade['atr']}")
+
+        Logger.separator()
+
+    # =====================================
+    # RESET
+    # =====================================
+
+    def reset(self):
+
+        Logger.info("Risk Manager resettato.")

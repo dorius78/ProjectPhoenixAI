@@ -2,68 +2,92 @@
 ========================================
 PROJECT PHOENIX AI
 Trade Manager
-Versione 1.1
+Versione 7.0
 ========================================
 """
 
 from Logs.logger import Logger
 
-from Config.settings import (
-    STOP_LOSS_ATR,
-    TAKE_PROFIT_ATR
-)
+from Core.risk_manager import RiskManager
 
 
 class TradeManager:
 
     def __init__(self):
 
-        Logger.success("Trade Manager inizializzato.")
+        self.risk = RiskManager()
 
-    def generate_trade(self, price, decision, atr):
+        Logger.success("Trade Manager V7 inizializzato.")
 
-        # ==========================
-        # NESSUNA OPERAZIONE
-        # ==========================
+    # =====================================
+    # GENERA TRADE
+    # =====================================
 
-        if decision == "HOLD":
+    def generate_trade(
 
-            return {
+        self,
 
-                "entry": round(price, 2),
-                "stop_loss": None,
-                "take_profit": None,
-                "risk_reward": "N/D"
+        symbol,
 
-            }
+        decision,
 
-        # ==========================
-        # BUY
-        # ==========================
+        current_price,
 
-        if decision == "BUY":
+        atr
 
-            stop_loss = price - (atr * STOP_LOSS_ATR)
-            take_profit = price + (atr * TAKE_PROFIT_ATR)
+    ):
 
-        # ==========================
-        # SELL
-        # ==========================
+        if isinstance(decision, dict):
 
-        elif decision == "SELL":
+            signal = decision.get("signal", "HOLD")
 
-            stop_loss = price + (atr * STOP_LOSS_ATR)
-            take_profit = price - (atr * TAKE_PROFIT_ATR)
+        else:
 
-        # ==========================
-        # RISULTATO
-        # ==========================
+            signal = decision
 
-        return {
+        trade = self.risk.build_trade(
 
-            "entry": round(price, 2),
-            "stop_loss": round(stop_loss, 2),
-            "take_profit": round(take_profit, 2),
-            "risk_reward": "1 : 2"
+            symbol=symbol,
 
-        }
+            signal=signal,
+
+            current_price=current_price,
+
+            atr=atr
+
+        )
+
+        return trade
+
+    # =====================================
+    # REPORT
+    # =====================================
+
+    def summary(self, trade):
+
+        if trade is None:
+
+            Logger.warning("Nessun trade generato.")
+
+            return
+
+        Logger.separator()
+
+        Logger.title("TRADE MANAGER")
+
+        Logger.info(f"Symbol       : {trade['symbol']}")
+        Logger.info(f"Side         : {trade['side']}")
+        Logger.info(f"Entry        : {trade['entry']}")
+        Logger.info(f"Stop Loss    : {trade['stop_loss']}")
+        Logger.info(f"Take Profit  : {trade['take_profit']}")
+        Logger.info(f"R/R          : {trade['risk_reward']}")
+
+        Logger.separator()
+
+    # =====================================
+    # RESET
+    # =====================================
+
+    def reset(self):
+
+        Logger.info("Trade Manager resettato.")

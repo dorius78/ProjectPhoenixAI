@@ -2,10 +2,11 @@
 ========================================
 PROJECT PHOENIX AI
 Signal Manager
-Versione 2.1
+Versione 7.0
 ========================================
 """
 
+from Config.settings import MIN_CONFIDENCE
 from Logs.logger import Logger
 
 
@@ -13,76 +14,163 @@ class SignalManager:
 
     def __init__(self):
 
-        Logger.success("Signal Manager inizializzato.")
+        Logger.success("Signal Manager V7 inizializzato.")
 
-    def generate_signal(
+    # =====================================
+    # VALIDAZIONE
+    # =====================================
 
-        self,
+    def validate(self, decision):
 
-        decision,
+        signal = str(
+            decision.get("signal", "HOLD")
+        ).upper()
 
-        brain,
+        score = abs(
+            float(
+                decision.get("score", 0)
+            )
+        )
 
-        risk
+        confidence = abs(
+            float(
+                decision.get(
+                    "confidence",
+                    score
+                )
+            )
+        )
 
-    ):
+        reasons = decision.get(
+            "reasons",
+            []
+        )
 
-        Logger.section("SIGNAL MANAGER")
+        valid = False
 
-        # ==========================
-        # CONTROLLO RISCHIO
-        # ==========================
+        if signal in (
+            "STRONG BUY",
+            "STRONG SELL"
+        ):
 
-        if not risk["allow_trade"]:
+            valid = True
 
-            Logger.warning("Trade bloccato dal Risk Manager.")
+        elif signal in (
+            "BUY",
+            "SELL"
+        ):
 
-            return "HOLD"
-
-        # ==========================
-        # CONTROLLO CONFIDENCE
-        # ==========================
-
-        confidence = brain["confidence"]
-
-        if confidence < 60:
-
-            Logger.info(
-                f"Confidence troppo bassa ({confidence}%)."
+            valid = (
+                confidence >= MIN_CONFIDENCE
             )
 
-            return "HOLD"
+        return {
 
-        # ==========================
-        # CONFERMA BUY
-        # ==========================
+            "valid": valid,
 
-        if (
-            decision == "BUY"
-            and brain["action"] == "BUY"
-        ):
+            "signal": signal,
 
-            Logger.success("Segnale BUY confermato.")
+            "score": score,
 
-            return "BUY"
+            "confidence": confidence,
 
-        # ==========================
-        # CONFERMA SELL
-        # ==========================
+            "reasons": reasons
 
-        if (
-            decision == "SELL"
-            and brain["action"] == "SELL"
-        ):
+        }
 
-            Logger.success("Segnale SELL confermato.")
+    # =====================================
+    # BUY
+    # =====================================
 
-            return "SELL"
+    def is_buy(self, signal):
 
-        # ==========================
-        # NESSUN SEGNALE
-        # ==========================
+        return str(signal).upper() in (
 
-        Logger.info("Nessun segnale valido.")
+            "BUY",
 
-        return "HOLD"
+            "STRONG BUY"
+
+        )
+
+    # =====================================
+    # SELL
+    # =====================================
+
+    def is_sell(self, signal):
+
+        return str(signal).upper() in (
+
+            "SELL",
+
+            "STRONG SELL"
+
+        )
+
+    # =====================================
+    # HOLD
+    # =====================================
+
+    def is_hold(self, signal):
+
+        return str(signal).upper() == "HOLD"
+
+    # =====================================
+    # ESECUZIONE
+    # =====================================
+
+    def should_execute(
+        self,
+        validation
+    ):
+
+        return validation["valid"]
+
+    # =====================================
+    # REPORT
+    # =====================================
+
+    def summary(self, validation):
+
+        Logger.separator()
+
+        Logger.title("SIGNAL MANAGER")
+
+        Logger.info(
+            f"Segnale      : {validation['signal']}"
+        )
+
+        Logger.info(
+            f"Score        : {validation['score']}"
+        )
+
+        Logger.info(
+            f"Confidence   : {validation['confidence']:.2f}"
+        )
+
+        Logger.info(
+            f"Eseguibile   : {validation['valid']}"
+        )
+
+        for reason in validation["reasons"]:
+
+            Logger.info(f"✔ {reason}")
+
+        Logger.separator()
+
+    # =====================================
+    # EXPORT
+    # =====================================
+
+    def export(self, validation):
+
+        return validation.copy()
+
+    # =====================================
+    # RESET
+    # =====================================
+
+    def reset(self):
+
+        Logger.info(
+            "Signal Manager resettato."
+        )
