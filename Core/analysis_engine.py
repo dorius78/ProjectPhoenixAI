@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Analysis Engine
-Versione 3.2
+Versione 7.0
 ========================================
 """
 
@@ -13,9 +13,8 @@ from Data.Indicators.indicator_manager import IndicatorManager
 from Core.market_analyzer import MarketAnalyzer
 from Core.phoenix_brain import PhoenixBrain
 from Core.decision_engine import DecisionEngine
-from Core.risk_manager import RiskManager
-from Core.phoenix_score import PhoenixScore
 from Core.signal_manager import SignalManager
+from Core.risk_manager import RiskManager
 from Core.trade_manager import TradeManager
 
 
@@ -23,133 +22,80 @@ class AnalysisEngine:
 
     def __init__(self):
 
-        Logger.success("Analysis Engine inizializzato.")
+        Logger.success("Analysis Engine V7 inizializzato.")
 
         self.indicator_manager = IndicatorManager()
 
         self.market_analyzer = MarketAnalyzer()
+
         self.phoenix_brain = PhoenixBrain()
+
         self.decision_engine = DecisionEngine()
-        self.risk_manager = RiskManager()
-        self.phoenix_score = PhoenixScore()
+
         self.signal_manager = SignalManager()
+
+        self.risk_manager = RiskManager()
+
         self.trade_manager = TradeManager()
 
-    def analyze(self, data, price):
+    # =====================================
+    # ANALISI COMPLETA
+    # =====================================
+
+    def analyze(self, data):
 
         Logger.section("ANALYSIS ENGINE")
 
-        # ==========================
-        # INDICATORI
-        # ==========================
-
-        ema20 = self.indicator_manager.calculate_ema(data, 20)
-        sma20 = self.indicator_manager.calculate_sma(data, 20)
-        rsi14 = self.indicator_manager.calculate_rsi(data, 14)
-
-        macd, signal, histogram = (
-            self.indicator_manager.calculate_macd(data)
+        indicators = self.indicator_manager.get_indicators(
+            data
         )
-
-        atr14 = self.indicator_manager.calculate_atr(data, 14)
-
-        adx14 = self.indicator_manager.calculate_adx(data, 14)
-
-        # ==========================
-        # MARKET ANALYZER
-        # ==========================
 
         analysis = self.market_analyzer.analyze(
-            data,
-            ema20,
-            sma20,
-            rsi14,
-            macd,
-            signal,
-            adx14
+            indicators
         )
-
-        # ==========================
-        # RISK MANAGER
-        # ==========================
 
         risk = self.risk_manager.evaluate(
             analysis
         )
-
-        # ==========================
-        # PHOENIX BRAIN
-        # ==========================
 
         brain = self.phoenix_brain.think(
             analysis,
             risk
         )
 
-        # ==========================
-        # DECISION ENGINE
-        # ==========================
-
         decision = self.decision_engine.analyze(
             brain["action"]
         )
 
-        # ==========================
-        # PHOENIX SCORE
-        # ==========================
-
-        phoenix_score = self.phoenix_score.calculate(
-            analysis
-        )
-
-        # ==========================
-        # SIGNAL MANAGER
-        # ==========================
-
-        final_signal = self.signal_manager.generate_signal(
+        signal = self.signal_manager.generate_signal(
             decision,
             brain,
             risk
         )
 
-        # ==========================
-        # TRADE MANAGER
-        # ==========================
-
         trade = self.trade_manager.generate_trade(
-            price,
-            final_signal,
-            atr14.iloc[-1]
-        )
 
-        # ==========================
-        # RISULTATO
-        # ==========================
+            indicators["price"],
+
+            signal,
+
+            indicators["atr"]
+
+        )
 
         return {
 
-            "ema20": ema20,
-            "sma20": sma20,
-            "rsi14": rsi14,
-
-            "macd": macd,
-            "signal": signal,
-            "histogram": histogram,
-
-            "atr14": atr14,
-            "adx14": adx14,
+            "indicators": indicators,
 
             "analysis": analysis,
 
             "brain": brain,
 
-            "decision": decision,
-
-            "final_signal": final_signal,
-
             "risk": risk,
 
-            "phoenix_score": phoenix_score,
+            "decision": decision,
+
+            "signal": signal,
 
             "trade": trade
 

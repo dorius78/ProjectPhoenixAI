@@ -2,9 +2,17 @@
 ========================================
 PROJECT PHOENIX AI
 Settings
-Versione 1.0
+Versione 7.0
 ========================================
 """
+
+# ======================================
+# PROGETTO
+# ======================================
+
+PROJECT_NAME = "PROJECT PHOENIX AI"
+
+VERSION = "7.0"
 
 # ======================================
 # MERCATO
@@ -16,12 +24,15 @@ PERIOD = "5d"
 
 INTERVAL = "1h"
 
-
 # ======================================
 # INDICATORI
 # ======================================
 
 EMA_PERIOD = 20
+
+EMA_FAST = 20
+
+EMA_SLOW = 50
 
 SMA_PERIOD = 20
 
@@ -29,6 +40,7 @@ RSI_PERIOD = 14
 
 ATR_PERIOD = 14
 
+ADX_PERIOD = 14
 
 # ======================================
 # MACD
@@ -40,6 +52,13 @@ MACD_SLOW = 26
 
 MACD_SIGNAL = 9
 
+# ======================================
+# BOLLINGER
+# ======================================
+
+BOLLINGER_PERIOD = 20
+
+BOLLINGER_STD = 2
 
 # ======================================
 # TRADE
@@ -49,22 +68,26 @@ STOP_LOSS_ATR = 1.5
 
 TAKE_PROFIT_ATR = 3.0
 
-
 # ======================================
-# RISK
+# RISK MANAGEMENT
 # ======================================
 
 MAX_RISK = 2.0
 
-MIN_SCORE_BUY = 70
-
-MAX_SCORE_SELL = 30
-
+MIN_CONFIDENCE = 60
 
 # ======================================
-# VERSIONE
+# BACKTEST
 # ======================================
 
-PROJECT_NAME = "PROJECT PHOENIX AI"
+INITIAL_CAPITAL = 10000
 
-VERSION = "2.0"
+COMMISSION = 0.001
+
+SLIPPAGE = 0.0
+
+# ======================================
+# LOG
+# ======================================
+
+LOG_LEVEL = "INFO"

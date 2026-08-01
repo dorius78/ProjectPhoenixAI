@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Backtest Engine
-Versione 2.0
+Versione 7.0
 ========================================
 """
 
@@ -13,24 +13,47 @@ class BacktestEngine:
 
     def __init__(self):
 
-        Logger.success("Backtest Engine inizializzato.")
+        Logger.success("Backtest Engine V7 inizializzato.")
 
-    def run(self, signals):
+        self.history = []
+
+    # =====================================
+    # REGISTRA TRADE
+    # =====================================
+
+    def add_trade(self, trade):
+
+        if trade is None:
+            return
+
+        self.history.append(trade)
+
+    # =====================================
+    # BACKTEST
+    # =====================================
+
+    def run(self):
 
         Logger.section("BACKTEST ENGINE")
 
-        total = len(signals)
+        total = len(self.history)
 
-        buy = signals.count("BUY")
-        sell = signals.count("SELL")
-        hold = signals.count("HOLD")
+        buy = sum(
+            1 for t in self.history
+            if t["side"] == "BUY"
+        )
 
-        executed = buy + sell
+        sell = sum(
+            1 for t in self.history
+            if t["side"] == "SELL"
+        )
 
-        if executed > 0:
-            activity = round((executed / total) * 100, 2)
-        else:
-            activity = 0.0
+        activity = 0.0
+
+        if total > 0:
+            activity = 100.0
+
+        market_bias = "NEUTRAL"
 
         if buy > sell:
             market_bias = "LONG"
@@ -38,20 +61,13 @@ class BacktestEngine:
         elif sell > buy:
             market_bias = "SHORT"
 
-        else:
-            market_bias = "NEUTRO"
-
         results = {
 
             "total_trades": total,
 
-            "executed_trades": executed,
-
             "buy": buy,
 
             "sell": sell,
-
-            "hold": hold,
 
             "activity": activity,
 
@@ -62,3 +78,13 @@ class BacktestEngine:
         Logger.success("Backtest completato.")
 
         return results
+
+    # =====================================
+    # RESET
+    # =====================================
+
+    def reset(self):
+
+        self.history.clear()
+
+        Logger.info("Storico Backtest azzerato.")

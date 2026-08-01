@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Professional Logger
-Versione 1.0
+Versione 7.0
 ========================================
 """
 
@@ -10,6 +10,10 @@ from datetime import datetime
 
 
 class Logger:
+
+    @staticmethod
+    def _time():
+        return datetime.now().strftime("%H:%M:%S")
 
     @staticmethod
     def line():
@@ -24,24 +28,24 @@ class Logger:
 
     @staticmethod
     def info(message):
-        now = datetime.now().strftime("%H:%M:%S")
-        print(f"[INFO {now}] {message}")
+        print(f"[INFO {Logger._time()}] {message}")
 
     @staticmethod
     def success(message):
-        now = datetime.now().strftime("%H:%M:%S")
-        print(f"[ OK  {now}] {message}")
+        print(f"[ OK  {Logger._time()}] {message}")
 
     @staticmethod
     def warning(message):
-        now = datetime.now().strftime("%H:%M:%S")
-        print(f"[WARN {now}] {message}")
+        print(f"[WARN {Logger._time()}] {message}")
 
     @staticmethod
     def error(message):
-        now = datetime.now().strftime("%H:%M:%S")
-        print(f"[ERR  {now}] {message}")
+        print(f"[ERR  {Logger._time()}] {message}")
 
     @staticmethod
     def value(name, value):
         print(f"{name:<25}: {value}")
+
+    @staticmethod
+    def debug(message):
+        print(f"[DBG  {Logger._time()}] {message}")

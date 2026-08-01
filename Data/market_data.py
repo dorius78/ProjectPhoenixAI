@@ -2,37 +2,68 @@
 ========================================
 PROJECT PHOENIX AI
 Market Data Manager
-Versione 0.1
+Versione 7.0
 ========================================
 """
 
+from Logs.logger import Logger
 from Data.market_provider import MarketProvider
 
 
 class MarketData:
 
     def __init__(self):
-        print("Market Data Manager inizializzato.")
+
+        Logger.success("Market Data Manager V7 inizializzato.")
+
         self.provider = MarketProvider()
 
+        self.markets = []
+
+    # =====================================
+    # CARICAMENTO MERCATI
+    # =====================================
+
     def load_markets(self):
-        print("Caricamento dei mercati...")
+
+        Logger.section("MARKET DATA")
 
         self.provider.connect()
 
-        markets = [
+        self.markets = [
+
             "Forex",
+
             "Crypto",
+
             "Azioni",
+
             "Indici",
+
             "Futures",
+
             "Commodities"
+
         ]
 
-        for market in markets:
-            print(f"✔ {market} disponibile")
+        for market in self.markets:
 
-        return markets
+            Logger.success(f"{market} disponibile")
+
+        return self.markets
+
+    # =====================================
+    # PREZZO
+    # =====================================
 
     def get_price(self, symbol):
+
         return self.provider.get_price(symbol)
+
+    # =====================================
+    # LISTA MERCATI
+    # =====================================
+
+    def get_markets(self):
+
+        return self.markets
