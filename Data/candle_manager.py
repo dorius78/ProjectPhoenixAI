@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Candle Manager
-Versione 7.0
+Versione 8.0
 ========================================
 """
 
@@ -15,10 +15,10 @@ class CandleManager:
 
     def __init__(self):
 
-        Logger.success("Candle Manager V7 inizializzato.")
+        Logger.success("Candle Manager V8 inizializzato.")
 
     # =====================================
-    # DOWNLOAD DATI
+    # DOWNLOAD
     # =====================================
 
     def _download(self, symbol, period, interval):
@@ -53,9 +53,7 @@ class CandleManager:
 
         except Exception as e:
 
-            Logger.error(
-                f"Errore download dati: {e}"
-            )
+            Logger.error(f"Errore download dati: {e}")
 
             return None
 
@@ -64,25 +62,16 @@ class CandleManager:
     # =====================================
 
     def get_candles(
-
         self,
-
         symbol,
-
         period="5d",
-
         interval="1h"
-
     ):
 
         return self._download(
-
             symbol,
-
             period,
-
             interval
-
         )
 
     # =====================================
@@ -90,49 +79,91 @@ class CandleManager:
     # =====================================
 
     def get_backtest_data(
-
         self,
-
         symbol,
-
         period="1y",
-
         interval="1h"
-
     ):
 
         return self._download(
-
             symbol,
-
             period,
-
             interval
-
         )
 
     # =====================================
-    # PERSONALIZZATI
+    # CUSTOM
     # =====================================
 
     def get_custom_data(
-
         self,
-
         symbol,
-
         period,
-
         interval
-
     ):
 
         return self._download(
-
             symbol,
-
             period,
-
             interval
-
         )
+
+    # =====================================
+    # ULTIMA CANDELA
+    # =====================================
+
+    def last_candle(self, data):
+
+        return data.iloc[-1]
+
+    # =====================================
+    # MASSIMO RECENTE
+    # =====================================
+
+    def recent_high(self, data, bars=20):
+
+        return float(
+            data["High"].tail(bars).max()
+        )
+
+    # =====================================
+    # MINIMO RECENTE
+    # =====================================
+
+    def recent_low(self, data, bars=20):
+
+        return float(
+            data["Low"].tail(bars).min()
+        )
+
+    # =====================================
+    # RANGE MEDIO
+    # =====================================
+
+    def average_range(self, data, bars=20):
+
+        rng = data["High"] - data["Low"]
+
+        return float(
+            rng.tail(bars).mean()
+        )
+
+    # =====================================
+    # TREND PREZZO
+    # =====================================
+
+    def price_direction(self, data):
+
+        first = float(data["Close"].iloc[0])
+
+        last = float(data["Close"].iloc[-1])
+
+        if last > first:
+
+            return "UP"
+
+        if last < first:
+
+            return "DOWN"
+
+        return "SIDEWAYS"

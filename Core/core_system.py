@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Core System
-Versione 7.1
+Versione 8.0
 ========================================
 """
 
@@ -20,9 +20,10 @@ class CoreSystem:
 
     def __init__(self):
 
-        Logger.success("Core System V7 inizializzato.")
+        Logger.success("Core System V8 inizializzato.")
 
         self.market = MarketData()
+
         self.candles = CandleManager()
 
         self.analysis = AnalysisEngine()
@@ -59,52 +60,95 @@ class CoreSystem:
 
             return
 
-        # ==========================
-        # PREZZO ATTUALE
-        # ==========================
-
         price = float(data["Close"].iloc[-1])
 
-        # ==========================
-        # ANALISI
-        # ==========================
-
         result = self.analysis.analyze(
+
             data,
+
             price
+
         )
 
         Logger.section("RISULTATI")
 
         print()
 
-        print("Decisione :", result["decision"])
-        print("Segnale   :", result["signal"])
+        decision = result["decision"]
+
+        signal = result["signal"]
+
+        print("Decisione :", decision["signal"])
+
+        print("Segnale   :", signal["signal"])
 
         print()
 
-        print("Score     :", result["brain"]["score"])
-        print("Confidence:", result["brain"]["confidence"])
+        print("Score     :", decision["score"])
+
+        print("Confidence:", decision["confidence"])
 
         print()
+
+        print(
+
+            "Validazione:",
+
+            "SI" if signal["valid"] else "NO"
+
+        )
+
+        print()
+
+        if decision["reasons"]:
+
+            print("Motivazioni:")
+
+            for reason in decision["reasons"]:
+
+                print(" -", reason)
+
+            print()
 
         trade = result["trade"]
 
         if trade:
 
             print("Entry      :", trade["entry"])
+
             print("Stop Loss  :", trade["stop_loss"])
+
             print("Take Profit:", trade["take_profit"])
 
-        # ==========================
-        # REGISTRA TRADE
-        # ==========================
+            print()
 
-        if trade and result["signal"] in ["BUY", "SELL"]:
+        # =====================================
+        # APERTURA POSIZIONE
+        # =====================================
+
+        if (
+
+            trade is not None
+
+            and signal["valid"]
+
+            and signal["signal"] in (
+
+                "BUY",
+
+                "SELL",
+
+                "STRONG BUY",
+
+                "STRONG SELL"
+
+            )
+
+        ):
 
             self.position_controller.open_position(
 
-                result["signal"],
+                signal["signal"],
 
                 trade["entry"],
 
@@ -116,9 +160,11 @@ class CoreSystem:
 
             self.backtest.add_trade({
 
-                "side": result["signal"],
+                "side": signal["signal"],
 
-                "entry": trade["entry"]
+                "entry": trade["entry"],
+
+                "pnl": 0
 
             })
 
@@ -127,6 +173,9 @@ class CoreSystem:
         stats = self.backtest.run()
 
         print()
-        print(stats)
+
+        for key, value in stats.items():
+
+            print(f"{key:15}: {value}")
 
         Logger.success("Core System completato.")

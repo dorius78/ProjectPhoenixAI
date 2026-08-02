@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Trade Manager
-Versione 7.1
+Versione 8.0
 ========================================
 """
 
@@ -17,7 +17,7 @@ class TradeManager:
 
         self.risk = RiskManager()
 
-        Logger.success("Trade Manager V7 inizializzato.")
+        Logger.success("Trade Manager V8 inizializzato.")
 
     # =====================================
     # GENERA TRADE
@@ -27,21 +27,31 @@ class TradeManager:
 
         self,
 
-        price,
+        symbol,
 
-        signal,
+        decision,
+
+        current_price,
 
         atr
 
     ):
 
+        if isinstance(decision, dict):
+
+            signal = decision.get("signal", "HOLD")
+
+        else:
+
+            signal = str(decision)
+
         return self.risk.build_trade(
 
-            symbol="BTC-USD",
+            symbol=symbol,
 
             signal=signal,
 
-            current_price=price,
+            current_price=current_price,
 
             atr=atr
 
@@ -56,6 +66,7 @@ class TradeManager:
         if trade is None:
 
             Logger.warning("Nessun trade generato.")
+
             return
 
         Logger.section("TRADE MANAGER")

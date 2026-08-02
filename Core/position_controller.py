@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Position Controller
-Versione 7.0
+Versione 8.0
 ========================================
 """
 
@@ -15,7 +15,7 @@ class PositionController:
 
     def __init__(self):
 
-        Logger.success("Position Controller V7 inizializzato.")
+        Logger.success("Position Controller V8 inizializzato.")
 
         self.position = None
 
@@ -33,32 +33,81 @@ class PositionController:
 
         if self.position is not None:
 
-            Logger.warning("Esiste già una posizione aperta.")
-
+            Logger.warning("Posizione già aperta.")
             return False
 
         self.position = {
 
             "side": side,
 
-            "entry": entry,
+            "entry": float(entry),
 
-            "stop_loss": stop_loss,
+            "stop_loss": float(stop_loss),
 
-            "take_profit": take_profit,
+            "take_profit": float(take_profit),
 
             "status": "OPEN",
 
-            "open_time": datetime.now()
+            "open_time": datetime.now(),
+
+            "current_price": float(entry),
+
+            "current_profit": 0.0,
+
+            "max_profit": 0.0,
+
+            "break_even": False,
+
+            "trailing_stop": None
 
         }
 
-        Logger.success(f"Posizione {side} aperta.")
+        Logger.success(f"Aperta posizione {side}")
 
         return True
 
     # =====================================
-    # CHIUSURA POSIZIONE
+    # AGGIORNA POSIZIONE
+    # =====================================
+
+    def update(self, current_price):
+
+        if self.position is None:
+
+            return
+
+        self.position["current_price"] = float(current_price)
+
+        entry = self.position["entry"]
+
+        if self.position["side"] == "BUY":
+
+            profit = current_price - entry
+
+        else:
+
+            profit = entry - current_price
+
+        self.position["current_profit"] = round(profit, 6)
+
+        if profit > self.position["max_profit"]:
+
+            self.position["max_profit"] = round(profit, 6)
+
+        if (
+
+            not self.position["break_even"]
+
+            and profit > 0
+
+        ):
+
+            self.position["stop_loss"] = entry
+
+            self.position["break_even"] = True
+
+    # =====================================
+    # CHIUSURA
     # =====================================
 
     def close_position(
@@ -69,7 +118,6 @@ class PositionController:
         if self.position is None:
 
             Logger.warning("Nessuna posizione aperta.")
-
             return None
 
         self.position["status"] = "CLOSED"
@@ -78,9 +126,7 @@ class PositionController:
 
         self.position["close_time"] = datetime.now()
 
-        Logger.success(
-            f"Posizione chiusa ({reason})"
-        )
+        Logger.success(f"Posizione chiusa ({reason})")
 
         closed = self.position
 
@@ -89,7 +135,7 @@ class PositionController:
         return closed
 
     # =====================================
-    # POSIZIONE ATTUALE
+    # GET
     # =====================================
 
     def get_position(self):

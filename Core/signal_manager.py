@@ -2,10 +2,11 @@
 ========================================
 PROJECT PHOENIX AI
 Signal Manager
-Versione 7.1
+Versione 8.0
 ========================================
 """
 
+from Config.settings import MIN_CONFIDENCE
 from Logs.logger import Logger
 
 
@@ -13,22 +14,55 @@ class SignalManager:
 
     def __init__(self):
 
-        Logger.success("Signal Manager V7 inizializzato.")
+        Logger.success("Signal Manager V8 inizializzato.")
 
     # =====================================
-    # GENERAZIONE SEGNALE
+    # VALIDAZIONE
+    # =====================================
+
+    def validate(self, decision):
+
+        signal = str(
+            decision.get("signal", "HOLD")
+        ).upper()
+
+        confidence = float(
+            decision.get("confidence", 0)
+        )
+
+        valid = False
+
+        if signal in ("STRONG BUY", "STRONG SELL"):
+
+            valid = True
+
+        elif signal in ("BUY", "SELL"):
+
+            valid = confidence >= MIN_CONFIDENCE
+
+        return {
+
+            "valid": valid,
+
+            "signal": signal,
+
+            "score": decision.get("score", 0),
+
+            "confidence": confidence,
+
+            "reasons": decision.get("reasons", [])
+
+        }
+
+    # =====================================
+    # COMPATIBILITA'
     # =====================================
 
     def generate_signal(
-
         self,
-
         decision,
-
         brain,
-
         risk
-
     ):
 
         if not risk["allow_trade"]:
@@ -40,13 +74,9 @@ class SignalManager:
         if action in (
 
             "BUY",
-
             "SELL",
-
             "STRONG BUY",
-
             "STRONG SELL",
-
             "HOLD"
 
         ):
@@ -61,10 +91,9 @@ class SignalManager:
 
     def is_buy(self, signal):
 
-        return signal.upper() in (
+        return str(signal).upper() in (
 
             "BUY",
-
             "STRONG BUY"
 
         )
@@ -75,10 +104,9 @@ class SignalManager:
 
     def is_sell(self, signal):
 
-        return signal.upper() in (
+        return str(signal).upper() in (
 
             "SELL",
-
             "STRONG SELL"
 
         )
@@ -89,7 +117,7 @@ class SignalManager:
 
     def is_hold(self, signal):
 
-        return signal.upper() == "HOLD"
+        return str(signal).upper() == "HOLD"
 
     # =====================================
     # RESET

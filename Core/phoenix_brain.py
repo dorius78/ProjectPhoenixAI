@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Phoenix Brain
-Versione 7.0
+Versione 7.1
 ========================================
 """
 
@@ -15,6 +15,10 @@ class PhoenixBrain:
 
         Logger.success("Phoenix Brain V7 inizializzato.")
 
+    # =====================================
+    # AI DECISION
+    # =====================================
+
     def think(self, analysis, risk):
 
         score = 50
@@ -26,12 +30,12 @@ class PhoenixBrain:
         # TREND
         # ==========================
 
-        if analysis["trend_bullish"]:
+        if analysis.get("trend_bullish", False):
 
             score += 20
             reasons.append("Trend rialzista")
 
-        elif analysis["trend_bearish"]:
+        elif analysis.get("trend_bearish", False):
 
             score -= 20
             warnings.append("Trend ribassista")
@@ -40,7 +44,7 @@ class PhoenixBrain:
         # EMA
         # ==========================
 
-        if analysis["ema_alignment"]:
+        if analysis.get("ema_alignment", False):
 
             score += 10
             reasons.append("EMA allineate")
@@ -49,12 +53,12 @@ class PhoenixBrain:
         # MACD
         # ==========================
 
-        if analysis["macd_buy"]:
+        if analysis.get("macd_buy", False):
 
             score += 10
             reasons.append("MACD BUY")
 
-        elif analysis["macd_sell"]:
+        elif analysis.get("macd_sell", False):
 
             score -= 10
             warnings.append("MACD SELL")
@@ -63,7 +67,7 @@ class PhoenixBrain:
         # RSI
         # ==========================
 
-        rsi = analysis["rsi"]
+        rsi = float(analysis.get("rsi", 50))
 
         if 45 <= rsi <= 60:
 
@@ -84,7 +88,7 @@ class PhoenixBrain:
         # ADX
         # ==========================
 
-        if analysis["adx_strong"]:
+        if analysis.get("adx_strong", False):
 
             score += 10
             reasons.append("Trend forte")
@@ -93,7 +97,7 @@ class PhoenixBrain:
         # VOLUME
         # ==========================
 
-        if analysis["volume_high"]:
+        if analysis.get("volume_high", False):
 
             score += 5
             reasons.append("Volume elevato")
@@ -102,51 +106,25 @@ class PhoenixBrain:
         # SMART MONEY
         # ==========================
 
-        if analysis["breakout"]:
+        for key, text in [
 
-            score += 5
-            reasons.append("Breakout")
+            ("breakout", "Breakout"),
+            ("order_block", "Order Block"),
+            ("liquidity", "Liquidity"),
+            ("smart_money", "Smart Money")
 
-        if analysis["order_block"]:
+        ]:
 
-            score += 5
-            reasons.append("Order Block")
+            if analysis.get(key, False):
 
-        if analysis["liquidity"]:
-
-            score += 5
-            reasons.append("Liquidity")
-
-        if analysis["smart_money"]:
-
-            score += 10
-            reasons.append("Smart Money")
+                score += 5
+                reasons.append(text)
 
         # ==========================
         # LIMITI
         # ==========================
 
         score = max(0, min(score, 100))
-
-        # ==========================
-        # AZIONE
-        # ==========================
-
-        if score >= 80:
-
-            action = "BUY"
-
-        elif score <= 20:
-
-            action = "SELL"
-
-        else:
-
-            action = "HOLD"
-
-        # ==========================
-        # CONFIDENCE
-        # ==========================
 
         confidence = score
 
@@ -160,6 +138,30 @@ class PhoenixBrain:
 
         confidence = max(0, min(confidence, 100))
 
+        # ==========================
+        # AZIONE
+        # ==========================
+
+        if score >= 85:
+
+            action = "STRONG BUY"
+
+        elif score >= 70:
+
+            action = "BUY"
+
+        elif score <= 15:
+
+            action = "STRONG SELL"
+
+        elif score <= 30:
+
+            action = "SELL"
+
+        else:
+
+            action = "HOLD"
+
         return {
 
             "action": action,
@@ -167,6 +169,10 @@ class PhoenixBrain:
             "score": score,
 
             "confidence": confidence,
+
+            "strength": score,
+
+            "risk": risk["risk_level"],
 
             "reasons": reasons,
 
