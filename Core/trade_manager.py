@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Trade Manager
-Versione 7.0
+Versione 7.1
 ========================================
 """
 
@@ -27,37 +27,25 @@ class TradeManager:
 
         self,
 
-        symbol,
+        price,
 
-        decision,
-
-        current_price,
+        signal,
 
         atr
 
     ):
 
-        if isinstance(decision, dict):
+        return self.risk.build_trade(
 
-            signal = decision.get("signal", "HOLD")
-
-        else:
-
-            signal = decision
-
-        trade = self.risk.build_trade(
-
-            symbol=symbol,
+            symbol="BTC-USD",
 
             signal=signal,
 
-            current_price=current_price,
+            current_price=price,
 
             atr=atr
 
         )
-
-        return trade
 
     # =====================================
     # REPORT
@@ -68,12 +56,9 @@ class TradeManager:
         if trade is None:
 
             Logger.warning("Nessun trade generato.")
-
             return
 
-        Logger.separator()
-
-        Logger.title("TRADE MANAGER")
+        Logger.section("TRADE MANAGER")
 
         Logger.info(f"Symbol       : {trade['symbol']}")
         Logger.info(f"Side         : {trade['side']}")
@@ -81,8 +66,6 @@ class TradeManager:
         Logger.info(f"Stop Loss    : {trade['stop_loss']}")
         Logger.info(f"Take Profit  : {trade['take_profit']}")
         Logger.info(f"R/R          : {trade['risk_reward']}")
-
-        Logger.separator()
 
     # =====================================
     # RESET

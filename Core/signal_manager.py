@@ -2,11 +2,10 @@
 ========================================
 PROJECT PHOENIX AI
 Signal Manager
-Versione 7.0
+Versione 7.1
 ========================================
 """
 
-from Config.settings import MIN_CONFIDENCE
 from Logs.logger import Logger
 
 
@@ -17,66 +16,44 @@ class SignalManager:
         Logger.success("Signal Manager V7 inizializzato.")
 
     # =====================================
-    # VALIDAZIONE
+    # GENERAZIONE SEGNALE
     # =====================================
 
-    def validate(self, decision):
+    def generate_signal(
 
-        signal = str(
-            decision.get("signal", "HOLD")
-        ).upper()
+        self,
 
-        score = abs(
-            float(
-                decision.get("score", 0)
-            )
-        )
+        decision,
 
-        confidence = abs(
-            float(
-                decision.get(
-                    "confidence",
-                    score
-                )
-            )
-        )
+        brain,
 
-        reasons = decision.get(
-            "reasons",
-            []
-        )
+        risk
 
-        valid = False
+    ):
 
-        if signal in (
-            "STRONG BUY",
-            "STRONG SELL"
-        ):
+        if not risk["allow_trade"]:
 
-            valid = True
+            return "HOLD"
 
-        elif signal in (
+        action = brain["action"].upper()
+
+        if action in (
+
             "BUY",
-            "SELL"
+
+            "SELL",
+
+            "STRONG BUY",
+
+            "STRONG SELL",
+
+            "HOLD"
+
         ):
 
-            valid = (
-                confidence >= MIN_CONFIDENCE
-            )
+            return action
 
-        return {
-
-            "valid": valid,
-
-            "signal": signal,
-
-            "score": score,
-
-            "confidence": confidence,
-
-            "reasons": reasons
-
-        }
+        return "HOLD"
 
     # =====================================
     # BUY
@@ -84,7 +61,7 @@ class SignalManager:
 
     def is_buy(self, signal):
 
-        return str(signal).upper() in (
+        return signal.upper() in (
 
             "BUY",
 
@@ -98,7 +75,7 @@ class SignalManager:
 
     def is_sell(self, signal):
 
-        return str(signal).upper() in (
+        return signal.upper() in (
 
             "SELL",
 
@@ -112,58 +89,7 @@ class SignalManager:
 
     def is_hold(self, signal):
 
-        return str(signal).upper() == "HOLD"
-
-    # =====================================
-    # ESECUZIONE
-    # =====================================
-
-    def should_execute(
-        self,
-        validation
-    ):
-
-        return validation["valid"]
-
-    # =====================================
-    # REPORT
-    # =====================================
-
-    def summary(self, validation):
-
-        Logger.separator()
-
-        Logger.title("SIGNAL MANAGER")
-
-        Logger.info(
-            f"Segnale      : {validation['signal']}"
-        )
-
-        Logger.info(
-            f"Score        : {validation['score']}"
-        )
-
-        Logger.info(
-            f"Confidence   : {validation['confidence']:.2f}"
-        )
-
-        Logger.info(
-            f"Eseguibile   : {validation['valid']}"
-        )
-
-        for reason in validation["reasons"]:
-
-            Logger.info(f"✔ {reason}")
-
-        Logger.separator()
-
-    # =====================================
-    # EXPORT
-    # =====================================
-
-    def export(self, validation):
-
-        return validation.copy()
+        return signal.upper() == "HOLD"
 
     # =====================================
     # RESET
@@ -171,6 +97,4 @@ class SignalManager:
 
     def reset(self):
 
-        Logger.info(
-            "Signal Manager resettato."
-        )
+        Logger.info("Signal Manager resettato.")

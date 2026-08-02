@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Core System
-Versione 7.0
+Versione 7.1
 ========================================
 """
 
@@ -23,7 +23,6 @@ class CoreSystem:
         Logger.success("Core System V7 inizializzato.")
 
         self.market = MarketData()
-
         self.candles = CandleManager()
 
         self.analysis = AnalysisEngine()
@@ -60,37 +59,48 @@ class CoreSystem:
 
             return
 
-        result = self.analysis.analyze(data)
+        # ==========================
+        # PREZZO ATTUALE
+        # ==========================
+
+        price = float(data["Close"].iloc[-1])
+
+        # ==========================
+        # ANALISI
+        # ==========================
+
+        result = self.analysis.analyze(
+            data,
+            price
+        )
 
         Logger.section("RISULTATI")
 
         print()
 
         print("Decisione :", result["decision"])
-
         print("Segnale   :", result["signal"])
 
         print()
 
         print("Score     :", result["brain"]["score"])
-
         print("Confidence:", result["brain"]["confidence"])
 
         print()
 
         trade = result["trade"]
 
-        print("Entry      :", trade["entry"])
+        if trade:
 
-        print("Stop Loss  :", trade["stop_loss"])
-
-        print("Take Profit:", trade["take_profit"])
+            print("Entry      :", trade["entry"])
+            print("Stop Loss  :", trade["stop_loss"])
+            print("Take Profit:", trade["take_profit"])
 
         # ==========================
         # REGISTRA TRADE
         # ==========================
 
-        if result["signal"] in ["BUY", "SELL"]:
+        if trade and result["signal"] in ["BUY", "SELL"]:
 
             self.position_controller.open_position(
 
@@ -117,7 +127,6 @@ class CoreSystem:
         stats = self.backtest.run()
 
         print()
-
         print(stats)
 
         Logger.success("Core System completato.")
