@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Execution Engine
-Versione 4.0
+Versione 4.1
 ========================================
 """
 
@@ -112,4 +112,3 @@ class ExecutionEngine:
             "status": "CLOSED"
 
         }
-}

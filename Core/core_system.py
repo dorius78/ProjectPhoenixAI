@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Core System
-Versione 12.0
+Versione 14.1
 ========================================
 """
 
@@ -15,6 +15,7 @@ from Core.analysis_engine import AnalysisEngine
 from Core.backtest_engine import BacktestEngine
 from Core.position_controller import PositionController
 from Core.portfolio_manager import PortfolioManager
+from Core.market_scanner import MarketScanner
 
 from Execution.execution_engine import ExecutionEngine
 
@@ -23,7 +24,7 @@ class CoreSystem:
 
     def __init__(self):
 
-        Logger.success("Core System V12 inizializzato.")
+        Logger.success("Core System V14.1 inizializzato.")
 
         self.market = MarketData()
 
@@ -38,6 +39,10 @@ class CoreSystem:
         self.execution = ExecutionEngine()
 
         self.backtest = BacktestEngine()
+
+        self.scanner = MarketScanner()
+
+        self.scanner.load_default()
 
     # =====================================
     # AVVIO
@@ -59,51 +64,113 @@ class CoreSystem:
 
         self.market.load_markets()
 
-        symbol = "BTC-USD"
+        self.scanner.reset()
 
-        data = self.candles.get_candles(
+        symbols = self.scanner.get_symbols()
 
-            symbol,
+        Logger.info(f"Scanner: {len(symbols)} strumenti")
 
-            period="5d",
+        best_result = None
 
-            interval="1h"
+        for symbol in symbols:
 
-        )
+            Logger.info(f"Analisi {symbol}")
 
-        if data is None or len(data) == 0:
+            data = self.candles.get_candles(
 
-            Logger.error("Nessun dato ricevuto.")
+                symbol,
+
+                period="5d",
+
+                interval="1h"
+
+            )
+
+            if data is None or len(data) == 0:
+
+                continue
+
+            current_price = float(
+
+                data["Close"].iloc[-1]
+
+            )
+
+            result = self.analysis.analyze(
+
+                data,
+
+                current_price,
+
+                symbol
+
+            )
+
+            decision = result["decision"]
+
+            signal = result["signal"]
+
+            trade = result["trade"]
+
+            self.scanner.add_result(
+
+                symbol,
+
+                decision["action"],
+
+                decision["score"],
+
+                decision["confidence"]
+
+            )
+
+            if (
+
+                best_result is None
+
+                or decision["score"]
+
+                > best_result["decision"]["score"]
+
+            ):
+
+                best_result = result
+
+        self.scanner.report()
+
+        if best_result is None:
+
+            Logger.warning(
+
+                "Nessun mercato analizzato."
+
+            )
 
             return
 
-        current_price = float(
+        Logger.section(
 
-            data["Close"].iloc[-1]
-
-        )
-
-        result = self.analysis.analyze(
-
-            data,
-
-            current_price,
-
-            symbol
+            "MIGLIOR SEGNALE"
 
         )
 
-        self.print_result(result)
+        self.print_result(best_result)
 
-        signal = result["signal"]
+        signal = best_result["signal"]
 
-        trade = result["trade"]
+        trade = best_result["trade"]
 
-        if trade is not None and signal["valid"]:
+        if (
+
+            trade is not None
+
+            and signal["valid"]
+
+        ):
 
             order = self.execution.execute(trade)
 
-            if order is not None and order["success"]:
+            if order["success"]:
 
                 opened = self.position_controller.open_position(
 
@@ -129,16 +196,6 @@ class CoreSystem:
 
                     )
 
-                    self.backtest.add_trade({
-
-                        "side": order["side"],
-
-                        "entry": order["entry"],
-
-                        "pnl": 0.0
-
-                    })
-
         self.print_backtest()
 
         self.portfolio.report()
@@ -151,37 +208,7 @@ class CoreSystem:
 
     def run_backtest(self):
 
-        Logger.section("PROJECT PHOENIX AI")
-
-        Logger.info("Modalità BACKTEST")
-
-        self.market.load_markets()
-
-        data = self.candles.get_backtest_data(
-
-            "BTC-USD",
-
-            period="1y",
-
-            interval="1h"
-
-        )
-
-        stats = self.backtest.simulate(
-
-            data,
-
-            self.analysis,
-
-            self.position_controller
-
-        )
-
-        print()
-
-        for key, value in stats.items():
-
-            print(f"{key:15}: {value}")
+        Logger.info("Backtest in sviluppo.")
 
     # =====================================
     # RISULTATI
@@ -199,7 +226,7 @@ class CoreSystem:
 
         print()
 
-        print("Decisione :", decision["signal"])
+        print("Decisione :", decision["action"])
 
         print("Segnale   :", signal["signal"])
 
@@ -213,7 +240,7 @@ class CoreSystem:
 
         print(
 
-            "Validazione :",
+            "Validazione:",
 
             "SI" if signal["valid"] else "NO"
 
@@ -232,6 +259,8 @@ class CoreSystem:
             print()
 
         if trade:
+
+            print("Symbol     :", trade["symbol"])
 
             print("Entry      :", trade["entry"])
 
