@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Analysis Engine
-Versione 8.1
+Versione 9.0
 ========================================
 """
 
@@ -22,7 +22,7 @@ class AnalysisEngine:
 
     def __init__(self):
 
-        Logger.success("Analysis Engine V8 inizializzato.")
+        Logger.success("Analysis Engine V9 inizializzato.")
 
         self.indicator_manager = IndicatorManager()
 
@@ -42,25 +42,27 @@ class AnalysisEngine:
     # ANALISI COMPLETA
     # =====================================
 
-    def analyze(self, data, price):
+    def analyze(
+
+        self,
+
+        data,
+
+        price,
+
+        symbol="BTC-USD"
+
+    ):
 
         Logger.section("ANALYSIS ENGINE")
 
-        # ==========================
-        # INDICATORI
-        # ==========================
-
         indicators = self.indicator_manager.get_indicators(data)
-
-        # ==========================
-        # ANALISI MERCATO
-        # ==========================
 
         analysis = self.market_analyzer.analyze(indicators)
 
-        # ==========================
+        # =====================================
         # SMART MONEY
-        # ==========================
+        # =====================================
 
         analysis.update(
 
@@ -76,15 +78,15 @@ class AnalysisEngine:
 
         analysis["liquidity"] = self.smart_money.detect_liquidity(data)
 
-        # ==========================
+        # =====================================
         # RISK
-        # ==========================
+        # =====================================
 
         risk = self.risk_manager.evaluate(analysis)
 
-        # ==========================
-        # PHOENIX BRAIN
-        # ==========================
+        # =====================================
+        # AI BRAIN
+        # =====================================
 
         brain = self.phoenix_brain.think(
 
@@ -94,63 +96,45 @@ class AnalysisEngine:
 
         )
 
-        # ==========================
-        # DECISION
-        # ==========================
+        # =====================================
+        # SIGNAL
+        # =====================================
 
-        decision = {
+        signal = self.signal_manager.validate(brain)
 
-            "signal": brain["action"],
-
-            "score": brain["score"],
-
-            "confidence": brain["confidence"],
-
-            "reasons": brain["reasons"]
-
-        }
-
-        # ==========================
-        # VALIDAZIONE
-        # ==========================
-
-        signal = self.signal_manager.validate(
-
-            decision
-
-        )
-
-        # ==========================
+        # =====================================
         # TRADE
-        # ==========================
+        # =====================================
 
-        trade = self.trade_manager.generate_trade(
+        trade = None
 
-            symbol="BTC-USD",
+        if signal["valid"]:
 
-            decision=signal,
+            trade = self.trade_manager.generate_trade(
 
-            current_price=price,
+                symbol=symbol,
 
-            atr=indicators["atr"]
+                price=price,
 
-        )
+                signal=signal["signal"],
 
-        # ==========================
+                atr=indicators["atr"]
+
+            )
+
+        # =====================================
         # OUTPUT
-        # ==========================
+        # =====================================
 
         return {
 
-            "indicators": indicators,
-
             "analysis": analysis,
 
-            "brain": brain,
+            "indicators": indicators,
 
             "risk": risk,
 
-            "decision": decision,
+            "decision": brain,
 
             "signal": signal,
 

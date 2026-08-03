@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Phoenix Brain
-Versione 7.1
+Versione 8.0
 ========================================
 """
 
@@ -13,7 +13,7 @@ class PhoenixBrain:
 
     def __init__(self):
 
-        Logger.success("Phoenix Brain V7 inizializzato.")
+        Logger.success("Phoenix Brain V8 inizializzato.")
 
     # =====================================
     # AI DECISION
@@ -26,103 +26,119 @@ class PhoenixBrain:
         reasons = []
         warnings = []
 
-        # ==========================
+        # =====================================
         # TREND
-        # ==========================
+        # =====================================
 
-        if analysis.get("trend_bullish", False):
+        if analysis.get("trend_bullish"):
 
             score += 20
             reasons.append("Trend rialzista")
 
-        elif analysis.get("trend_bearish", False):
+        elif analysis.get("trend_bearish"):
 
             score -= 20
             warnings.append("Trend ribassista")
 
-        # ==========================
+        # =====================================
         # EMA
-        # ==========================
+        # =====================================
 
-        if analysis.get("ema_alignment", False):
+        if analysis.get("ema_alignment"):
 
             score += 10
             reasons.append("EMA allineate")
 
-        # ==========================
+        # =====================================
         # MACD
-        # ==========================
+        # =====================================
 
-        if analysis.get("macd_buy", False):
+        if analysis.get("macd_buy"):
 
             score += 10
             reasons.append("MACD BUY")
 
-        elif analysis.get("macd_sell", False):
+        elif analysis.get("macd_sell"):
 
             score -= 10
             warnings.append("MACD SELL")
 
-        # ==========================
+        # =====================================
         # RSI
-        # ==========================
+        # =====================================
 
         rsi = float(analysis.get("rsi", 50))
 
-        if 45 <= rsi <= 60:
+        if rsi < 30:
 
-            score += 10
-            reasons.append("RSI equilibrato")
+            score += 15
+            reasons.append("RSI ipervenduto")
 
         elif rsi > 70:
 
             score -= 15
             warnings.append("RSI ipercomprato")
 
-        elif rsi < 30:
+        elif 45 <= rsi <= 60:
 
-            score += 15
-            reasons.append("RSI ipervenduto")
+            score += 5
+            reasons.append("RSI equilibrato")
 
-        # ==========================
+        # =====================================
         # ADX
-        # ==========================
+        # =====================================
 
-        if analysis.get("adx_strong", False):
+        if analysis.get("adx_strong"):
 
             score += 10
             reasons.append("Trend forte")
 
-        # ==========================
+        # =====================================
         # VOLUME
-        # ==========================
+        # =====================================
 
-        if analysis.get("volume_high", False):
+        if analysis.get("volume_high"):
 
-            score += 5
+            score += 10
             reasons.append("Volume elevato")
 
-        # ==========================
+        # =====================================
         # SMART MONEY
-        # ==========================
+        # =====================================
 
-        for key, text in [
+        if analysis.get("bos_bullish"):
 
-            ("breakout", "Breakout"),
-            ("order_block", "Order Block"),
-            ("liquidity", "Liquidity"),
-            ("smart_money", "Smart Money")
+            score += 15
+            reasons.append("BOS Rialzista")
 
-        ]:
+        if analysis.get("bos_bearish"):
 
-            if analysis.get(key, False):
+            score -= 15
+            warnings.append("BOS Ribassista")
 
-                score += 5
-                reasons.append(text)
+        if analysis.get("choch"):
 
-        # ==========================
+            score += 10
+            reasons.append("CHoCH")
+
+        if analysis.get("fvg"):
+
+            score += 8
+            reasons.append("Fair Value Gap")
+
+        if analysis.get("order_block"):
+
+            score += 10
+            reasons.append("Order Block")
+
+        if analysis.get("liquidity"):
+
+            score += 8
+            reasons.append("Liquidity Sweep")
+
+        # =====================================
         # LIMITI
-        # ==========================
+        # =====================================
 
         score = max(0, min(score, 100))
 
@@ -138,11 +154,11 @@ class PhoenixBrain:
 
         confidence = max(0, min(confidence, 100))
 
-        # ==========================
-        # AZIONE
-        # ==========================
+        # =====================================
+        # DECISIONE
+        # =====================================
 
-        if score >= 85:
+        if score >= 90:
 
             action = "STRONG BUY"
 
@@ -150,7 +166,7 @@ class PhoenixBrain:
 
             action = "BUY"
 
-        elif score <= 15:
+        elif score <= 10:
 
             action = "STRONG SELL"
 

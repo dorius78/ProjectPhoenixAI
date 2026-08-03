@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Backtest Engine
-Versione 8.0
+Versione 11.0
 ========================================
 """
 
@@ -13,25 +13,26 @@ class BacktestEngine:
 
     def __init__(self):
 
-        Logger.success("Backtest Engine V8 inizializzato.")
+        Logger.success("Backtest Engine V11 inizializzato.")
 
         self.history = []
 
         self.initial_capital = 10000.0
 
     # =====================================
-    # REGISTRA TRADE
+    # AGGIUNGI TRADE
     # =====================================
 
     def add_trade(self, trade):
 
         if trade is None:
+
             return
 
         self.history.append(trade)
 
     # =====================================
-    # BACKTEST
+    # REPORT
     # =====================================
 
     def run(self):
@@ -46,40 +47,94 @@ class BacktestEngine:
         wins = 0
         losses = 0
 
-        profit = 0.0
+        gross_profit = 0.0
+        gross_loss = 0.0
 
         capital = self.initial_capital
+
+        peak = capital
+
+        max_drawdown = 0.0
 
         for trade in self.history:
 
             side = trade.get("side", "HOLD")
 
-            if side == "BUY":
+            pnl = float(trade.get("pnl", 0.0))
+
+            if "BUY" in side:
+
                 buy += 1
 
-            elif side == "SELL":
+            elif "SELL" in side:
+
                 sell += 1
 
-            pnl = float(trade.get("pnl", 0))
-
             capital += pnl
-            profit += pnl
 
             if pnl > 0:
 
                 wins += 1
 
+                gross_profit += pnl
+
             elif pnl < 0:
 
                 losses += 1
 
-        activity = 0.0
+                gross_loss += abs(pnl)
 
-        if total > 0:
+            if capital > peak:
 
-            activity = round((buy + sell) / total * 100, 2)
+                peak = capital
 
-        market_bias = "NEUTRAL"
+            drawdown = peak - capital
+
+            if drawdown > max_drawdown:
+
+                max_drawdown = drawdown
+
+        executed = wins + losses
+
+        win_rate = (
+
+            round(wins / executed * 100, 2)
+
+            if executed > 0
+
+            else 0.0
+
+        )
+
+        net_profit = gross_profit - gross_loss
+
+        roi = round(
+
+            net_profit / self.initial_capital * 100,
+
+            2
+
+        )
+
+        profit_factor = (
+
+            round(gross_profit / gross_loss, 2)
+
+            if gross_loss > 0
+
+            else 0.0
+
+        )
+
+        activity = (
+
+            round((buy + sell) / total * 100, 2)
+
+            if total > 0
+
+            else 0.0
+
+        )
 
         if buy > sell:
 
@@ -89,15 +144,13 @@ class BacktestEngine:
 
             market_bias = "SHORT"
 
-        win_rate = 0.0
+        else:
 
-        executed = wins + losses
+            market_bias = "NEUTRAL"
 
-        if executed > 0:
+        Logger.success("Backtest completato.")
 
-            win_rate = round(wins / executed * 100, 2)
-
-        results = {
+        return {
 
             "total_trades": total,
 
@@ -111,19 +164,25 @@ class BacktestEngine:
 
             "win_rate": win_rate,
 
-            "profit": round(profit, 2),
+            "gross_profit": round(gross_profit, 2),
+
+            "gross_loss": round(gross_loss, 2),
+
+            "net_profit": round(net_profit, 2),
 
             "capital": round(capital, 2),
+
+            "roi": roi,
+
+            "profit_factor": profit_factor,
+
+            "max_drawdown": round(max_drawdown, 2),
 
             "activity": activity,
 
             "market_bias": market_bias
 
         }
-
-        Logger.success("Backtest completato.")
-
-        return results
 
     # =====================================
     # RESET
@@ -133,4 +192,4 @@ class BacktestEngine:
 
         self.history.clear()
 
-        Logger.info("Storico Backtest azzerato.")
+        Logger.info("Backtest azzerato.")

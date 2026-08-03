@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Position Controller
-Versione 8.0
+Versione 11.0
 ========================================
 """
 
@@ -15,7 +15,7 @@ class PositionController:
 
     def __init__(self):
 
-        Logger.success("Position Controller V8 inizializzato.")
+        Logger.success("Position Controller V11 inizializzato.")
 
         self.position = None
 
@@ -24,19 +24,30 @@ class PositionController:
     # =====================================
 
     def open_position(
+
         self,
+
         side,
+
         entry,
+
         stop_loss,
-        take_profit
+
+        take_profit,
+
+        symbol="BTC-USD"
+
     ):
 
         if self.position is not None:
 
             Logger.warning("Posizione già aperta.")
+
             return False
 
         self.position = {
+
+            "symbol": symbol,
 
             "side": side,
 
@@ -62,7 +73,11 @@ class PositionController:
 
         }
 
-        Logger.success(f"Aperta posizione {side}")
+        Logger.success(
+
+            f"Aperta posizione {side} su {symbol}"
+
+        )
 
         return True
 
@@ -74,9 +89,11 @@ class PositionController:
 
         if self.position is None:
 
-            return
+            return None
 
-        self.position["current_price"] = float(current_price)
+        current_price = float(current_price)
+
+        self.position["current_price"] = current_price
 
         entry = self.position["entry"]
 
@@ -94,6 +111,10 @@ class PositionController:
 
             self.position["max_profit"] = round(profit, 6)
 
+        # ==========================
+        # BREAK EVEN
+        # ==========================
+
         if (
 
             not self.position["break_even"]
@@ -106,18 +127,90 @@ class PositionController:
 
             self.position["break_even"] = True
 
+            Logger.info("Break Even attivato.")
+
+        # ==========================
+        # TRAILING STOP
+        # ==========================
+
+        if self.position["break_even"]:
+
+            distance = abs(
+
+                self.position["take_profit"]
+
+                - entry
+
+            ) * 0.25
+
+            if self.position["side"] == "BUY":
+
+                new_stop = current_price - distance
+
+                if new_stop > self.position["stop_loss"]:
+
+                    self.position["stop_loss"] = round(
+
+                        new_stop,
+
+                        6
+
+                    )
+
+            else:
+
+                new_stop = current_price + distance
+
+                if new_stop < self.position["stop_loss"]:
+
+                    self.position["stop_loss"] = round(
+
+                        new_stop,
+
+                        6
+
+                    )
+
+        # ==========================
+        # CHIUSURA
+        # ==========================
+
+        if self.position["side"] == "BUY":
+
+            if current_price <= self.position["stop_loss"]:
+
+                return self.close_position("STOP LOSS")
+
+            if current_price >= self.position["take_profit"]:
+
+                return self.close_position("TAKE PROFIT")
+
+        else:
+
+            if current_price >= self.position["stop_loss"]:
+
+                return self.close_position("STOP LOSS")
+
+            if current_price <= self.position["take_profit"]:
+
+                return self.close_position("TAKE PROFIT")
+
+        return self.position
+
     # =====================================
     # CHIUSURA
     # =====================================
 
     def close_position(
+
         self,
+
         reason="MANUALE"
+
     ):
 
         if self.position is None:
 
-            Logger.warning("Nessuna posizione aperta.")
             return None
 
         self.position["status"] = "CLOSED"
@@ -126,7 +219,11 @@ class PositionController:
 
         self.position["close_time"] = datetime.now()
 
-        Logger.success(f"Posizione chiusa ({reason})")
+        Logger.success(
+
+            f"Posizione chiusa ({reason})"
+
+        )
 
         closed = self.position
 
@@ -143,7 +240,7 @@ class PositionController:
         return self.position
 
     # =====================================
-    # CONTROLLO
+    # ESISTE
     # =====================================
 
     def has_position(self):
@@ -158,4 +255,8 @@ class PositionController:
 
         self.position = None
 
-        Logger.info("Position Controller azzerato.")
+        Logger.info(
+
+            "Position Controller azzerato."
+
+        )
