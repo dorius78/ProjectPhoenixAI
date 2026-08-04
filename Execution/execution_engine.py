@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Execution Engine
-Versione 5.0
+Versione 6.0
 ========================================
 """
 
@@ -15,7 +15,7 @@ class ExecutionEngine:
 
     def __init__(self):
 
-        Logger.success("Execution Engine V5 inizializzato.")
+        Logger.success("Execution Engine V6 inizializzato.")
 
         self.orders = []
 
@@ -23,7 +23,13 @@ class ExecutionEngine:
     # ESECUZIONE ORDINE
     # =====================================
 
-    def execute(self, trade):
+    def execute(
+
+        self,
+
+        trade
+
+    ):
 
         Logger.section("EXECUTION ENGINE")
 
@@ -41,13 +47,23 @@ class ExecutionEngine:
 
         signal = str(
 
-            trade.get("signal", "HOLD")
+            trade.get(
+
+                "signal",
+
+                "HOLD"
+
+            )
 
         ).upper()
 
         if signal == "HOLD":
 
-            Logger.info("Segnale HOLD.")
+            Logger.info(
+
+                "Segnale HOLD."
+
+            )
 
             return {
 
@@ -77,11 +93,23 @@ class ExecutionEngine:
 
             "signal": signal,
 
-            "entry": float(trade["entry"]),
+            "entry": float(
 
-            "stop_loss": float(trade["stop_loss"]),
+                trade["entry"]
 
-            "take_profit": float(trade["take_profit"]),
+            ),
+
+            "stop_loss": float(
+
+                trade["stop_loss"]
+
+            ),
+
+            "take_profit": float(
+
+                trade["take_profit"]
+
+            ),
 
             "risk_reward": float(
 
@@ -91,7 +119,13 @@ class ExecutionEngine:
 
             "status": "OPEN",
 
-            "open_time": datetime.now()
+            "reason": "ENTRY",
+
+            "pnl": 0.0,
+
+            "open_time": datetime.now(),
+
+            "close_time": None
 
         }
 
@@ -121,13 +155,7 @@ class ExecutionEngine:
 
             return None
 
-        Logger.success(
-
-            f"Ordine {position['side']} chiuso."
-
-        )
-
-        return {
+        report = {
 
             "success": True,
 
@@ -139,18 +167,32 @@ class ExecutionEngine:
 
             "exit": position["current_price"],
 
+            "stop_loss": position["stop_loss"],
+
+            "take_profit": position["take_profit"],
+
             "pnl": position["current_profit"],
+
+            "status": "CLOSED",
 
             "reason": position["close_reason"],
 
-            "status": "CLOSED",
+            "open_time": position["open_time"],
 
             "close_time": datetime.now()
 
         }
 
+        Logger.success(
+
+            f"Ordine {position['side']} chiuso."
+
+        )
+
+        return report
+
     # =====================================
-    # ORDINI APERTI
+    # ORDINI
     # =====================================
 
     def get_orders(self):

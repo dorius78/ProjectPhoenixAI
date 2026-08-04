@@ -2,11 +2,12 @@
 ========================================
 PROJECT PHOENIX AI
 Live Trading Engine
-Versione 1.0
+Versione 4.0
 ========================================
 """
 
 import time
+from datetime import datetime
 
 from Logs.logger import Logger
 
@@ -27,13 +28,15 @@ class LiveTradingEngine:
 
         portfolio,
 
-        backtest
+        backtest,
+
+        database
 
     ):
 
         Logger.success(
 
-            "Live Trading Engine V1 inizializzato."
+            "Live Trading Engine V4 inizializzato."
 
         )
 
@@ -48,6 +51,8 @@ class LiveTradingEngine:
         self.portfolio = portfolio
 
         self.backtest = backtest
+
+        self.database = database
 
     # =====================================
     # AVVIO
@@ -129,7 +134,61 @@ class LiveTradingEngine:
 
                         )
 
-                        self.backtest.add_trade({
+                        duration = (
+
+                            report["close_time"]
+
+                            -
+
+                            closed["open_time"]
+
+                        ).total_seconds()
+
+                        result = (
+
+                            "WIN"
+
+                            if report["pnl"] > 0
+
+                            else "LOSS"
+
+                        )
+
+                        risk = abs(
+
+                            closed["entry"]
+
+                            -
+
+                            closed["stop_loss"]
+
+                        )
+
+                        reward = abs(
+
+                            report["exit"]
+
+                            -
+
+                            closed["entry"]
+
+                        )
+
+                        rr = 0
+
+                        if risk > 0:
+
+                            rr = round(
+
+                                reward / risk,
+
+                                2
+
+                            )
+
+                        trade = {
+
+                            "symbol": report["symbol"],
 
                             "side": report["side"],
 
@@ -137,9 +196,39 @@ class LiveTradingEngine:
 
                             "exit": report["exit"],
 
-                            "pnl": report["pnl"]
+                            "stop_loss": closed["stop_loss"],
 
-                        })
+                            "take_profit": closed["take_profit"],
+
+                            "pnl": report["pnl"],
+
+                            "status": "CLOSED",
+
+                            "reason": report["reason"],
+
+                            "open_time": closed["open_time"],
+
+                            "close_time": report["close_time"],
+
+                            "duration": duration,
+
+                            "result": result,
+
+                            "risk_reward": rr
+
+                        }
+
+                        self.database.save_trade(
+
+                            trade
+
+                        )
+
+                        self.backtest.add_trade(
+
+                            trade
+
+                        )
 
                         self.portfolio.remove(
 
@@ -147,8 +236,14 @@ class LiveTradingEngine:
 
                         )
 
+                        Logger.success(
+
+                            "Trade registrato."
+
+                        )
+
                 # ==========================
-                # NUOVA ANALISI
+                # NUOVO TRADE
                 # ==========================
 
                 if not self.position_controller.has_position():

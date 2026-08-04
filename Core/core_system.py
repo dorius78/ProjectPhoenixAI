@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Core System
-Versione 16.0
+Versione 18.0
 ========================================
 """
 
@@ -10,6 +10,8 @@ from Logs.logger import Logger
 
 from Data.market_data import MarketData
 from Data.candle_manager import CandleManager
+
+from Database.database_manager import DatabaseManager
 
 from Core.analysis_engine import AnalysisEngine
 from Core.backtest_engine import BacktestEngine
@@ -25,7 +27,7 @@ class CoreSystem:
 
     def __init__(self):
 
-        Logger.success("Core System V16 inizializzato.")
+        Logger.success("Core System V18 inizializzato.")
 
         self.market = MarketData()
 
@@ -40,6 +42,8 @@ class CoreSystem:
         self.execution = ExecutionEngine()
 
         self.backtest = BacktestEngine()
+
+        self.database = DatabaseManager()
 
         self.scanner = MarketScanner()
 
@@ -57,7 +61,9 @@ class CoreSystem:
 
             self.portfolio,
 
-            self.backtest
+            self.backtest,
+
+            self.database
 
         )
 
@@ -70,7 +76,7 @@ class CoreSystem:
         self.run_live()
 
     # =====================================
-    # SCANNER MULTI MARKET
+    # SCANNER
     # =====================================
 
     def run_live(self):
@@ -177,14 +183,70 @@ class CoreSystem:
 
         )
 
+        signal = best_result["signal"]
+
+        trade = best_result["trade"]
+
+        if (
+
+            trade is not None
+
+            and signal["valid"]
+
+        ):
+
+            order = self.execution.execute(
+
+                trade
+
+            )
+
+            if order["success"]:
+
+                opened = self.position_controller.open_position(
+
+                    side=order["side"],
+
+                    entry=order["entry"],
+
+                    stop_loss=order["stop_loss"],
+
+                    take_profit=order["take_profit"],
+
+                    symbol=order["symbol"]
+
+                )
+
+                if opened:
+
+                    self.portfolio.add(
+
+                        order["symbol"],
+
+                        self.position_controller.get_position()
+
+                    )
+
+        self.print_backtest()
+
+        self.portfolio.report()
+
+        Logger.section("DATABASE")
+
+        Logger.info(
+
+            f"Trade salvati : {self.database.count()}"
+
+        )
+
         Logger.success(
 
-            "Scanner completato."
+            "Core System completato."
 
         )
 
     # =====================================
-    # LIVE CONTINUO
+    # LIVE TRADING
     # =====================================
 
     def run_live_trading(
@@ -247,39 +309,15 @@ class CoreSystem:
 
         print()
 
-        print(
+        print("Decisione :", decision["action"])
 
-            "Decisione :",
-
-            decision["action"]
-
-        )
-
-        print(
-
-            "Segnale   :",
-
-            signal["signal"]
-
-        )
+        print("Segnale   :", signal["signal"])
 
         print()
 
-        print(
+        print("Score     :", decision["score"])
 
-            "Score     :",
-
-            decision["score"]
-
-        )
-
-        print(
-
-            "Confidence:",
-
-            decision["confidence"]
-
-        )
+        print("Confidence:", decision["confidence"])
 
         print()
 
@@ -287,11 +325,7 @@ class CoreSystem:
 
             "Validazione:",
 
-            "SI"
-
-            if signal["valid"]
-
-            else "NO"
+            "SI" if signal["valid"] else "NO"
 
         )
 
