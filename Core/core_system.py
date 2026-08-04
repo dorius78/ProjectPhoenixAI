@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Core System
-Versione 14.1
+Versione 16.0
 ========================================
 """
 
@@ -16,6 +16,7 @@ from Core.backtest_engine import BacktestEngine
 from Core.position_controller import PositionController
 from Core.portfolio_manager import PortfolioManager
 from Core.market_scanner import MarketScanner
+from Core.live_trading_engine import LiveTradingEngine
 
 from Execution.execution_engine import ExecutionEngine
 
@@ -24,7 +25,7 @@ class CoreSystem:
 
     def __init__(self):
 
-        Logger.success("Core System V14.1 inizializzato.")
+        Logger.success("Core System V16 inizializzato.")
 
         self.market = MarketData()
 
@@ -44,6 +45,22 @@ class CoreSystem:
 
         self.scanner.load_default()
 
+        self.live_engine = LiveTradingEngine(
+
+            self.candles,
+
+            self.analysis,
+
+            self.execution,
+
+            self.position_controller,
+
+            self.portfolio,
+
+            self.backtest
+
+        )
+
     # =====================================
     # AVVIO
     # =====================================
@@ -53,14 +70,14 @@ class CoreSystem:
         self.run_live()
 
     # =====================================
-    # LIVE
+    # SCANNER MULTI MARKET
     # =====================================
 
     def run_live(self):
 
         Logger.section("PROJECT PHOENIX AI")
 
-        Logger.info("Modalità LIVE")
+        Logger.info("Modalità LIVE SCANNER")
 
         self.market.load_markets()
 
@@ -68,7 +85,11 @@ class CoreSystem:
 
         symbols = self.scanner.get_symbols()
 
-        Logger.info(f"Scanner: {len(symbols)} strumenti")
+        Logger.info(
+
+            f"Scanner: {len(symbols)} strumenti"
+
+        )
 
         best_result = None
 
@@ -108,10 +129,6 @@ class CoreSystem:
 
             decision = result["decision"]
 
-            signal = result["signal"]
-
-            trade = result["trade"]
-
             self.scanner.add_result(
 
                 symbol,
@@ -142,7 +159,7 @@ class CoreSystem:
 
             Logger.warning(
 
-                "Nessun mercato analizzato."
+                "Nessun mercato disponibile."
 
             )
 
@@ -154,53 +171,47 @@ class CoreSystem:
 
         )
 
-        self.print_result(best_result)
+        self.print_result(
 
-        signal = best_result["signal"]
+            best_result
 
-        trade = best_result["trade"]
+        )
 
-        if (
+        Logger.success(
 
-            trade is not None
+            "Scanner completato."
 
-            and signal["valid"]
+        )
 
-        ):
+    # =====================================
+    # LIVE CONTINUO
+    # =====================================
 
-            order = self.execution.execute(trade)
+    def run_live_trading(
 
-            if order["success"]:
+        self,
 
-                opened = self.position_controller.open_position(
+        symbol="BTC-USD"
 
-                    side=order["side"],
+    ):
 
-                    entry=order["entry"],
+        Logger.section(
 
-                    stop_loss=order["stop_loss"],
+            "LIVE TRADING"
 
-                    take_profit=order["take_profit"],
+        )
 
-                    symbol=order["symbol"]
+        self.market.load_markets()
 
-                )
+        self.live_engine.start(
 
-                if opened:
+            symbol=symbol,
 
-                    self.portfolio.add(
+            interval="1h",
 
-                        order["symbol"],
+            delay=30
 
-                        self.position_controller.get_position()
-
-                    )
-
-        self.print_backtest()
-
-        self.portfolio.report()
-
-        Logger.success("Core System completato.")
+        )
 
     # =====================================
     # BACKTEST
@@ -208,13 +219,23 @@ class CoreSystem:
 
     def run_backtest(self):
 
-        Logger.info("Backtest in sviluppo.")
+        Logger.info(
+
+            "Backtest in sviluppo."
+
+        )
 
     # =====================================
     # RISULTATI
     # =====================================
 
-    def print_result(self, result):
+    def print_result(
+
+        self,
+
+        result
+
+    ):
 
         Logger.section("RISULTATI")
 
@@ -226,15 +247,39 @@ class CoreSystem:
 
         print()
 
-        print("Decisione :", decision["action"])
+        print(
 
-        print("Segnale   :", signal["signal"])
+            "Decisione :",
+
+            decision["action"]
+
+        )
+
+        print(
+
+            "Segnale   :",
+
+            signal["signal"]
+
+        )
 
         print()
 
-        print("Score     :", decision["score"])
+        print(
 
-        print("Confidence:", decision["confidence"])
+            "Score     :",
+
+            decision["score"]
+
+        )
+
+        print(
+
+            "Confidence:",
+
+            decision["confidence"]
+
+        )
 
         print()
 
@@ -242,7 +287,11 @@ class CoreSystem:
 
             "Validazione:",
 
-            "SI" if signal["valid"] else "NO"
+            "SI"
+
+            if signal["valid"]
+
+            else "NO"
 
         )
 

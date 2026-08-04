@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Backtest Engine
-Versione 11.0
+Versione 12.0
 ========================================
 """
 
@@ -13,11 +13,13 @@ class BacktestEngine:
 
     def __init__(self):
 
-        Logger.success("Backtest Engine V11 inizializzato.")
+        Logger.success("Backtest Engine V12 inizializzato.")
 
         self.history = []
 
         self.initial_capital = 10000.0
+
+        self.closed_trades = 0
 
     # =====================================
     # AGGIUNGI TRADE
@@ -30,6 +32,26 @@ class BacktestEngine:
             return
 
         self.history.append(trade)
+
+        self.closed_trades += 1
+
+        Logger.info(
+
+            f"Trade chiuso #{self.closed_trades}"
+
+        )
+
+    # =====================================
+    # ULTIMO TRADE
+    # =====================================
+
+    def last_trade(self):
+
+        if not self.history:
+
+            return None
+
+        return self.history[-1]
 
     # =====================================
     # REPORT
@@ -58,9 +80,17 @@ class BacktestEngine:
 
         for trade in self.history:
 
-            side = trade.get("side", "HOLD")
+            side = str(
 
-            pnl = float(trade.get("pnl", 0.0))
+                trade.get("side", "HOLD")
+
+            ).upper()
+
+            pnl = float(
+
+                trade.get("pnl", 0.0)
+
+            )
 
             if "BUY" in side:
 
@@ -96,45 +126,63 @@ class BacktestEngine:
 
         executed = wins + losses
 
-        win_rate = (
+        if executed > 0:
 
-            round(wins / executed * 100, 2)
+            win_rate = round(
 
-            if executed > 0
+                wins / executed * 100,
 
-            else 0.0
+                2
 
-        )
+            )
+
+        else:
+
+            win_rate = 0.0
 
         net_profit = gross_profit - gross_loss
 
         roi = round(
 
-            net_profit / self.initial_capital * 100,
+            net_profit /
+
+            self.initial_capital * 100,
 
             2
 
         )
 
-        profit_factor = (
+        if gross_loss > 0:
 
-            round(gross_profit / gross_loss, 2)
+            profit_factor = round(
 
-            if gross_loss > 0
+                gross_profit /
 
-            else 0.0
+                gross_loss,
 
-        )
+                2
 
-        activity = (
+            )
 
-            round((buy + sell) / total * 100, 2)
+        else:
 
-            if total > 0
+            profit_factor = 0.0
 
-            else 0.0
+        if total > 0:
 
-        )
+            activity = round(
+
+                (buy + sell) /
+
+                total * 100,
+
+                2
+
+            )
+
+        else:
+
+            activity = 0.0
 
         if buy > sell:
 
@@ -148,11 +196,17 @@ class BacktestEngine:
 
             market_bias = "NEUTRAL"
 
-        Logger.success("Backtest completato.")
+        Logger.success(
+
+            "Backtest completato."
+
+        )
 
         return {
 
             "total_trades": total,
+
+            "closed_trades": self.closed_trades,
 
             "buy": buy,
 
@@ -164,19 +218,49 @@ class BacktestEngine:
 
             "win_rate": win_rate,
 
-            "gross_profit": round(gross_profit, 2),
+            "gross_profit": round(
 
-            "gross_loss": round(gross_loss, 2),
+                gross_profit,
 
-            "net_profit": round(net_profit, 2),
+                2
 
-            "capital": round(capital, 2),
+            ),
+
+            "gross_loss": round(
+
+                gross_loss,
+
+                2
+
+            ),
+
+            "net_profit": round(
+
+                net_profit,
+
+                2
+
+            ),
+
+            "capital": round(
+
+                capital,
+
+                2
+
+            ),
 
             "roi": roi,
 
             "profit_factor": profit_factor,
 
-            "max_drawdown": round(max_drawdown, 2),
+            "max_drawdown": round(
+
+                max_drawdown,
+
+                2
+
+            ),
 
             "activity": activity,
 
@@ -192,4 +276,10 @@ class BacktestEngine:
 
         self.history.clear()
 
-        Logger.info("Backtest azzerato.")
+        self.closed_trades = 0
+
+        Logger.info(
+
+            "Backtest azzerato."
+
+        )

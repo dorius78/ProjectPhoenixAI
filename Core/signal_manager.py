@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Signal Manager
-Versione 8.0
+Versione 9.0
 ========================================
 """
 
@@ -14,7 +14,7 @@ class SignalManager:
 
     def __init__(self):
 
-        Logger.success("Signal Manager V8 inizializzato.")
+        Logger.success("Signal Manager V9 inizializzato.")
 
     # =====================================
     # VALIDAZIONE
@@ -23,20 +23,42 @@ class SignalManager:
     def validate(self, decision):
 
         signal = str(
-            decision.get("signal", "HOLD")
+
+            decision.get("action", "HOLD")
+
         ).upper()
 
         confidence = float(
+
             decision.get("confidence", 0)
+
+        )
+
+        score = int(
+
+            decision.get("score", 0)
+
         )
 
         valid = False
 
-        if signal in ("STRONG BUY", "STRONG SELL"):
+        if signal in (
+
+            "STRONG BUY",
+
+            "STRONG SELL"
+
+        ):
 
             valid = True
 
-        elif signal in ("BUY", "SELL"):
+        elif signal in (
+
+            "BUY",
+
+            "SELL"
+
+        ):
 
             valid = confidence >= MIN_CONFIDENCE
 
@@ -46,23 +68,34 @@ class SignalManager:
 
             "signal": signal,
 
-            "score": decision.get("score", 0),
+            "score": score,
 
             "confidence": confidence,
 
-            "reasons": decision.get("reasons", [])
+            "reasons": decision.get(
+
+                "reasons",
+
+                []
+
+            )
 
         }
 
     # =====================================
-    # COMPATIBILITA'
+    # GENERAZIONE
     # =====================================
 
     def generate_signal(
+
         self,
+
         decision,
+
         brain,
+
         risk
+
     ):
 
         if not risk["allow_trade"]:
@@ -74,9 +107,13 @@ class SignalManager:
         if action in (
 
             "BUY",
+
             "SELL",
+
             "STRONG BUY",
+
             "STRONG SELL",
+
             "HOLD"
 
         ):
@@ -94,6 +131,7 @@ class SignalManager:
         return str(signal).upper() in (
 
             "BUY",
+
             "STRONG BUY"
 
         )
@@ -107,6 +145,7 @@ class SignalManager:
         return str(signal).upper() in (
 
             "SELL",
+
             "STRONG SELL"
 
         )

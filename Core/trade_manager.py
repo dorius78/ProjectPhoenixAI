@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Trade Manager
-Versione 9.0
+Versione 10.0
 ========================================
 """
 
@@ -17,7 +17,7 @@ class TradeManager:
 
         self.risk = RiskManager()
 
-        Logger.success("Trade Manager V9 inizializzato.")
+        Logger.success("Trade Manager V10 inizializzato.")
 
     # =====================================
     # GENERA TRADE
@@ -37,21 +37,27 @@ class TradeManager:
 
     ):
 
-        if signal in (
+        signal = str(signal).upper()
 
-            "HOLD",
-
-            None
-
-        ):
+        if signal == "HOLD":
 
             return None
+
+        side = signal
+
+        if signal == "STRONG BUY":
+
+            side = "BUY"
+
+        elif signal == "STRONG SELL":
+
+            side = "SELL"
 
         trade = self.risk.build_trade(
 
             symbol=symbol,
 
-            signal=signal,
+            signal=side,
 
             current_price=price,
 
@@ -64,6 +70,10 @@ class TradeManager:
             return None
 
         trade["symbol"] = symbol
+
+        trade["signal"] = signal
+
+        trade["side"] = side
 
         return trade
 
@@ -81,41 +91,19 @@ class TradeManager:
 
         Logger.section("TRADE MANAGER")
 
-        Logger.info(
+        Logger.info(f"Symbol       : {trade['symbol']}")
 
-            f"Symbol       : {trade['symbol']}"
+        Logger.info(f"Signal       : {trade['signal']}")
 
-        )
+        Logger.info(f"Side         : {trade['side']}")
 
-        Logger.info(
+        Logger.info(f"Entry        : {trade['entry']}")
 
-            f"Side         : {trade['side']}"
+        Logger.info(f"Stop Loss    : {trade['stop_loss']}")
 
-        )
+        Logger.info(f"Take Profit  : {trade['take_profit']}")
 
-        Logger.info(
-
-            f"Entry        : {trade['entry']}"
-
-        )
-
-        Logger.info(
-
-            f"Stop Loss    : {trade['stop_loss']}"
-
-        )
-
-        Logger.info(
-
-            f"Take Profit  : {trade['take_profit']}"
-
-        )
-
-        Logger.info(
-
-            f"Risk Reward  : {trade['risk_reward']}"
-
-        )
+        Logger.info(f"Risk Reward  : {trade['risk_reward']}")
 
     # =====================================
     # RESET
@@ -123,8 +111,4 @@ class TradeManager:
 
     def reset(self):
 
-        Logger.info(
-
-            "Trade Manager azzerato."
-
-        )
+        Logger.info("Trade Manager azzerato.")

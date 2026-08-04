@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Position Controller
-Versione 11.0
+Versione 12.0
 ========================================
 """
 
@@ -15,7 +15,7 @@ class PositionController:
 
     def __init__(self):
 
-        Logger.success("Position Controller V11 inizializzato.")
+        Logger.success("Position Controller V12 inizializzato.")
 
         self.position = None
 
@@ -61,6 +61,10 @@ class PositionController:
 
             "open_time": datetime.now(),
 
+            "close_time": None,
+
+            "close_reason": None,
+
             "current_price": float(entry),
 
             "current_profit": 0.0,
@@ -85,7 +89,13 @@ class PositionController:
     # AGGIORNA POSIZIONE
     # =====================================
 
-    def update(self, current_price):
+    def update(
+
+        self,
+
+        current_price
+
+    ):
 
         if self.position is None:
 
@@ -97,7 +107,9 @@ class PositionController:
 
         entry = self.position["entry"]
 
-        if self.position["side"] == "BUY":
+        side = self.position["side"]
+
+        if side == "BUY":
 
             profit = current_price - entry
 
@@ -105,15 +117,27 @@ class PositionController:
 
             profit = entry - current_price
 
-        self.position["current_profit"] = round(profit, 6)
+        self.position["current_profit"] = round(
+
+            profit,
+
+            6
+
+        )
 
         if profit > self.position["max_profit"]:
 
-            self.position["max_profit"] = round(profit, 6)
+            self.position["max_profit"] = round(
 
-        # ==========================
+                profit,
+
+                6
+
+            )
+
+        # =====================================
         # BREAK EVEN
-        # ==========================
+        # =====================================
 
         if (
 
@@ -127,11 +151,15 @@ class PositionController:
 
             self.position["break_even"] = True
 
-            Logger.info("Break Even attivato.")
+            Logger.info(
 
-        # ==========================
+                "Break Even attivato."
+
+            )
+
+        # =====================================
         # TRAILING STOP
-        # ==========================
+        # =====================================
 
         if self.position["break_even"]:
 
@@ -143,7 +171,7 @@ class PositionController:
 
             ) * 0.25
 
-            if self.position["side"] == "BUY":
+            if side == "BUY":
 
                 new_stop = current_price - distance
 
@@ -154,6 +182,12 @@ class PositionController:
                         new_stop,
 
                         6
+
+                    )
+
+                    Logger.info(
+
+                        f"Trailing Stop -> {self.position['stop_loss']}"
 
                     )
 
@@ -171,34 +205,56 @@ class PositionController:
 
                     )
 
-        # ==========================
-        # CHIUSURA
-        # ==========================
+                    Logger.info(
 
-        if self.position["side"] == "BUY":
+                        f"Trailing Stop -> {self.position['stop_loss']}"
+
+                    )
+
+        # =====================================
+        # STOP LOSS / TAKE PROFIT
+        # =====================================
+
+        if side == "BUY":
 
             if current_price <= self.position["stop_loss"]:
 
-                return self.close_position("STOP LOSS")
+                return self.close_position(
+
+                    "STOP LOSS"
+
+                )
 
             if current_price >= self.position["take_profit"]:
 
-                return self.close_position("TAKE PROFIT")
+                return self.close_position(
+
+                    "TAKE PROFIT"
+
+                )
 
         else:
 
             if current_price >= self.position["stop_loss"]:
 
-                return self.close_position("STOP LOSS")
+                return self.close_position(
+
+                    "STOP LOSS"
+
+                )
 
             if current_price <= self.position["take_profit"]:
 
-                return self.close_position("TAKE PROFIT")
+                return self.close_position(
+
+                    "TAKE PROFIT"
+
+                )
 
         return self.position
 
     # =====================================
-    # CHIUSURA
+    # CHIUSURA POSIZIONE
     # =====================================
 
     def close_position(
@@ -225,14 +281,14 @@ class PositionController:
 
         )
 
-        closed = self.position
+        closed = self.position.copy()
 
         self.position = None
 
         return closed
 
     # =====================================
-    # GET
+    # POSIZIONE
     # =====================================
 
     def get_position(self):

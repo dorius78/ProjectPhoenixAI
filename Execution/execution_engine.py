@@ -2,9 +2,11 @@
 ========================================
 PROJECT PHOENIX AI
 Execution Engine
-Versione 4.1
+Versione 5.0
 ========================================
 """
+
+from datetime import datetime
 
 from Logs.logger import Logger
 
@@ -13,7 +15,9 @@ class ExecutionEngine:
 
     def __init__(self):
 
-        Logger.success("Execution Engine V4 inizializzato.")
+        Logger.success("Execution Engine V5 inizializzato.")
+
+        self.orders = []
 
     # =====================================
     # ESECUZIONE ORDINE
@@ -35,7 +39,11 @@ class ExecutionEngine:
 
             }
 
-        signal = trade.get("signal", "").upper()
+        signal = str(
+
+            trade.get("signal", "HOLD")
+
+        ).upper()
 
         if signal == "HOLD":
 
@@ -59,13 +67,7 @@ class ExecutionEngine:
 
             side = "SELL"
 
-        Logger.success(
-
-            f"Ordine {side} aperto."
-
-        )
-
-        return {
+        order = {
 
             "success": True,
 
@@ -75,23 +77,45 @@ class ExecutionEngine:
 
             "signal": signal,
 
-            "entry": trade["entry"],
+            "entry": float(trade["entry"]),
 
-            "stop_loss": trade["stop_loss"],
+            "stop_loss": float(trade["stop_loss"]),
 
-            "take_profit": trade["take_profit"],
+            "take_profit": float(trade["take_profit"]),
 
-            "risk_reward": trade["risk_reward"],
+            "risk_reward": float(
 
-            "status": "SIMULATED"
+                trade["risk_reward"]
+
+            ),
+
+            "status": "OPEN",
+
+            "open_time": datetime.now()
 
         }
+
+        self.orders.append(order)
+
+        Logger.success(
+
+            f"Ordine {side} aperto."
+
+        )
+
+        return order
 
     # =====================================
     # CHIUSURA ORDINE
     # =====================================
 
-    def close(self, position):
+    def close(
+
+        self,
+
+        position
+
+    ):
 
         if position is None:
 
@@ -109,6 +133,40 @@ class ExecutionEngine:
 
             "symbol": position["symbol"],
 
-            "status": "CLOSED"
+            "side": position["side"],
+
+            "entry": position["entry"],
+
+            "exit": position["current_price"],
+
+            "pnl": position["current_profit"],
+
+            "reason": position["close_reason"],
+
+            "status": "CLOSED",
+
+            "close_time": datetime.now()
 
         }
+
+    # =====================================
+    # ORDINI APERTI
+    # =====================================
+
+    def get_orders(self):
+
+        return self.orders
+
+    # =====================================
+    # RESET
+    # =====================================
+
+    def reset(self):
+
+        self.orders.clear()
+
+        Logger.info(
+
+            "Execution Engine azzerato."
+
+        )
