@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Core System
-Versione 18.0
+Versione 19.0
 ========================================
 """
 
@@ -19,6 +19,7 @@ from Core.position_controller import PositionController
 from Core.portfolio_manager import PortfolioManager
 from Core.market_scanner import MarketScanner
 from Core.live_trading_engine import LiveTradingEngine
+from Core.performance_analytics import PerformanceAnalytics
 
 from Execution.execution_engine import ExecutionEngine
 
@@ -27,7 +28,7 @@ class CoreSystem:
 
     def __init__(self):
 
-        Logger.success("Core System V18 inizializzato.")
+        Logger.success("Core System V19 inizializzato.")
 
         self.market = MarketData()
 
@@ -44,6 +45,12 @@ class CoreSystem:
         self.backtest = BacktestEngine()
 
         self.database = DatabaseManager()
+
+        self.performance = PerformanceAnalytics(
+
+            self.database
+
+        )
 
         self.scanner = MarketScanner()
 
@@ -274,6 +281,14 @@ class CoreSystem:
             delay=30
 
         )
+
+    # =====================================
+    # PERFORMANCE
+    # =====================================
+
+    def run_performance(self):
+
+        self.performance.report()
 
     # =====================================
     # BACKTEST

@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Database Manager
-Versione 3.0
+Versione 5.0
 ========================================
 """
 
@@ -15,16 +15,10 @@ class DatabaseManager:
 
     def __init__(self):
 
-        Logger.success(
-
-            "Database Manager V3 inizializzato."
-
-        )
+        Logger.success("Database Manager V5 inizializzato.")
 
         self.connection = sqlite3.connect(
-
             "phoenix_ai.db"
-
         )
 
         self.cursor = self.connection.cursor()
@@ -32,7 +26,7 @@ class DatabaseManager:
         self.create_tables()
 
     # =====================================
-    # CREA TABELLE
+    # CREA TABELLA
     # =====================================
 
     def create_tables(self):
@@ -44,25 +38,20 @@ class DatabaseManager:
             id INTEGER PRIMARY KEY AUTOINCREMENT,
 
             symbol TEXT,
-
             side TEXT,
 
             entry REAL,
-
             exit REAL,
 
             stop_loss REAL,
-
             take_profit REAL,
 
             pnl REAL,
 
             status TEXT,
-
             reason TEXT,
 
             open_time TEXT,
-
             close_time TEXT,
 
             duration REAL,
@@ -78,16 +67,10 @@ class DatabaseManager:
         self.connection.commit()
 
     # =====================================
-    # SALVA TRADE
+    # SALVA
     # =====================================
 
-    def save_trade(
-
-        self,
-
-        trade
-
-    ):
+    def save_trade(self, trade):
 
         self.cursor.execute(
 
@@ -96,31 +79,18 @@ class DatabaseManager:
             INSERT INTO trades(
 
                 symbol,
-
                 side,
-
                 entry,
-
                 exit,
-
                 stop_loss,
-
                 take_profit,
-
                 pnl,
-
                 status,
-
                 reason,
-
                 open_time,
-
                 close_time,
-
                 duration,
-
                 result,
-
                 risk_reward
 
             )
@@ -135,59 +105,20 @@ class DatabaseManager:
 
             (
 
-                trade.get("symbol"),
-
-                trade.get("side"),
-
-                trade.get("entry"),
-
-                trade.get("exit"),
-
-                trade.get("stop_loss"),
-
-                trade.get("take_profit"),
-
-                trade.get("pnl"),
-
-                trade.get("status"),
-
-                trade.get("reason"),
-
-                str(
-
-                    trade.get("open_time")
-
-                ),
-
-                str(
-
-                    trade.get("close_time")
-
-                ),
-
-                trade.get(
-
-                    "duration",
-
-                    0
-
-                ),
-
-                trade.get(
-
-                    "result",
-
-                    "UNKNOWN"
-
-                ),
-
-                trade.get(
-
-                    "risk_reward",
-
-                    0
-
-                )
+                trade["symbol"],
+                trade["side"],
+                trade["entry"],
+                trade["exit"],
+                trade["stop_loss"],
+                trade["take_profit"],
+                trade["pnl"],
+                trade["status"],
+                trade["reason"],
+                str(trade["open_time"]),
+                str(trade["close_time"]),
+                trade["duration"],
+                trade["result"],
+                trade["risk_reward"]
 
             )
 
@@ -196,7 +127,7 @@ class DatabaseManager:
         self.connection.commit()
 
     # =====================================
-    # TUTTI I TRADE
+    # ELENCO
     # =====================================
 
     def load_trades(self):
@@ -210,7 +141,7 @@ class DatabaseManager:
         return self.cursor.fetchall()
 
     # =====================================
-    # CONTA
+    # STATISTICHE
     # =====================================
 
     def count(self):
@@ -223,10 +154,6 @@ class DatabaseManager:
 
         return self.cursor.fetchone()[0]
 
-    # =====================================
-    # WIN
-    # =====================================
-
     def wins(self):
 
         self.cursor.execute(
@@ -236,10 +163,6 @@ class DatabaseManager:
         )
 
         return self.cursor.fetchone()[0]
-
-    # =====================================
-    # LOSS
-    # =====================================
 
     def losses(self):
 
@@ -251,9 +174,15 @@ class DatabaseManager:
 
         return self.cursor.fetchone()[0]
 
-    # =====================================
-    # PROFITTO
-    # =====================================
+    def breakeven(self):
+
+        self.cursor.execute(
+
+            "SELECT COUNT(*) FROM trades WHERE pnl=0"
+
+        )
+
+        return self.cursor.fetchone()[0]
 
     def total_profit(self):
 
@@ -263,13 +192,97 @@ class DatabaseManager:
 
         )
 
-        result = self.cursor.fetchone()[0]
+        value = self.cursor.fetchone()[0]
 
-        if result is None:
+        return 0 if value is None else round(value,2)
+
+    def gross_profit(self):
+
+        self.cursor.execute(
+
+            "SELECT SUM(pnl) FROM trades WHERE pnl>0"
+
+        )
+
+        value = self.cursor.fetchone()[0]
+
+        return 0 if value is None else round(value,2)
+
+    def gross_loss(self):
+
+        self.cursor.execute(
+
+            "SELECT SUM(pnl) FROM trades WHERE pnl<0"
+
+        )
+
+        value = self.cursor.fetchone()[0]
+
+        return 0 if value is None else round(abs(value),2)
+
+    def best_trade(self):
+
+        self.cursor.execute(
+
+            "SELECT MAX(pnl) FROM trades"
+
+        )
+
+        value = self.cursor.fetchone()[0]
+
+        return 0 if value is None else round(value,2)
+
+    def worst_trade(self):
+
+        self.cursor.execute(
+
+            "SELECT MIN(pnl) FROM trades"
+
+        )
+
+        value = self.cursor.fetchone()[0]
+
+        return 0 if value is None else round(value,2)
+
+    def average_profit(self):
+
+        self.cursor.execute(
+
+            "SELECT AVG(pnl) FROM trades"
+
+        )
+
+        value = self.cursor.fetchone()[0]
+
+        return 0 if value is None else round(value,2)
+
+    def profit_factor(self):
+
+        gp = self.gross_profit()
+
+        gl = self.gross_loss()
+
+        if gl == 0:
 
             return 0
 
-        return round(result, 2)
+        return round(gp/gl,2)
+
+    def win_rate(self):
+
+        total = self.wins()+self.losses()
+
+        if total == 0:
+
+            return 0
+
+        return round(
+
+            self.wins()*100/total,
+
+            2
+
+        )
 
     # =====================================
     # RESET
@@ -292,7 +305,7 @@ class DatabaseManager:
         )
 
     # =====================================
-    # CHIUSURA
+    # CLOSE
     # =====================================
 
     def close(self):

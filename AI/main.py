@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Main
-Versione 17.0
+Versione 19.0
 ========================================
 """
 
@@ -29,7 +29,7 @@ def main():
     print("2 - Live Trading")
     print("3 - Backtest")
     print("4 - Database Trade")
-    print("5 - Trade Journal")
+    print("5 - Performance Analytics")
 
     print()
 
@@ -45,7 +45,7 @@ def main():
 
         simbolo = input(
 
-            "Symbol (es. BTC-USD): "
+            "Symbol (BTC-USD): "
 
         ).strip()
 
@@ -65,38 +65,31 @@ def main():
 
     elif scelta == "4":
 
+        Logger.section(
+
+            "DATABASE"
+
+        )
+
         trades = core.database.load_trades()
 
-        print()
+        if len(trades) == 0:
 
-        print("=" * 60)
-        print("DATABASE TRADE")
-        print("=" * 60)
+            print()
 
-        for trade in trades:
+            print("Nessun trade presente.")
 
-            print(trade)
+            print()
 
-        print()
+        else:
+
+            for trade in trades:
+
+                print(trade)
 
     elif scelta == "5":
 
-        print()
-
-        print("=" * 60)
-        print("TRADE JOURNAL")
-        print("=" * 60)
-
-        print(f"Trade Totali : {core.database.count()}")
-        print(f"Trade Win    : {core.database.wins()}")
-        print(f"Trade Loss   : {core.database.losses()}")
-        print(f"Profitto Tot.: {core.database.total_profit()}")
-
-        print()
-
-        for trade in core.database.load_trades():
-
-            print(trade)
+        core.run_performance()
 
     else:
 
