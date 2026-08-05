@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Performance Analytics
-Versione 14.0
+Versione 15.0
 ========================================
 """
 
@@ -18,6 +18,7 @@ from Core.sortino_ratio import SortinoRatio
 from Core.calmar_ratio import CalmarRatio
 from Core.recovery_factor import RecoveryFactor
 from Core.ulcer_index import UlcerIndex
+from Core.omega_ratio import OmegaRatio
 
 
 class PerformanceAnalytics:
@@ -27,7 +28,7 @@ class PerformanceAnalytics:
     def __init__(self, database):
 
         Logger.success(
-            "Performance Analytics V14 inizializzato."
+            "Performance Analytics V15 inizializzato."
         )
 
         self.database = database
@@ -44,6 +45,7 @@ class PerformanceAnalytics:
         self.calmar = CalmarRatio()
         self.recovery = RecoveryFactor()
         self.ulcer = UlcerIndex()
+        self.omega = OmegaRatio()
 
     def report(self):
 
@@ -68,6 +70,7 @@ class PerformanceAnalytics:
         calmar = self.calmar.calculate(self.database)
         recovery = self.recovery.calculate(self.database)
         ulcer = self.ulcer.calculate(self.database)
+        omega = self.omega.calculate(self.database)
 
         equity = self.INITIAL_CAPITAL
         peak = equity
@@ -138,6 +141,7 @@ class PerformanceAnalytics:
         print("Calmar Ratio     :", calmar)
         print("Recovery Factor  :", recovery)
         print("Ulcer Index      :", ulcer)
+        print("Omega Ratio      :", omega)
 
         print()
 
