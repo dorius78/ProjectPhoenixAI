@@ -19,37 +19,21 @@ class ProfitToDrawdown:
 
         )
 
-    def calculate(
-
-        self,
-
-        database
-
-    ):
+    def calculate(self, database):
 
         trades = database.load_trades()
 
         if len(trades) == 0:
 
-            return 0.0
+            return 0
 
         equity = 10000.0
-
         peak = equity
+        max_drawdown = 0
 
-        max_drawdown = 0.0
+        for trade in reversed(trades):
 
-        total_profit = 0.0
-
-        for trade in trades:
-
-            pnl = float(
-
-                trade[7]
-
-            )
-
-            total_profit += pnl
+            pnl = float(trade[7])
 
             equity += pnl
 
@@ -63,13 +47,21 @@ class ProfitToDrawdown:
 
                 max_drawdown = drawdown
 
+        profit = database.total_profit()
+
         if max_drawdown == 0:
 
-            return 0.0
+            return round(
+
+                profit,
+
+                3
+
+            )
 
         return round(
 
-            total_profit / max_drawdown,
+            profit / max_drawdown,
 
             3
 
