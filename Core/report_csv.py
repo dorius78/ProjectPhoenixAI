@@ -1,8 +1,8 @@
 """
 ========================================
 PROJECT PHOENIX AI
-CSV Report
-Versione 1.0
+Report CSV
+Versione 2.0
 ========================================
 """
 
@@ -11,14 +11,12 @@ import csv
 from Logs.logger import Logger
 
 
-class CSVReport:
+class ReportCSV:
 
     def __init__(self):
 
         Logger.success(
-
-            "CSV Report V1 inizializzato."
-
+            "Report CSV V2 inizializzato."
         )
 
     def export(
@@ -73,6 +71,6 @@ class CSVReport:
 
         Logger.success(
 
-            f"CSV creato: {filename}"
+            f"Report CSV salvato: {filename}"
 
         )

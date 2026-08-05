@@ -1,22 +1,22 @@
 """
 ========================================
 PROJECT PHOENIX AI
-PDF Report
-Versione 1.0
+Report PDF
+Versione 2.0
 ========================================
 """
+
+from datetime import datetime
 
 from Logs.logger import Logger
 
 
-class PDFReport:
+class ReportPDF:
 
     def __init__(self):
 
         Logger.success(
-
-            "PDF Report V1 inizializzato."
-
+            "Report PDF V2 inizializzato."
         )
 
     def export(
@@ -40,27 +40,33 @@ class PDFReport:
         ) as file:
 
             file.write(
-
                 "========================================\n"
-
             )
 
             file.write(
-
                 "PROJECT PHOENIX AI\n"
-
             )
 
             file.write(
-
                 "PERFORMANCE REPORT\n"
-
             )
 
             file.write(
-
                 "========================================\n\n"
+            )
 
+            file.write(
+                "Creato: "
+            )
+
+            file.write(
+                str(
+                    datetime.now()
+                )
+            )
+
+            file.write(
+                "\n\n"
             )
 
             for key, value in statistics.items():
@@ -73,6 +79,6 @@ class PDFReport:
 
         Logger.success(
 
-            f"PDF Report creato: {filename}"
+            f"Report PDF salvato: {filename}"
 
         )

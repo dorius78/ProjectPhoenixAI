@@ -1,8 +1,8 @@
 """
 ========================================
 PROJECT PHOENIX AI
-JSON Report
-Versione 1.0
+Report JSON
+Versione 2.0
 ========================================
 """
 
@@ -11,14 +11,12 @@ import json
 from Logs.logger import Logger
 
 
-class JSONReport:
+class ReportJSON:
 
     def __init__(self):
 
         Logger.success(
-
-            "JSON Report V1 inizializzato."
-
+            "Report JSON V2 inizializzato."
         )
 
     def export(
@@ -49,12 +47,14 @@ class JSONReport:
 
                 indent=4,
 
-                ensure_ascii=False
+                ensure_ascii=False,
+
+                default=str
 
             )
 
         Logger.success(
 
-            f"JSON creato: {filename}"
+            f"Report JSON salvato: {filename}"
 
         )
