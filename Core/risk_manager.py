@@ -2,65 +2,63 @@
 ========================================
 PROJECT PHOENIX AI
 Risk Manager
-Versione 7.1
+Versione 10.0
 ========================================
 """
 
 from Logs.logger import Logger
+
+from Core.risk_limits import RiskLimits
+from Core.risk_position_size import RiskPositionSize
+from Core.risk_drawdown import RiskDrawdown
 
 
 class RiskManager:
 
     def __init__(self):
 
-        Logger.success("Risk Manager V7 inizializzato.")
+        Logger.success(
+            "Risk Manager V10 inizializzato."
+        )
 
         self.risk_reward_ratio = 2.0
 
-    # =====================================
-    # VALUTAZIONE RISCHIO
-    # =====================================
+        self.limits = RiskLimits()
+        self.position_size = RiskPositionSize()
+        self.drawdown = RiskDrawdown()
 
-    def evaluate(self, analysis):
+    def evaluate(
+        self,
+        analysis
+    ):
 
-        trend = analysis.get("trend", "NEUTRO")
-        momentum = analysis.get("momentum", "NEUTRO")
-        rsi = analysis.get("rsi", "NEUTRALE")
+        return self.limits.evaluate(
+            analysis
+        )
 
-        score = 50
+    def calculate_position_size(
+        self,
+        account_balance,
+        risk_percent,
+        entry,
+        stop_loss
+    ):
 
-        if trend == "RIALZISTA":
-            score += 20
-        elif trend == "RIBASSISTA":
-            score += 20
+        return self.position_size.calculate(
+            account_balance,
+            risk_percent,
+            entry,
+            stop_loss
+        )
 
-        if momentum in ["RIALZISTA", "RIBASSISTA"]:
-            score += 20
+    def calculate_drawdown(
+        self,
+        equity_curve
+    ):
 
-        if rsi == "NEUTRALE":
-            score += 10
-
-        if score >= 70:
-            level = "BASSO"
-            allow_trade = True
-
-        elif score >= 50:
-            level = "MEDIO"
-            allow_trade = True
-
-        else:
-            level = "ALTO"
-            allow_trade = False
-
-        return {
-            "risk_level": level,
-            "risk_score": score,
-            "allow_trade": allow_trade
-        }
-
-    # =====================================
-    # COSTRUZIONE TRADE
-    # =====================================
+        return self.drawdown.calculate(
+            equity_curve
+        )
 
     def build_trade(
         self,
@@ -78,6 +76,7 @@ class RiskManager:
             "STRONG BUY",
             "STRONG SELL"
         ):
+
             return None
 
         atr = float(atr)
