@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Performance Analytics Report
-Versione 1.0
+Versione 2.0
 ========================================
 """
 
@@ -14,7 +14,7 @@ class PerformanceAnalyticsReport:
     def __init__(self):
 
         Logger.success(
-            "Performance Report V1 inizializzato."
+            "Performance Report V2 inizializzato."
         )
 
     def print_summary(self, data):
@@ -46,8 +46,12 @@ class PerformanceAnalyticsReport:
 
         print()
 
-        print("Gross Profit     :", risk["gross_profit"])
-        print("Gross Loss       :", risk["gross_loss"])
+        print("Gross Profit     :", data["gross_profit"])
+        print("Gross Loss       :", data["gross_loss"])
+        print("Profitto Netto   :", data["net_profit"])
+        print("Best Trade       :", data["best_trade"])
+        print("Worst Trade      :", data["worst_trade"])
+        print("Media Trade      :", data["average_trade"])
 
         print()
 
@@ -76,19 +80,9 @@ class PerformanceAnalyticsReport:
         for mese, profitto in data["monthly"].items():
 
             print(
-
                 mese,
-
                 ":",
-
-                round(
-
-                    profitto,
-
-                    2
-
-                )
-
+                round(profitto, 2)
             )
 
     def print_symbols(self, data):
@@ -147,11 +141,7 @@ class PerformanceAnalyticsReport:
     def print_report(self, data):
 
         self.print_summary(data)
-
         self.print_monthly(data)
-
         self.print_symbols(data)
-
         self.print_timeframes(data)
-
         self.print_equity_curve(data)

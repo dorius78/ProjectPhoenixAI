@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Performance Analytics Calculator
-Versione 1.0
+Versione 2.0
 ========================================
 """
 
@@ -35,7 +35,7 @@ class PerformanceAnalyticsCalculator:
     def __init__(self, database):
 
         Logger.success(
-            "Performance Analytics Calculator V1 inizializzato."
+            "Performance Analytics Calculator V2 inizializzato."
         )
 
         self.database = database
@@ -182,6 +182,14 @@ class PerformanceAnalyticsCalculator:
             "longest_win": longest_win,
             "longest_loss": longest_loss,
 
-            "equity_curve": equity_curve
+            "equity_curve": equity_curve,
+
+            "gross_profit": risk["gross_profit"],
+            "gross_loss": risk["gross_loss"],
+
+            "net_profit": self.database.total_profit(),
+            "best_trade": self.database.best_trade(),
+            "worst_trade": self.database.worst_trade(),
+            "average_trade": self.database.average_profit()
 
         }

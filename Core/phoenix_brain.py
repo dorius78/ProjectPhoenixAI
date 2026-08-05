@@ -2,161 +2,44 @@
 ========================================
 PROJECT PHOENIX AI
 Phoenix Brain
-Versione 8.0
+Versione 9.0
 ========================================
 """
 
 from Logs.logger import Logger
+
+from Core.phoenix_brain_logic import PhoenixBrainLogic
 
 
 class PhoenixBrain:
 
     def __init__(self):
 
-        Logger.success("Phoenix Brain V8 inizializzato.")
+        Logger.success(
+            "Phoenix Brain V9 inizializzato."
+        )
 
-    # =====================================
-    # AI DECISION
-    # =====================================
+        self.logic = PhoenixBrainLogic()
 
-    def think(self, analysis, risk):
+    def think(
 
-        score = 50
+        self,
 
-        reasons = []
-        warnings = []
+        analysis,
 
-        # =====================================
-        # TREND
-        # =====================================
+        risk
 
-        if analysis.get("trend_bullish"):
+    ):
 
-            score += 20
-            reasons.append("Trend rialzista")
+        data = self.logic.calculate(
 
-        elif analysis.get("trend_bearish"):
+            analysis,
 
-            score -= 20
-            warnings.append("Trend ribassista")
+            risk
 
-        # =====================================
-        # EMA
-        # =====================================
+        )
 
-        if analysis.get("ema_alignment"):
-
-            score += 10
-            reasons.append("EMA allineate")
-
-        # =====================================
-        # MACD
-        # =====================================
-
-        if analysis.get("macd_buy"):
-
-            score += 10
-            reasons.append("MACD BUY")
-
-        elif analysis.get("macd_sell"):
-
-            score -= 10
-            warnings.append("MACD SELL")
-
-        # =====================================
-        # RSI
-        # =====================================
-
-        rsi = float(analysis.get("rsi", 50))
-
-        if rsi < 30:
-
-            score += 15
-            reasons.append("RSI ipervenduto")
-
-        elif rsi > 70:
-
-            score -= 15
-            warnings.append("RSI ipercomprato")
-
-        elif 45 <= rsi <= 60:
-
-            score += 5
-            reasons.append("RSI equilibrato")
-
-        # =====================================
-        # ADX
-        # =====================================
-
-        if analysis.get("adx_strong"):
-
-            score += 10
-            reasons.append("Trend forte")
-
-        # =====================================
-        # VOLUME
-        # =====================================
-
-        if analysis.get("volume_high"):
-
-            score += 10
-            reasons.append("Volume elevato")
-
-        # =====================================
-        # SMART MONEY
-        # =====================================
-
-        if analysis.get("bos_bullish"):
-
-            score += 15
-            reasons.append("BOS Rialzista")
-
-        if analysis.get("bos_bearish"):
-
-            score -= 15
-            warnings.append("BOS Ribassista")
-
-        if analysis.get("choch"):
-
-            score += 10
-            reasons.append("CHoCH")
-
-        if analysis.get("fvg"):
-
-            score += 8
-            reasons.append("Fair Value Gap")
-
-        if analysis.get("order_block"):
-
-            score += 10
-            reasons.append("Order Block")
-
-        if analysis.get("liquidity"):
-
-            score += 8
-            reasons.append("Liquidity Sweep")
-
-        # =====================================
-        # LIMITI
-        # =====================================
-
-        score = max(0, min(score, 100))
-
-        confidence = score
-
-        if risk["risk_level"] == "MEDIO":
-
-            confidence -= 10
-
-        elif risk["risk_level"] == "ALTO":
-
-            confidence -= 20
-
-        confidence = max(0, min(confidence, 100))
-
-        # =====================================
-        # DECISIONE
-        # =====================================
+        score = data["score"]
 
         if score >= 90:
 
@@ -184,14 +67,14 @@ class PhoenixBrain:
 
             "score": score,
 
-            "confidence": confidence,
+            "confidence": data["confidence"],
 
             "strength": score,
 
             "risk": risk["risk_level"],
 
-            "reasons": reasons,
+            "reasons": data["reasons"],
 
-            "warnings": warnings
+            "warnings": data["warnings"]
 
         }
