@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Performance Report
-Versione 1.0
+Versione 2.0
 ========================================
 """
 
@@ -15,32 +15,34 @@ class PerformanceReport:
 
         Logger.success(
 
-            "Performance Report V1 inizializzato."
+            "Performance Report V2 inizializzato."
 
         )
 
-    def section(
+        self.rows = []
 
-        self,
+    def clear(self):
 
-        title
+        self.rows = []
 
-    ):
+    def line(self, label, value):
+
+        self.rows.append(
+
+            (label, value)
+
+        )
+
+    def print(self):
 
         print()
 
-        print(title)
+        for label, value in self.rows:
 
-        print("--------------------------------")
+            print(
 
-    def line(
+                f"{label:<18}: {value}"
 
-        self,
+            )
 
-        label,
-
-        value
-
-    ):
-
-        print(f"{label:<18}: {value}")
+        print()

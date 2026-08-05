@@ -25,6 +25,7 @@ from Core.profit_to_drawdown import ProfitToDrawdown
 from Core.kelly_criterion import KellyCriterion
 from Core.payoff_ratio import PayoffRatio
 from Core.win_loss_ratio import WinLossRatio
+from Core.performance_report import PerformanceReport
 
 
 class PerformanceAnalytics:
@@ -57,10 +58,13 @@ class PerformanceAnalytics:
         self.kelly = KellyCriterion()
         self.payoff = PayoffRatio()
         self.winloss = WinLossRatio()
+        self.report_builder = PerformanceReport()
 
     def report(self):
 
         Logger.section("PERFORMANCE ANALYTICS")
+
+        self.report_builder.clear()
 
         trades = self.database.load_trades()
 
