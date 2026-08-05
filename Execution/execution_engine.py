@@ -2,26 +2,30 @@
 ========================================
 PROJECT PHOENIX AI
 Execution Engine
-Versione 6.0
+Versione 9.1
 ========================================
 """
 
-from datetime import datetime
-
 from Logs.logger import Logger
+
+from Execution.execution_builder import ExecutionBuilder
+from Execution.execution_report import ExecutionReport
+from Execution.execution_validator import ExecutionValidator
 
 
 class ExecutionEngine:
 
     def __init__(self):
 
-        Logger.success("Execution Engine V6 inizializzato.")
+        Logger.success(
+            "Execution Engine V9.1 inizializzato."
+        )
 
         self.orders = []
 
-    # =====================================
-    # ESECUZIONE ORDINE
-    # =====================================
+        self.validator = ExecutionValidator()
+        self.builder = ExecutionBuilder()
+        self.report = ExecutionReport()
 
     def execute(
 
@@ -31,117 +35,37 @@ class ExecutionEngine:
 
     ):
 
-        Logger.section("EXECUTION ENGINE")
+        Logger.section(
+            "EXECUTION ENGINE"
+        )
 
-        if trade is None:
+        valid, message = self.validator.validate(
+            trade
+        )
 
-            Logger.warning("Trade non valido.")
+        if not valid:
 
-            return {
-
-                "success": False,
-
-                "message": "Nessun trade"
-
-            }
-
-        signal = str(
-
-            trade.get(
-
-                "signal",
-
-                "HOLD"
-
-            )
-
-        ).upper()
-
-        if signal == "HOLD":
-
-            Logger.info(
-
-                "Segnale HOLD."
-
-            )
+            Logger.warning(message)
 
             return {
 
                 "success": False,
 
-                "message": "Segnale HOLD"
+                "message": message
 
             }
 
-        side = signal
-
-        if signal == "STRONG BUY":
-
-            side = "BUY"
-
-        elif signal == "STRONG SELL":
-
-            side = "SELL"
-
-        order = {
-
-            "success": True,
-
-            "symbol": trade["symbol"],
-
-            "side": side,
-
-            "signal": signal,
-
-            "entry": float(
-
-                trade["entry"]
-
-            ),
-
-            "stop_loss": float(
-
-                trade["stop_loss"]
-
-            ),
-
-            "take_profit": float(
-
-                trade["take_profit"]
-
-            ),
-
-            "risk_reward": float(
-
-                trade["risk_reward"]
-
-            ),
-
-            "status": "OPEN",
-
-            "reason": "ENTRY",
-
-            "pnl": 0.0,
-
-            "open_time": datetime.now(),
-
-            "close_time": None
-
-        }
+        order = self.builder.build(
+            trade
+        )
 
         self.orders.append(order)
 
         Logger.success(
-
-            f"Ordine {side} aperto."
-
+            f"Ordine {order['side']} aperto."
         )
 
         return order
-
-    # =====================================
-    # CHIUSURA ORDINE
-    # =====================================
 
     def close(
 
@@ -151,64 +75,28 @@ class ExecutionEngine:
 
     ):
 
-        if position is None:
+        report = self.report.build(
+            position
+        )
+
+        if report is None:
 
             return None
 
-        report = {
-
-            "success": True,
-
-            "symbol": position["symbol"],
-
-            "side": position["side"],
-
-            "entry": position["entry"],
-
-            "exit": position["current_price"],
-
-            "stop_loss": position["stop_loss"],
-
-            "take_profit": position["take_profit"],
-
-            "pnl": position["current_profit"],
-
-            "status": "CLOSED",
-
-            "reason": position["close_reason"],
-
-            "open_time": position["open_time"],
-
-            "close_time": datetime.now()
-
-        }
-
         Logger.success(
-
-            f"Ordine {position['side']} chiuso."
-
+            f"Ordine {report['side']} chiuso."
         )
 
         return report
 
-    # =====================================
-    # ORDINI
-    # =====================================
-
     def get_orders(self):
 
         return self.orders
-
-    # =====================================
-    # RESET
-    # =====================================
 
     def reset(self):
 
         self.orders.clear()
 
         Logger.info(
-
             "Execution Engine azzerato."
-
         )
