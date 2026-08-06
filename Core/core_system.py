@@ -294,13 +294,102 @@ class CoreSystem:
     # BACKTEST
     # =====================================
 
-    def run_backtest(self):
+    def run_backtest(self, symbol="BTC-USD", period="3mo", interval="1h"):
 
-        Logger.info(
+        Logger.section("BACKTEST")
 
-            "Backtest in sviluppo."
+        Logger.info(f"Backtest {symbol} ({period} - {interval})")
 
-        )
+        data = self.candles.get_backtest_data(symbol, period=period, interval=interval)
+
+        if data is None or len(data) < 100:
+            Logger.warning("Dati insufficienti per il backtest (servono almeno 100 candele).")
+            return
+
+        # Stato pulito ad ogni backtest: nessuna posizione residua
+        # da una precedente esecuzione (Live Trading o backtest).
+        self.position_controller = PositionController()
+        self.backtest.reset()
+
+        total_bars = len(data)
+
+        # Le prime candele servono solo a "riscaldare" gli indicatori
+        # (EMA/ADX/ecc. richiedono uno storico minimo per essere
+        # affidabili): non generiamo trade prima di questo punto.
+        start = 100
+
+        for i in range(start, total_bars):
+
+            window = data.iloc[:i + 1]
+            current_price = float(window["Close"].iloc[-1])
+
+            if self.position_controller.has_position():
+
+                closed = self.position_controller.update(current_price)
+
+                if closed is not None and closed["status"] == "CLOSED":
+
+                    report = self.execution.close(closed)
+
+                    duration = (report["close_time"] - closed["open_time"]).total_seconds()
+                    result = "WIN" if report["pnl"] > 0 else "LOSS"
+                    risk = abs(closed["entry"] - closed["stop_loss"])
+                    reward = abs(report["exit"] - closed["entry"])
+                    rr = round(reward / risk, 2) if risk > 0 else 0
+
+                    trade = {
+                        "symbol": report["symbol"],
+                        "side": report["side"],
+                        "entry": report["entry"],
+                        "exit": report["exit"],
+                        "stop_loss": closed["stop_loss"],
+                        "take_profit": closed["take_profit"],
+                        "pnl": report["pnl"],
+                        "status": "CLOSED",
+                        "reason": report["reason"],
+                        "open_time": closed["open_time"],
+                        "close_time": report["close_time"],
+                        "duration": duration,
+                        "result": result,
+                        "risk_reward": rr
+                    }
+
+                    self.database.save_trade(trade)
+                    self.backtest.add_trade(trade)
+                    self.portfolio.remove(report["symbol"])
+
+            if not self.position_controller.has_position():
+
+                result_analysis = self.analysis.analyze(window, current_price, symbol)
+                signal = result_analysis["signal"]
+                trade = result_analysis["trade"]
+
+                if trade is not None and signal["valid"]:
+
+                    order = self.execution.execute(trade)
+
+                    if order["success"]:
+
+                        opened = self.position_controller.open_position(
+                            side=order["side"],
+                            entry=order["entry"],
+                            stop_loss=order["stop_loss"],
+                            take_profit=order["take_profit"],
+                            symbol=order["symbol"]
+                        )
+
+                        if opened:
+
+                            self.portfolio.add(
+                                order["symbol"],
+                                self.position_controller.get_position()
+                            )
+
+        self.print_backtest()
+
+        Logger.section("DATABASE")
+
+        Logger.info(f"Trade salvati : {self.database.count()}")
 
     # =====================================
     # RISULTATI

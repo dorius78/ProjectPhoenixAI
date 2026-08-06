@@ -61,7 +61,17 @@ def main():
 
     elif scelta == "3":
 
-        core.run_backtest()
+        simbolo = input("Symbol (BTC-USD): ").strip()
+
+        if simbolo == "":
+            simbolo = "BTC-USD"
+
+        periodo = input("Periodo storico (3mo): ").strip()
+
+        if periodo == "":
+            periodo = "3mo"
+
+        core.run_backtest(symbol=simbolo, period=periodo)
 
     elif scelta == "4":
 

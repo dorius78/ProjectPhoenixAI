@@ -8,10 +8,10 @@ Versione 1.0
 
 from Logs.logger import Logger
 
-from Core.report_csv import CSVReport
-from Core.report_html import HTMLReport
-from Core.report_json import JSONReport
-from Core.report_pdf import PDFReport
+from Core.report_csv import ReportCSV
+from Core.report_html import ReportHTML
+from Core.report_json import ReportJSON
+from Core.report_pdf import ReportPDF
 from Core.report_exporter import ReportExporter
 
 
@@ -26,10 +26,10 @@ class ReportFactory:
         )
 
         self.txt = ReportExporter()
-        self.csv = CSVReport()
-        self.html = HTMLReport()
-        self.json = JSONReport()
-        self.pdf = PDFReport()
+        self.csv = ReportCSV()
+        self.html = ReportHTML()
+        self.json = ReportJSON()
+        self.pdf = ReportPDF()
 
     def export_txt(
 
