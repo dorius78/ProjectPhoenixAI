@@ -8,6 +8,8 @@ Versione 10.0
 
 from Logs.logger import Logger
 
+from Core.config import Config
+
 from Core.risk_limits import RiskLimits
 from Core.risk_position_size import RiskPositionSize
 from Core.risk_drawdown import RiskDrawdown
@@ -65,7 +67,8 @@ class RiskManager:
         symbol,
         signal,
         current_price,
-        atr
+        atr,
+        account_balance
     ):
 
         signal = signal.upper()
@@ -96,6 +99,22 @@ class RiskManager:
             take_profit = entry - (atr * rr)
             side = "SELL"
 
+        # Prima non esisteva alcuna size: ogni trade rischiava
+        # implicitamente 1 unita' intera del simbolo, indipendente
+        # dal capitale disponibile. Ora la size e' calcolata in modo
+        # che la perdita massima (se lo Stop Loss viene colpito)
+        # sia sempre pari a MAX_RISK% del saldo.
+        size = self.calculate_position_size(
+            account_balance,
+            Config.MAX_RISK,
+            entry,
+            stop_loss
+        )
+
+        if size <= 0:
+
+            return None
+
         return {
 
             "symbol": symbol,
@@ -104,6 +123,7 @@ class RiskManager:
             "stop_loss": round(stop_loss, 6),
             "take_profit": round(take_profit, 6),
             "atr": round(atr, 6),
-            "risk_reward": rr
+            "risk_reward": rr,
+            "size": size
 
         }

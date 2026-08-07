@@ -8,6 +8,8 @@ Versione 2.0
 
 from Logs.logger import Logger
 
+from Core.config import Config
+
 
 class PortfolioManager:
 
@@ -16,6 +18,33 @@ class PortfolioManager:
         Logger.success("Portfolio Manager V2 inizializzato.")
 
         self.positions = {}
+
+        # Prima non esisteva alcun tracciamento del capitale: ogni
+        # trade veniva aperto sempre con size implicita 1, e il
+        # PnL era la differenza di prezzo grezza. Su BTC-USD questo
+        # significava rischiare centinaia/migliaia di dollari a
+        # trade, capitale finito sotto zero nei backtest.
+        self.balance = float(Config.START_BALANCE)
+
+    # =====================================
+    # SALDO
+    # =====================================
+
+    def get_balance(self):
+
+        return round(self.balance, 2)
+
+    def update_balance(self, pnl):
+
+        self.balance += float(pnl)
+
+        Logger.info(
+            f"Saldo aggiornato: {self.get_balance()}"
+        )
+
+    def get_equity(self):
+
+        return round(self.balance + self.total_profit(), 2)
 
     # =====================================
     # AGGIUNGI POSIZIONE
@@ -191,8 +220,8 @@ class PortfolioManager:
 
         self.positions.clear()
 
+        self.balance = float(Config.START_BALANCE)
+
         Logger.info(
-
             "Portfolio azzerato."
-
         )

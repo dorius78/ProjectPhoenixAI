@@ -77,6 +77,12 @@ class ExecutionBuilder:
 
             ),
 
+            "size": float(
+
+                trade.get("size", 1.0)
+
+            ),
+
             "status": "OPEN",
 
             "reason": "ENTRY",

@@ -54,7 +54,22 @@ class MarketAnalyzer:
             "trend_bullish": ema20 > ema50,
             "trend_bearish": ema20 < ema50,
 
-            "ema_alignment": abs(ema20 - ema50) > 0,
+            # Prima era "abs(ema20 - ema50) > 0", quindi quasi sempre
+            # vero (due medie diverse anche di un centesimo bastavano).
+            # Ora richiede una separazione minima e reale (0.05% del
+            # prezzo) nella direzione del trend, per avere un segnale
+            # che dica davvero qualcosa.
+            "ema_alignment_bullish": (
+                ema20 > ema50
+                and price > 0
+                and (ema20 - ema50) / price > 0.0005
+            ),
+
+            "ema_alignment_bearish": (
+                ema20 < ema50
+                and price > 0
+                and (ema50 - ema20) / price > 0.0005
+            ),
 
             # RSI
 

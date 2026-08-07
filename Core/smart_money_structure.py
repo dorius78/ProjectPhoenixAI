@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Smart Money Structure
-Versione 1.0
+Versione 2.0
 ========================================
 """
 
@@ -14,7 +14,7 @@ class SmartMoneyStructure:
     def __init__(self):
 
         Logger.success(
-            "Smart Money Structure V1 inizializzato."
+            "Smart Money Structure V2 inizializzato."
         )
 
     def detect_bos(self, data, lookback=20):
@@ -39,7 +39,7 @@ class SmartMoneyStructure:
 
         if len(data) < 5:
 
-            return False
+            return {"detected": False, "direction": None}
 
         last = float(data["Close"].iloc[-1])
         prev = float(data["Close"].iloc[-2])
@@ -48,4 +48,10 @@ class SmartMoneyStructure:
         bullish = prev < prev2 and last > prev
         bearish = prev > prev2 and last < prev
 
-        return bullish or bearish
+        if bullish:
+            return {"detected": True, "direction": "BULLISH"}
+
+        if bearish:
+            return {"detected": True, "direction": "BEARISH"}
+
+        return {"detected": False, "direction": None}

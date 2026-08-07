@@ -29,7 +29,9 @@ class TradeBuilder:
 
         signal,
 
-        atr
+        atr,
+
+        account_balance
 
     ):
 
@@ -57,7 +59,9 @@ class TradeBuilder:
 
             current_price=price,
 
-            atr=atr
+            atr=atr,
+
+            account_balance=account_balance
 
         )
 

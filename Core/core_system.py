@@ -136,7 +136,9 @@ class CoreSystem:
 
                 current_price,
 
-                symbol
+                symbol,
+
+                account_balance=self.portfolio.get_balance()
 
             )
 
@@ -220,7 +222,9 @@ class CoreSystem:
 
                     take_profit=order["take_profit"],
 
-                    symbol=order["symbol"]
+                    symbol=order["symbol"],
+
+                    size=order["size"]
 
                 )
 
@@ -307,8 +311,10 @@ class CoreSystem:
             return
 
         # Stato pulito ad ogni backtest: nessuna posizione residua
-        # da una precedente esecuzione (Live Trading o backtest).
+        # da una precedente esecuzione (Live Trading o backtest),
+        # e saldo che riparte dal capitale iniziale di Config.
         self.position_controller = PositionController()
+        self.portfolio.reset()
         self.backtest.reset()
 
         total_bars = len(data)
@@ -356,11 +362,17 @@ class CoreSystem:
 
                     self.database.save_trade(trade)
                     self.backtest.add_trade(trade)
+                    self.portfolio.update_balance(report["pnl"])
                     self.portfolio.remove(report["symbol"])
 
             if not self.position_controller.has_position():
 
-                result_analysis = self.analysis.analyze(window, current_price, symbol)
+                result_analysis = self.analysis.analyze(
+                    window,
+                    current_price,
+                    symbol,
+                    account_balance=self.portfolio.get_balance()
+                )
                 signal = result_analysis["signal"]
                 trade = result_analysis["trade"]
 
@@ -375,7 +387,8 @@ class CoreSystem:
                             entry=order["entry"],
                             stop_loss=order["stop_loss"],
                             take_profit=order["take_profit"],
-                            symbol=order["symbol"]
+                            symbol=order["symbol"],
+                            size=order["size"]
                         )
 
                         if opened:

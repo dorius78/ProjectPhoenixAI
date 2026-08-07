@@ -66,7 +66,9 @@ def main():
         if simbolo == "":
             simbolo = "BTC-USD"
 
-        periodo = input("Periodo storico (3mo): ").strip()
+        periodo = input(
+            "Periodo storico - 1mo/3mo/6mo/1y/2y (3mo): "
+        ).strip()
 
         if periodo == "":
             periodo = "3mo"

@@ -230,6 +230,12 @@ class LiveTradingEngine:
 
                         )
 
+                        self.portfolio.update_balance(
+
+                            report["pnl"]
+
+                        )
+
                         self.portfolio.remove(
 
                             report["symbol"]
@@ -254,7 +260,9 @@ class LiveTradingEngine:
 
                         price,
 
-                        symbol
+                        symbol,
+
+                        account_balance=self.portfolio.get_balance()
 
                     )
 
@@ -288,7 +296,9 @@ class LiveTradingEngine:
 
                                 take_profit=order["take_profit"],
 
-                                symbol=order["symbol"]
+                                symbol=order["symbol"],
+
+                                size=order["size"]
 
                             )
 

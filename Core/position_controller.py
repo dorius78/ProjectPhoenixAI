@@ -35,7 +35,9 @@ class PositionController:
 
         take_profit,
 
-        symbol="BTC-USD"
+        symbol="BTC-USD",
+
+        size=1.0
 
     ):
 
@@ -56,6 +58,8 @@ class PositionController:
             "stop_loss": float(stop_loss),
 
             "take_profit": float(take_profit),
+
+            "size": float(size),
 
             "status": "OPEN",
 
@@ -79,7 +83,7 @@ class PositionController:
 
         Logger.success(
 
-            f"Aperta posizione {side} su {symbol}"
+            f"Aperta posizione {side} su {symbol} (size: {size})"
 
         )
 
@@ -109,13 +113,15 @@ class PositionController:
 
         side = self.position["side"]
 
+        size = self.position.get("size", 1.0)
+
         if side == "BUY":
 
-            profit = current_price - entry
+            profit = (current_price - entry) * size
 
         else:
 
-            profit = entry - current_price
+            profit = (entry - current_price) * size
 
         self.position["current_profit"] = round(
 

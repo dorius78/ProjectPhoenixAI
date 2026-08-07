@@ -41,7 +41,9 @@ class TradeManager:
 
         signal,
 
-        atr
+        atr,
+
+        account_balance
 
     ):
 
@@ -55,7 +57,9 @@ class TradeManager:
 
             signal,
 
-            atr
+            atr,
+
+            account_balance
 
         )
 

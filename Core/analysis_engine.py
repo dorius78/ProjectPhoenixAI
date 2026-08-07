@@ -50,7 +50,9 @@ class AnalysisEngine:
 
         price,
 
-        symbol="BTC-USD"
+        symbol="BTC-USD",
+
+        account_balance=10000.0
 
     ):
 
@@ -65,18 +67,24 @@ class AnalysisEngine:
         # =====================================
 
         analysis.update(
-
             self.smart_money.detect_bos(data)
-
         )
 
-        analysis["choch"] = self.smart_money.detect_choch(data)
+        choch = self.smart_money.detect_choch(data)
+        analysis["choch_bullish"] = choch["direction"] == "BULLISH"
+        analysis["choch_bearish"] = choch["direction"] == "BEARISH"
 
-        analysis["fvg"] = self.smart_money.detect_fvg(data)
+        fvg = self.smart_money.detect_fvg(data)
+        analysis["fvg_bullish"] = fvg["direction"] == "BULLISH"
+        analysis["fvg_bearish"] = fvg["direction"] == "BEARISH"
 
-        analysis["order_block"] = self.smart_money.detect_order_block(data)
+        order_block = self.smart_money.detect_order_block(data)
+        analysis["order_block_bullish"] = order_block["direction"] == "BULLISH"
+        analysis["order_block_bearish"] = order_block["direction"] == "BEARISH"
 
-        analysis["liquidity"] = self.smart_money.detect_liquidity(data)
+        liquidity = self.smart_money.detect_liquidity(data)
+        analysis["liquidity_bullish"] = liquidity["direction"] == "BULLISH"
+        analysis["liquidity_bearish"] = liquidity["direction"] == "BEARISH"
 
         # =====================================
         # RISK
@@ -118,7 +126,9 @@ class AnalysisEngine:
 
                 signal=signal["signal"],
 
-                atr=indicators["atr"]
+                atr=indicators["atr"],
+
+                account_balance=account_balance
 
             )
 
