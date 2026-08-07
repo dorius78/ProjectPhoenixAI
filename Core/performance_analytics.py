@@ -27,6 +27,9 @@ from Core.payoff_ratio import PayoffRatio
 from Core.win_loss_ratio import WinLossRatio
 from Core.performance_report import PerformanceReport
 
+from Core.report_statistics import ReportStatistics
+from Core.report_service import ReportService
+
 
 class PerformanceAnalytics:
 
@@ -59,6 +62,9 @@ class PerformanceAnalytics:
         self.payoff = PayoffRatio()
         self.winloss = WinLossRatio()
         self.report_builder = PerformanceReport()
+
+        self.report_statistics = ReportStatistics()
+        self.report_service = ReportService()
 
     def report(self):
 
@@ -276,3 +282,39 @@ class PerformanceAnalytics:
         for value in equity_curve:
 
             print(value)
+
+        # =====================================
+        # EXPORT
+        # =====================================
+
+        statistics = self.report_statistics.build(
+            risk,
+            trade,
+            roi,
+            equity,
+            max_drawdown,
+            sharpe,
+            sortino,
+            calmar,
+            recovery,
+            ulcer,
+            omega,
+            profit_dd,
+            kelly,
+            payoff,
+            winloss
+        )
+
+        print()
+
+        scelta = input(
+            "Esportare questo report su file? (S/N): "
+        ).strip().upper()
+
+        if scelta == "S":
+
+            self.report_service.export_all(statistics)
+
+            Logger.success(
+                "Report esportati: performance_report.txt/.csv/.json/.html/.pdf"
+            )

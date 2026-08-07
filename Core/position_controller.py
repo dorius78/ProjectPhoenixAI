@@ -37,7 +37,9 @@ class PositionController:
 
         symbol="BTC-USD",
 
-        size=1.0
+        size=1.0,
+
+        timestamp=None
 
     ):
 
@@ -46,6 +48,13 @@ class PositionController:
             Logger.warning("Posizione già aperta.")
 
             return False
+
+        # Nel Live Trading non passiamo "timestamp": qui si usa l'ora
+        # reale del PC, corretto per operazioni dal vivo. Nel Backtest
+        # invece si passa la data della candela storica, altrimenti
+        # ogni trade risulterebbe aperto e chiuso nello stesso istante
+        # reale (il backtest gira in pochi secondi).
+        open_time = timestamp if timestamp is not None else datetime.now()
 
         self.position = {
 
@@ -63,7 +72,7 @@ class PositionController:
 
             "status": "OPEN",
 
-            "open_time": datetime.now(),
+            "open_time": open_time,
 
             "close_time": None,
 
@@ -97,7 +106,9 @@ class PositionController:
 
         self,
 
-        current_price
+        current_price,
+
+        timestamp=None
 
     ):
 
@@ -227,7 +238,9 @@ class PositionController:
 
                 return self.close_position(
 
-                    "STOP LOSS"
+                    "STOP LOSS",
+
+                    timestamp
 
                 )
 
@@ -235,7 +248,9 @@ class PositionController:
 
                 return self.close_position(
 
-                    "TAKE PROFIT"
+                    "TAKE PROFIT",
+
+                    timestamp
 
                 )
 
@@ -245,7 +260,9 @@ class PositionController:
 
                 return self.close_position(
 
-                    "STOP LOSS"
+                    "STOP LOSS",
+
+                    timestamp
 
                 )
 
@@ -253,7 +270,9 @@ class PositionController:
 
                 return self.close_position(
 
-                    "TAKE PROFIT"
+                    "TAKE PROFIT",
+
+                    timestamp
 
                 )
 
@@ -267,7 +286,9 @@ class PositionController:
 
         self,
 
-        reason="MANUALE"
+        reason="MANUALE",
+
+        timestamp=None
 
     ):
 
@@ -279,7 +300,9 @@ class PositionController:
 
         self.position["close_reason"] = reason
 
-        self.position["close_time"] = datetime.now()
+        self.position["close_time"] = (
+            timestamp if timestamp is not None else datetime.now()
+        )
 
         Logger.success(
 

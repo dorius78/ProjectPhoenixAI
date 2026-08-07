@@ -8,7 +8,7 @@ Versione 2.0
 
 from Logs.logger import Logger
 
-from Core.config import Config
+from Config.settings import START_BALANCE
 
 
 class PortfolioManager:
@@ -24,7 +24,7 @@ class PortfolioManager:
         # PnL era la differenza di prezzo grezza. Su BTC-USD questo
         # significava rischiare centinaia/migliaia di dollari a
         # trade, capitale finito sotto zero nei backtest.
-        self.balance = float(Config.START_BALANCE)
+        self.balance = float(START_BALANCE)
 
     # =====================================
     # SALDO
@@ -220,7 +220,7 @@ class PortfolioManager:
 
         self.positions.clear()
 
-        self.balance = float(Config.START_BALANCE)
+        self.balance = float(START_BALANCE)
 
         Logger.info(
             "Portfolio azzerato."

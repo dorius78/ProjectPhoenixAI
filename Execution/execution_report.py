@@ -49,6 +49,10 @@ class ExecutionReport:
 
             "open_time": position["open_time"],
 
-            "close_time": datetime.now()
+            "close_time": (
+                position["close_time"]
+                if position.get("close_time") is not None
+                else datetime.now()
+            )
 
         }

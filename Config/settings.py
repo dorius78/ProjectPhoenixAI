@@ -2,7 +2,14 @@
 ========================================
 PROJECT PHOENIX AI
 Settings
-Versione 7.0
+Versione 8.0
+
+Questa e' l'UNICA fonte di configurazione del progetto. Prima
+esisteva anche Core/config.py con alcuni parametri duplicati
+(es. MAX_RISK con due valori diversi, 1.0 e 2.0) e altri presenti
+solo li' (APP_NAME, MODE, START_BALANCE, CURRENCIES): tutto e'
+stato unificato qui per evitare che due moduli leggano parametri
+diversi per lo stesso concetto.
 ========================================
 """
 
@@ -10,9 +17,11 @@ Versione 7.0
 # PROGETTO
 # ======================================
 
-PROJECT_NAME = "PROJECT PHOENIX AI"
+APP_NAME = "PROJECT PHOENIX AI"
 
-VERSION = "7.0"
+VERSION = "0.0.1"
+
+MODE = "DEMO"          # DEMO oppure LIVE
 
 # ======================================
 # MERCATO
@@ -23,6 +32,13 @@ SYMBOL = "BTC-USD"
 PERIOD = "5d"
 
 INTERVAL = "1h"
+
+CURRENCIES = [
+    "EURUSD",
+    "GBPUSD",
+    "USDJPY",
+    "XAUUSD"
+]
 
 # ======================================
 # INDICATORI
@@ -72,15 +88,19 @@ TAKE_PROFIT_ATR = 3.0
 # RISK MANAGEMENT
 # ======================================
 
-MAX_RISK = 2.0
+# Prima erano due valori diversi in due file (1.0 in Core/config.py,
+# 2.0 qui): quello realmente in uso per il position sizing era 1.0
+# (Core/config.py), quindi e' quello mantenuto per non alterare il
+# comportamento gia' verificato nei backtest.
+MAX_RISK = 1.0
 
 MIN_CONFIDENCE = 60
 
 # ======================================
-# BACKTEST
+# CAPITALE / BACKTEST
 # ======================================
 
-INITIAL_CAPITAL = 10000
+START_BALANCE = 10000
 
 COMMISSION = 0.001
 

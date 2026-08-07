@@ -7,16 +7,16 @@ Versione 19.0
 """
 
 from Core.core_system import CoreSystem
-from Core.config import Config
+from Config.settings import APP_NAME, VERSION, MODE
 from Logs.logger import Logger
 
 
 def main():
 
     print("=" * 60)
-    print(Config.APP_NAME)
-    print(f"Versione {Config.VERSION}")
-    print(f"Modalità: {Config.MODE}")
+    print(APP_NAME)
+    print(f"Versione {VERSION}")
+    print(f"Modalità: {MODE}")
     print("=" * 60)
 
     Logger.info("Avvio di Project Phoenix AI")

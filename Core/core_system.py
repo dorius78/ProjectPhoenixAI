@@ -328,10 +328,11 @@ class CoreSystem:
 
             window = data.iloc[:i + 1]
             current_price = float(window["Close"].iloc[-1])
+            candle_time = window.index[-1]
 
             if self.position_controller.has_position():
 
-                closed = self.position_controller.update(current_price)
+                closed = self.position_controller.update(current_price, candle_time)
 
                 if closed is not None and closed["status"] == "CLOSED":
 
@@ -388,7 +389,8 @@ class CoreSystem:
                             stop_loss=order["stop_loss"],
                             take_profit=order["take_profit"],
                             symbol=order["symbol"],
-                            size=order["size"]
+                            size=order["size"],
+                            timestamp=candle_time
                         )
 
                         if opened:
@@ -397,6 +399,8 @@ class CoreSystem:
                                 order["symbol"],
                                 self.position_controller.get_position()
                             )
+
+        self.backtest.set_total_bars(total_bars - start)
 
         self.print_backtest()
 
