@@ -21,6 +21,8 @@ class BacktestEngine:
 
         self.closed_trades = 0
 
+        self.total_bars = 0
+
     # =====================================
     # AGGIUNGI TRADE
     # =====================================
@@ -52,6 +54,14 @@ class BacktestEngine:
             return None
 
         return self.history[-1]
+
+    # =====================================
+    # CANDELE TOTALI (per il calcolo di "activity")
+    # =====================================
+
+    def set_total_bars(self, total_bars):
+
+        self.total_bars = int(total_bars)
 
     # =====================================
     # REPORT
@@ -168,16 +178,17 @@ class BacktestEngine:
 
             profit_factor = 0.0
 
-        if total > 0:
+        # Prima "activity" era (buy+sell)/total*100: siccome ogni trade
+        # e' sempre o BUY o SELL, questo era matematicamente sempre
+        # uguale a 100, indipendentemente da quanto la strategia
+        # tradasse davvero. Ora misura la vera frequenza: quante
+        # candele su cento, delle candele effettivamente analizzate,
+        # hanno prodotto un trade.
+        if self.total_bars > 0:
 
             activity = round(
-
-                (buy + sell) /
-
-                total * 100,
-
+                total / self.total_bars * 100,
                 2
-
             )
 
         else:
@@ -277,6 +288,8 @@ class BacktestEngine:
         self.history.clear()
 
         self.closed_trades = 0
+
+        self.total_bars = 0
 
         Logger.info(
 

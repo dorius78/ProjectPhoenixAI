@@ -8,7 +8,7 @@ Versione 10.0
 
 from Logs.logger import Logger
 
-from Core.config import Config
+from Config.settings import MAX_RISK
 
 from Core.risk_limits import RiskLimits
 from Core.risk_position_size import RiskPositionSize
@@ -106,7 +106,7 @@ class RiskManager:
         # sia sempre pari a MAX_RISK% del saldo.
         size = self.calculate_position_size(
             account_balance,
-            Config.MAX_RISK,
+            MAX_RISK,
             entry,
             stop_loss
         )
