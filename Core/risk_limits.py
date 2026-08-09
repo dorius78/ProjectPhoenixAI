@@ -19,31 +19,26 @@ class RiskLimits:
 
     def evaluate(self, analysis):
 
-        trend = analysis.get("trend", "NEUTRO")
-        momentum = analysis.get("momentum", "NEUTRO")
-        rsi = analysis.get("rsi", "NEUTRALE")
+        # Prima cercava chiavi ("trend", "momentum", "rsi" come
+        # stringa "RIALZISTA"/"NEUTRALE") che non esistono nel
+        # dizionario di analisi reale (che usa trend_bullish/
+        # trend_bearish booleani, adx_strong, rsi numerico): il
+        # punteggio finiva sempre a 50 ("MEDIO"), qualunque fosse
+        # la situazione di mercato vera.
 
         score = 50
 
-        if trend == "RIALZISTA":
+        if analysis.get("trend_bullish") or analysis.get("trend_bearish"):
 
             score += 20
 
-        elif trend == "RIBASSISTA":
+        if analysis.get("adx_strong"):
 
             score += 20
 
-        if momentum in (
+        rsi = float(analysis.get("rsi", 50))
 
-            "RIALZISTA",
-
-            "RIBASSISTA"
-
-        ):
-
-            score += 20
-
-        if rsi == "NEUTRALE":
+        if 40 <= rsi <= 60:
 
             score += 10
 

@@ -36,3 +36,8 @@ phoenix_ai.db
 .DS_Store
 Thumbs.db
 desktop.ini
+# ========================================
+# MT5 CREDENTIALS
+# ========================================
+
+Config/mt5_credentials.py

@@ -22,6 +22,7 @@ from Core.live_trading_engine import LiveTradingEngine
 from Core.performance_analytics import PerformanceAnalytics
 
 from Execution.execution_engine import ExecutionEngine
+from Config.settings import MODE
 
 
 class CoreSystem:
@@ -181,110 +182,110 @@ class CoreSystem:
             return
 
         Logger.section(
-
             "MIGLIOR SEGNALE"
-
         )
 
         self.print_result(
-
             best_result
-
         )
 
-        signal = best_result["signal"]
-
-        trade = best_result["trade"]
-
-        if (
-
-            trade is not None
-
-            and signal["valid"]
-
-        ):
-
-            order = self.execution.execute(
-
-                trade
-
-            )
-
-            if order["success"]:
-
-                opened = self.position_controller.open_position(
-
-                    side=order["side"],
-
-                    entry=order["entry"],
-
-                    stop_loss=order["stop_loss"],
-
-                    take_profit=order["take_profit"],
-
-                    symbol=order["symbol"],
-
-                    size=order["size"]
-
-                )
-
-                if opened:
-
-                    self.portfolio.add(
-
-                        order["symbol"],
-
-                        self.position_controller.get_position()
-
-                    )
-
-        self.print_backtest()
-
-        self.portfolio.report()
+        # Lo Scanner Multi Market e' pensato per segnalare, non per
+        # operare: mostra solo la classifica e il miglior segnale.
+        # Prima apriva davvero una posizione (paper trading) che pero'
+        # non veniva mai monitorata ne' chiusa (lo scanner e' un
+        # comando "one-shot", non un ciclo continuo come il Live
+        # Trading), restando orfana in memoria fino alla chiusura del
+        # programma. Se vuoi operare su un segnale trovato qui, usa
+        # il Live Trading (opzione 2) sul simbolo scelto.
 
         Logger.section("DATABASE")
 
         Logger.info(
-
             f"Trade salvati : {self.database.count()}"
-
         )
 
         Logger.success(
-
             "Core System completato."
-
         )
 
     # =====================================
     # LIVE TRADING
     # =====================================
 
-    def run_live_trading(
+    def run_live_trading(self, symbol="BTC-USD"):
 
-        self,
-
-        symbol="BTC-USD"
-
-    ):
-
-        Logger.section(
-
-            "LIVE TRADING"
-
-        )
+        Logger.section("LIVE TRADING")
 
         self.market.load_markets()
 
-        self.live_engine.start(
+        if MODE == "LIVE":
 
-            symbol=symbol,
+            self._run_live_trading_broker(symbol)
 
-            interval="1h",
+        else:
 
-            delay=30
+            self.live_engine.start(
+                symbol=symbol,
+                interval="1h",
+                delay=30
+            )
 
+    def _run_live_trading_broker(self, symbol):
+
+        # MODE == "LIVE" in Config/settings.py: usa un broker vero
+        # (MT5) invece della simulazione. Import qui, non in cima al
+        # file, cosi' chi usa solo la simulazione non ha bisogno del
+        # pacchetto MetaTrader5 installato (funziona solo su Windows).
+        from Execution.mt5_broker import MT5Broker
+
+        Logger.warning(
+            "MODE = LIVE: questo ciclo apre e chiude posizioni REALI "
+            "tramite MT5 (conto demo o reale a seconda delle "
+            "credenziali in Config/mt5_credentials.py)."
         )
+
+        conferma = input(
+            "Digita CONFERMO per avviare il trading automatico "
+            "tramite broker reale: "
+        ).strip()
+
+        if conferma.upper() != "CONFERMO":
+
+            Logger.info("Avvio annullato dall'utente.")
+
+            return
+
+        broker = MT5Broker()
+
+        if not broker.connect():
+
+            Logger.warning(
+                "Connessione al broker fallita. Live Trading annullato."
+            )
+
+            return
+
+        live_engine = LiveTradingEngine(
+            self.candles,
+            self.analysis,
+            broker,
+            self.position_controller,
+            self.portfolio,
+            self.backtest,
+            self.database
+        )
+
+        try:
+
+            live_engine.start(
+                symbol=symbol,
+                interval="1h",
+                delay=30
+            )
+
+        finally:
+
+            broker.disconnect()
 
     # =====================================
     # PERFORMANCE

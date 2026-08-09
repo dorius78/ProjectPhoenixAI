@@ -97,6 +97,21 @@ MAX_RISK = 1.0
 MIN_CONFIDENCE = 60
 
 # ======================================
+# PROTEZIONI LIVE TRADING
+# ======================================
+
+# Se la perdita del giorno supera questa percentuale del saldo
+# di inizio giornata, il Live Trading si ferma da solo (nessun
+# nuovo trade, quelli aperti restano gestiti fino alla chiusura
+# naturale via SL/TP).
+MAX_DAILY_LOSS_PERCENT = 3.0
+
+# Se si accumulano questi trade in perdita DI FILA, il Live
+# Trading si ferma da solo (protezione contro condizioni di
+# mercato anomale o un bug non ancora scoperto).
+MAX_CONSECUTIVE_LOSSES = 4
+
+# ======================================
 # CAPITALE / BACKTEST
 # ======================================
 

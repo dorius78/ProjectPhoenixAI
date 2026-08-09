@@ -11,6 +11,8 @@ from datetime import datetime
 
 from Logs.logger import Logger
 
+from Core.trading_guard import TradingGuard
+
 
 class LiveTradingEngine:
 
@@ -53,6 +55,8 @@ class LiveTradingEngine:
         self.backtest = backtest
 
         self.database = database
+
+        self.guard = TradingGuard(self.portfolio.get_balance())
 
     # =====================================
     # AVVIO
@@ -236,6 +240,14 @@ class LiveTradingEngine:
 
                         )
 
+                        self.guard.register_trade(
+
+                            report["pnl"],
+
+                            self.portfolio.get_balance()
+
+                        )
+
                         self.portfolio.remove(
 
                             report["symbol"]
@@ -253,6 +265,19 @@ class LiveTradingEngine:
                 # ==========================
 
                 if not self.position_controller.has_position():
+
+                    can_trade, reason = self.guard.can_trade(
+                        self.portfolio.get_balance()
+                    )
+
+                    if not can_trade:
+
+                        Logger.warning(
+                            f"Live Trading fermato dal Trading Guard: "
+                            f"{reason}"
+                        )
+
+                        break
 
                     result = self.analysis.analyze(
 
