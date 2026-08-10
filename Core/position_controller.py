@@ -1,11 +1,3 @@
-"""
-========================================
-PROJECT PHOENIX AI
-Position Controller
-Versione 12.4
-========================================
-"""
-
 from datetime import datetime
 
 from Logs.logger import Logger
@@ -18,7 +10,7 @@ class PositionController:
     def __init__(self):
 
         Logger.success(
-            "Position Controller V12.4 inizializzato."
+            "Position Controller V12.5 inizializzato."
         )
 
         self.position = None
@@ -81,13 +73,6 @@ class PositionController:
         # =================================
         # ORARIO APERTURA
         # =================================
-        #
-        # Live Trading:
-        # viene utilizzata l'ora reale.
-        #
-        # Backtest:
-        # viene utilizzato il timestamp
-        # della candela storica.
 
         open_time = (
 
@@ -122,14 +107,14 @@ class PositionController:
             "entry": entry,
 
             # Stop Loss iniziale.
-            # Questo valore NON viene mai modificato
-            # da Break Even o Trailing Stop.
+            # NON viene modificato da
+            # Break Even o Trailing Stop.
 
             "initial_stop_loss": stop_loss,
 
             # Stop Loss corrente.
-            # Questo valore può essere modificato
-            # durante la gestione della posizione.
+            # Può essere modificato durante
+            # la gestione della posizione.
 
             "stop_loss": stop_loss,
 
@@ -191,11 +176,6 @@ class PositionController:
         # =================================
         # 1. POSITION MONITOR
         # =================================
-        #
-        # Aggiorna:
-        # - current_price
-        # - current_profit
-        # - max_profit
 
         self.position = self.monitor.update(
 
@@ -208,12 +188,6 @@ class PositionController:
         # =================================
         # 2. EXIT MANAGER
         # =================================
-        #
-        # Gestisce:
-        # - Break Even
-        # - Trailing Stop
-        # - Stop Loss
-        # - Take Profit
 
         exit_reason = self.exit_manager.evaluate(
 
@@ -233,7 +207,9 @@ class PositionController:
 
                 exit_reason,
 
-                timestamp
+                timestamp,
+
+                current_price
 
             )
 
@@ -253,13 +229,150 @@ class PositionController:
 
         reason="MANUALE",
 
-        timestamp=None
+        timestamp=None,
+
+        current_price=None
 
     ):
 
         if self.position is None:
 
             return None
+
+        # =================================
+        # PREZZO CORRENTE
+        # =================================
+
+        if current_price is None:
+
+            current_price = self.position[
+                "current_price"
+            ]
+
+        current_price = float(
+            current_price
+        )
+
+        # =================================
+        # DETERMINAZIONE PREZZO USCITA
+        # =================================
+
+        reason_upper = str(
+            reason
+        ).upper()
+
+        # ---------------------------------
+        # TAKE PROFIT
+        # ---------------------------------
+
+        if reason_upper == "TAKE PROFIT":
+
+            exit_price = float(
+                self.position["take_profit"]
+            )
+
+        # ---------------------------------
+        # BREAK EVEN
+        # ---------------------------------
+
+        elif reason_upper == "BREAK EVEN":
+
+            exit_price = float(
+                self.position["entry"]
+            )
+
+        # ---------------------------------
+        # TRAILING STOP
+        # ---------------------------------
+
+        elif reason_upper == "TRAILING STOP":
+
+            trailing_stop = self.position.get(
+                "trailing_stop"
+            )
+
+            if trailing_stop is not None:
+
+                exit_price = float(
+                    trailing_stop
+                )
+
+            else:
+
+                exit_price = float(
+                    self.position["stop_loss"]
+                )
+
+        # ---------------------------------
+        # STOP LOSS
+        # ---------------------------------
+
+        elif reason_upper == "STOP LOSS":
+
+            exit_price = float(
+                self.position["stop_loss"]
+            )
+
+        # ---------------------------------
+        # USCITA MANUALE / ALTRO
+        # ---------------------------------
+
+        else:
+
+            exit_price = current_price
+
+        # =================================
+        # PREZZO DI USCITA FINALE
+        # =================================
+
+        self.position["current_price"] = (
+            exit_price
+        )
+
+        # =================================
+        # CALCOLO PNL FINALE
+        # =================================
+
+        side = str(
+            self.position["side"]
+        ).upper()
+
+        entry = float(
+            self.position["entry"]
+        )
+
+        size = float(
+            self.position.get(
+                "size",
+                1.0
+            )
+        )
+
+        if side in (
+            "BUY",
+            "STRONG BUY"
+        ):
+
+            self.position["current_profit"] = round(
+
+                (exit_price - entry) * size,
+
+                6
+
+            )
+
+        elif side in (
+            "SELL",
+            "STRONG SELL"
+        ):
+
+            self.position["current_profit"] = round(
+
+                (entry - exit_price) * size,
+
+                6
+
+            )
 
         # =================================
         # STATO
