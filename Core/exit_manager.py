@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Exit Manager
-Versione 1.0
+Versione 2.0
 ========================================
 """
 
@@ -14,8 +14,82 @@ class ExitManager:
     def __init__(self):
 
         Logger.success(
-            "Exit Manager V1 inizializzato."
+            "Exit Manager V2 inizializzato."
         )
+
+    # =====================================
+    # BREAK EVEN
+    # =====================================
+
+    def apply_break_even(
+        self,
+        position,
+        current_price
+    ):
+
+        if position is None:
+
+            return None
+
+        current_price = float(
+            current_price
+        )
+
+        entry = float(
+            position["entry"]
+        )
+
+        size = float(
+            position.get("size", 1.0)
+        )
+
+        side = str(
+            position["side"]
+        ).upper()
+
+        break_even = bool(
+            position.get("break_even", False)
+        )
+
+        # =================================
+        # GIA' ATTIVO
+        # =================================
+
+        if break_even:
+
+            return position
+
+        # =================================
+        # CALCOLO PROFITTO
+        # =================================
+
+        if side in ("BUY", "STRONG BUY"):
+
+            profit = (
+                current_price - entry
+            ) * size
+
+        else:
+
+            profit = (
+                entry - current_price
+            ) * size
+
+        # =================================
+        # ATTIVAZIONE BREAK EVEN
+        # =================================
+
+        if profit > 0:
+
+            position["stop_loss"] = entry
+
+            position["break_even"] = True
+
+            Logger.info(
+                "Break Even attivato."
+            )
+
+        return position
 
     # =====================================
     # VALUTA USCITA
@@ -32,6 +106,15 @@ class ExitManager:
             return None
 
         current_price = float(
+            current_price
+        )
+
+        # =================================
+        # BREAK EVEN
+        # =================================
+
+        self.apply_break_even(
+            position,
             current_price
         )
 

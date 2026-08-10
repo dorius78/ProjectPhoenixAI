@@ -95,3 +95,73 @@ def test_sell_take_profit():
     )
 
     assert result == "TAKE PROFIT"
+def test_break_even_buy():
+
+    manager = ExitManager()
+
+    position = {
+        "symbol": "BTC-USD",
+        "side": "BUY",
+        "entry": 100000.0,
+        "stop_loss": 99000.0,
+        "take_profit": 102000.0,
+        "size": 0.01,
+        "status": "OPEN",
+        "break_even": False
+    }
+
+    result = manager.apply_break_even(
+        position,
+        101000.0
+    )
+
+    assert result["stop_loss"] == 100000.0
+    assert result["break_even"] is True
+
+
+def test_break_even_sell():
+
+    manager = ExitManager()
+
+    position = {
+        "symbol": "BTC-USD",
+        "side": "SELL",
+        "entry": 100000.0,
+        "stop_loss": 101000.0,
+        "take_profit": 98000.0,
+        "size": 0.01,
+        "status": "OPEN",
+        "break_even": False
+    }
+
+    result = manager.apply_break_even(
+        position,
+        99000.0
+    )
+
+    assert result["stop_loss"] == 100000.0
+    assert result["break_even"] is True
+
+
+def test_break_even_not_activated_in_loss():
+
+    manager = ExitManager()
+
+    position = {
+        "symbol": "BTC-USD",
+        "side": "BUY",
+        "entry": 100000.0,
+        "stop_loss": 99000.0,
+        "take_profit": 102000.0,
+        "size": 0.01,
+        "status": "OPEN",
+        "break_even": False
+    }
+
+    result = manager.apply_break_even(
+        position,
+        99500.0
+    )
+
+    assert result["stop_loss"] == 99000.0
+    assert result["break_even"] is False
