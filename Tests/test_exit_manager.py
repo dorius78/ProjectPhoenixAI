@@ -165,3 +165,97 @@ def test_break_even_not_activated_in_loss():
 
     assert result["stop_loss"] == 99000.0
     assert result["break_even"] is False
+def test_trailing_stop_buy():
+
+    manager = ExitManager()
+
+    position = {
+        "symbol": "BTC-USD",
+        "side": "BUY",
+        "entry": 100000.0,
+        "stop_loss": 100000.0,
+        "take_profit": 102000.0,
+        "size": 0.01,
+        "status": "OPEN",
+        "break_even": True
+    }
+
+    result = manager.apply_trailing_stop(
+        position,
+        101500.0
+    )
+
+    assert result["stop_loss"] == 101000.0
+    assert result["break_even"] is True
+
+
+def test_trailing_stop_sell():
+
+    manager = ExitManager()
+
+    position = {
+        "symbol": "BTC-USD",
+        "side": "SELL",
+        "entry": 100000.0,
+        "stop_loss": 100000.0,
+        "take_profit": 98000.0,
+        "size": 0.01,
+        "status": "OPEN",
+        "break_even": True
+    }
+
+    result = manager.apply_trailing_stop(
+        position,
+        98500.0
+    )
+
+    assert result["stop_loss"] == 99000.0
+    assert result["break_even"] is True
+
+
+def test_trailing_stop_buy_does_not_move_backward():
+
+    manager = ExitManager()
+
+    position = {
+        "symbol": "BTC-USD",
+        "side": "BUY",
+        "entry": 100000.0,
+        "stop_loss": 101000.0,
+        "take_profit": 102000.0,
+        "size": 0.01,
+        "status": "OPEN",
+        "break_even": True
+    }
+
+    result = manager.apply_trailing_stop(
+        position,
+        100500.0
+    )
+
+    assert result["stop_loss"] == 101000.0
+    assert result["break_even"] is True
+
+
+def test_trailing_stop_sell_does_not_move_backward():
+
+    manager = ExitManager()
+
+    position = {
+        "symbol": "BTC-USD",
+        "side": "SELL",
+        "entry": 100000.0,
+        "stop_loss": 99000.0,
+        "take_profit": 98000.0,
+        "size": 0.01,
+        "status": "OPEN",
+        "break_even": True
+    }
+
+    result = manager.apply_trailing_stop(
+        position,
+        99500.0
+    )
+
+    assert result["stop_loss"] == 99000.0
+    assert result["break_even"] is True

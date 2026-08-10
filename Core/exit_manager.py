@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Exit Manager
-Versione 2.0
+Versione 3.0
 ========================================
 """
 
@@ -14,7 +14,7 @@ class ExitManager:
     def __init__(self):
 
         Logger.success(
-            "Exit Manager V2 inizializzato."
+            "Exit Manager V3 inizializzato."
         )
 
     # =====================================
@@ -92,6 +92,106 @@ class ExitManager:
         return position
 
     # =====================================
+    # TRAILING STOP
+    # =====================================
+
+    def apply_trailing_stop(
+        self,
+        position,
+        current_price
+    ):
+
+        if position is None:
+
+            return None
+
+        current_price = float(
+            current_price
+        )
+
+        entry = float(
+            position["entry"]
+        )
+
+        take_profit = float(
+            position["take_profit"]
+        )
+
+        stop_loss = float(
+            position["stop_loss"]
+        )
+
+        side = str(
+            position["side"]
+        ).upper()
+
+        break_even = bool(
+            position.get("break_even", False)
+        )
+
+        # =================================
+        # TRAILING SOLO DOPO BREAK EVEN
+        # =================================
+
+        if not break_even:
+
+            return position
+
+        # =================================
+        # DISTANZA TRAILING
+        # =================================
+
+        distance = abs(
+            take_profit - entry
+        ) * 0.25
+
+        # =================================
+        # BUY
+        # =================================
+
+        if side in ("BUY", "STRONG BUY"):
+
+            new_stop = (
+                current_price - distance
+            )
+
+            if new_stop > stop_loss:
+
+                position["stop_loss"] = round(
+                    new_stop,
+                    6
+                )
+
+                Logger.info(
+                    f"Trailing Stop -> "
+                    f"{position['stop_loss']}"
+                )
+
+        # =================================
+        # SELL
+        # =================================
+
+        elif side in ("SELL", "STRONG SELL"):
+
+            new_stop = (
+                current_price + distance
+            )
+
+            if new_stop < stop_loss:
+
+                position["stop_loss"] = round(
+                    new_stop,
+                    6
+                )
+
+                Logger.info(
+                    f"Trailing Stop -> "
+                    f"{position['stop_loss']}"
+                )
+
+        return position
+
+    # =====================================
     # VALUTA USCITA
     # =====================================
 
@@ -114,6 +214,15 @@ class ExitManager:
         # =================================
 
         self.apply_break_even(
+            position,
+            current_price
+        )
+
+        # =================================
+        # TRAILING STOP
+        # =================================
+
+        self.apply_trailing_stop(
             position,
             current_price
         )
