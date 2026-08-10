@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Position Controller
-Versione 12.3
+Versione 12.4
 ========================================
 """
 
@@ -18,7 +18,7 @@ class PositionController:
     def __init__(self):
 
         Logger.success(
-            "Position Controller V12.3 inizializzato."
+            "Position Controller V12.4 inizializzato."
         )
 
         self.position = None
@@ -98,6 +98,18 @@ class PositionController:
         )
 
         # =================================
+        # VALORI NUMERICI
+        # =================================
+
+        entry = float(entry)
+
+        stop_loss = float(stop_loss)
+
+        take_profit = float(take_profit)
+
+        size = float(size)
+
+        # =================================
         # CREAZIONE POSIZIONE
         # =================================
 
@@ -107,13 +119,23 @@ class PositionController:
 
             "side": side,
 
-            "entry": float(entry),
+            "entry": entry,
 
-            "stop_loss": float(stop_loss),
+            # Stop Loss iniziale.
+            # Questo valore NON viene mai modificato
+            # da Break Even o Trailing Stop.
 
-            "take_profit": float(take_profit),
+            "initial_stop_loss": stop_loss,
 
-            "size": float(size),
+            # Stop Loss corrente.
+            # Questo valore può essere modificato
+            # durante la gestione della posizione.
+
+            "stop_loss": stop_loss,
+
+            "take_profit": take_profit,
+
+            "size": size,
 
             "status": "OPEN",
 
@@ -123,7 +145,7 @@ class PositionController:
 
             "close_reason": None,
 
-            "current_price": float(entry),
+            "current_price": entry,
 
             "current_profit": 0.0,
 
@@ -192,11 +214,6 @@ class PositionController:
         # - Trailing Stop
         # - Stop Loss
         # - Take Profit
-        #
-        # Restituisce:
-        # - None
-        # - STOP LOSS
-        # - TAKE PROFIT
 
         exit_reason = self.exit_manager.evaluate(
 

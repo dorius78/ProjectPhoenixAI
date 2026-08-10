@@ -341,7 +341,12 @@ class CoreSystem:
 
                     duration = (report["close_time"] - closed["open_time"]).total_seconds()
                     result = "WIN" if report["pnl"] > 0 else "LOSS"
-                    risk = abs(closed["entry"] - closed["stop_loss"])
+
+                    risk = abs(
+                        closed["entry"]
+                        - closed["initial_stop_loss"]
+                    )
+
                     reward = abs(report["exit"] - closed["entry"])
                     rr = round(reward / risk, 2) if risk > 0 else 0
 
@@ -375,6 +380,7 @@ class CoreSystem:
                     symbol,
                     account_balance=self.portfolio.get_balance()
                 )
+
                 signal = result_analysis["signal"]
                 trade = result_analysis["trade"]
 

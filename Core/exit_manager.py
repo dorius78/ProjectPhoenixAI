@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Exit Manager
-Versione 3.1
+Versione 3.2
 ========================================
 """
 
@@ -14,7 +14,7 @@ class ExitManager:
     def __init__(self):
 
         Logger.success(
-            "Exit Manager V3.1 inizializzato."
+            "Exit Manager V3.2 inizializzato."
         )
 
     # =====================================
@@ -22,9 +22,13 @@ class ExitManager:
     # =====================================
 
     def apply_break_even(
+
         self,
+
         position,
+
         current_price
+
     ):
 
         if position is None:
@@ -50,29 +54,50 @@ class ExitManager:
             )
         )
 
+        # =================================
+        # GIA' ATTIVO
+        # =================================
+
         if break_even:
 
             return position
 
+        # =================================
+        # VERIFICA PROFITTO
+        # =================================
+
         in_profit = False
 
-        if side in ("BUY", "STRONG BUY"):
+        if side in (
+            "BUY",
+            "STRONG BUY"
+        ):
 
             if current_price > entry:
 
                 in_profit = True
 
-        elif side in ("SELL", "STRONG SELL"):
+        elif side in (
+            "SELL",
+            "STRONG SELL"
+        ):
 
             if current_price < entry:
 
                 in_profit = True
+
+        # =================================
+        # ATTIVAZIONE BREAK EVEN
+        # =================================
 
         if in_profit:
 
             position["stop_loss"] = entry
 
             position["break_even"] = True
+
+            # Nessun trailing ancora attivo.
+            position["trailing_stop"] = None
 
             Logger.info(
                 "Break Even attivato."
@@ -85,9 +110,13 @@ class ExitManager:
     # =====================================
 
     def apply_trailing_stop(
+
         self,
+
         position,
+
         current_price
+
     ):
 
         if position is None:
@@ -121,48 +150,98 @@ class ExitManager:
             )
         )
 
+        # =================================
+        # TRAILING SOLO DOPO BREAK EVEN
+        # =================================
+
         if not break_even:
 
             return position
 
+        # =================================
+        # DISTANZA TRAILING
+        # =================================
+
         distance = abs(
+
             take_profit - entry
+
         ) * 0.25
 
-        if side in ("BUY", "STRONG BUY"):
+        # =================================
+        # BUY
+        # =================================
+
+        if side in (
+            "BUY",
+            "STRONG BUY"
+        ):
 
             new_stop = (
-                current_price - distance
+
+                current_price
+                - distance
+
             )
 
             if new_stop > stop_loss:
 
-                position["stop_loss"] = round(
+                new_stop = round(
                     new_stop,
                     6
                 )
 
-                Logger.info(
-                    f"Trailing Stop -> "
-                    f"{position['stop_loss']}"
+                position["stop_loss"] = (
+                    new_stop
                 )
 
-        elif side in ("SELL", "STRONG SELL"):
+                position["trailing_stop"] = (
+                    new_stop
+                )
+
+                Logger.info(
+
+                    f"Trailing Stop -> "
+                    f"{new_stop}"
+
+                )
+
+        # =================================
+        # SELL
+        # =================================
+
+        elif side in (
+            "SELL",
+            "STRONG SELL"
+        ):
 
             new_stop = (
-                current_price + distance
+
+                current_price
+                + distance
+
             )
 
             if new_stop < stop_loss:
 
-                position["stop_loss"] = round(
+                new_stop = round(
                     new_stop,
                     6
                 )
 
+                position["stop_loss"] = (
+                    new_stop
+                )
+
+                position["trailing_stop"] = (
+                    new_stop
+                )
+
                 Logger.info(
+
                     f"Trailing Stop -> "
-                    f"{position['stop_loss']}"
+                    f"{new_stop}"
+
                 )
 
         return position
@@ -172,9 +251,13 @@ class ExitManager:
     # =====================================
 
     def evaluate(
+
         self,
+
         position,
+
         current_price
+
     ):
 
         if position is None:
@@ -185,14 +268,28 @@ class ExitManager:
             current_price
         )
 
+        # =================================
+        # BREAK EVEN
+        # =================================
+
         position = self.apply_break_even(
+
             position,
+
             current_price
+
         )
 
+        # =================================
+        # TRAILING STOP
+        # =================================
+
         position = self.apply_trailing_stop(
+
             position,
+
             current_price
+
         )
 
         side = str(
@@ -207,21 +304,78 @@ class ExitManager:
             position["take_profit"]
         )
 
-        if side in ("BUY", "STRONG BUY"):
+        trailing_stop = position.get(
+            "trailing_stop"
+        )
+
+        break_even = bool(
+            position.get(
+                "break_even",
+                False
+            )
+        )
+
+        # =================================
+        # BUY
+        # =================================
+
+        if side in (
+            "BUY",
+            "STRONG BUY"
+        ):
+
+            # -----------------------------
+            # STOP / TRAILING
+            # -----------------------------
 
             if current_price <= stop_loss:
 
+                if trailing_stop is not None:
+
+                    return "TRAILING STOP"
+
+                if break_even:
+
+                    return "BREAK EVEN"
+
                 return "STOP LOSS"
+
+            # -----------------------------
+            # TAKE PROFIT
+            # -----------------------------
 
             if current_price >= take_profit:
 
                 return "TAKE PROFIT"
 
-        elif side in ("SELL", "STRONG SELL"):
+        # =================================
+        # SELL
+        # =================================
+
+        elif side in (
+            "SELL",
+            "STRONG SELL"
+        ):
+
+            # -----------------------------
+            # STOP / TRAILING
+            # -----------------------------
 
             if current_price >= stop_loss:
 
+                if trailing_stop is not None:
+
+                    return "TRAILING STOP"
+
+                if break_even:
+
+                    return "BREAK EVEN"
+
                 return "STOP LOSS"
+
+            # -----------------------------
+            # TAKE PROFIT
+            # -----------------------------
 
             if current_price <= take_profit:
 

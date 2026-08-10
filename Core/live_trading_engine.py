@@ -164,7 +164,7 @@ class LiveTradingEngine:
 
                             -
 
-                            closed["stop_loss"]
+                            closed["initial_stop_loss"]
 
                         )
 
@@ -267,14 +267,19 @@ class LiveTradingEngine:
                 if not self.position_controller.has_position():
 
                     can_trade, reason = self.guard.can_trade(
+
                         self.portfolio.get_balance()
+
                     )
 
                     if not can_trade:
 
                         Logger.warning(
+
                             f"Live Trading fermato dal Trading Guard: "
+
                             f"{reason}"
+
                         )
 
                         break
