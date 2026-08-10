@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Exit Manager
-Versione 3.0
+Versione 3.1
 ========================================
 """
 
@@ -14,7 +14,7 @@ class ExitManager:
     def __init__(self):
 
         Logger.success(
-            "Exit Manager V3 inizializzato."
+            "Exit Manager V3.1 inizializzato."
         )
 
     # =====================================
@@ -39,47 +39,36 @@ class ExitManager:
             position["entry"]
         )
 
-        size = float(
-            position.get("size", 1.0)
-        )
-
         side = str(
             position["side"]
         ).upper()
 
         break_even = bool(
-            position.get("break_even", False)
+            position.get(
+                "break_even",
+                False
+            )
         )
-
-        # =================================
-        # GIA' ATTIVO
-        # =================================
 
         if break_even:
 
             return position
 
-        # =================================
-        # CALCOLO PROFITTO
-        # =================================
+        in_profit = False
 
         if side in ("BUY", "STRONG BUY"):
 
-            profit = (
-                current_price - entry
-            ) * size
+            if current_price > entry:
 
-        else:
+                in_profit = True
 
-            profit = (
-                entry - current_price
-            ) * size
+        elif side in ("SELL", "STRONG SELL"):
 
-        # =================================
-        # ATTIVAZIONE BREAK EVEN
-        # =================================
+            if current_price < entry:
 
-        if profit > 0:
+                in_profit = True
+
+        if in_profit:
 
             position["stop_loss"] = entry
 
@@ -126,28 +115,19 @@ class ExitManager:
         ).upper()
 
         break_even = bool(
-            position.get("break_even", False)
+            position.get(
+                "break_even",
+                False
+            )
         )
-
-        # =================================
-        # TRAILING SOLO DOPO BREAK EVEN
-        # =================================
 
         if not break_even:
 
             return position
 
-        # =================================
-        # DISTANZA TRAILING
-        # =================================
-
         distance = abs(
             take_profit - entry
         ) * 0.25
-
-        # =================================
-        # BUY
-        # =================================
 
         if side in ("BUY", "STRONG BUY"):
 
@@ -166,10 +146,6 @@ class ExitManager:
                     f"Trailing Stop -> "
                     f"{position['stop_loss']}"
                 )
-
-        # =================================
-        # SELL
-        # =================================
 
         elif side in ("SELL", "STRONG SELL"):
 
@@ -209,20 +185,12 @@ class ExitManager:
             current_price
         )
 
-        # =================================
-        # BREAK EVEN
-        # =================================
-
-        self.apply_break_even(
+        position = self.apply_break_even(
             position,
             current_price
         )
 
-        # =================================
-        # TRAILING STOP
-        # =================================
-
-        self.apply_trailing_stop(
+        position = self.apply_trailing_stop(
             position,
             current_price
         )
@@ -239,10 +207,6 @@ class ExitManager:
             position["take_profit"]
         )
 
-        # =================================
-        # BUY
-        # =================================
-
         if side in ("BUY", "STRONG BUY"):
 
             if current_price <= stop_loss:
@@ -252,10 +216,6 @@ class ExitManager:
             if current_price >= take_profit:
 
                 return "TAKE PROFIT"
-
-        # =================================
-        # SELL
-        # =================================
 
         elif side in ("SELL", "STRONG SELL"):
 

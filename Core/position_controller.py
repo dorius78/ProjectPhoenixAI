@@ -2,22 +2,49 @@
 ========================================
 PROJECT PHOENIX AI
 Position Controller
-Versione 12.0
+Versione 12.3
 ========================================
 """
 
 from datetime import datetime
 
 from Logs.logger import Logger
+from Core.position_monitor import PositionMonitor
+from Core.exit_manager import ExitManager
 
 
 class PositionController:
 
     def __init__(self):
 
-        Logger.success("Position Controller V12 inizializzato.")
+        Logger.success(
+            "Position Controller V12.3 inizializzato."
+        )
 
         self.position = None
+
+        # =================================
+        # POSITION MONITOR
+        # =================================
+        #
+        # Responsabile di:
+        # - prezzo corrente
+        # - profitto corrente
+        # - massimo profitto
+
+        self.monitor = PositionMonitor()
+
+        # =================================
+        # EXIT MANAGER
+        # =================================
+        #
+        # Responsabile di:
+        # - Break Even
+        # - Trailing Stop
+        # - Stop Loss
+        # - Take Profit
+
+        self.exit_manager = ExitManager()
 
     # =====================================
     # APERTURA POSIZIONE
@@ -45,16 +72,34 @@ class PositionController:
 
         if self.position is not None:
 
-            Logger.warning("Posizione già aperta.")
+            Logger.warning(
+                "Posizione già aperta."
+            )
 
             return False
 
-        # Nel Live Trading non passiamo "timestamp": qui si usa l'ora
-        # reale del PC, corretto per operazioni dal vivo. Nel Backtest
-        # invece si passa la data della candela storica, altrimenti
-        # ogni trade risulterebbe aperto e chiuso nello stesso istante
-        # reale (il backtest gira in pochi secondi).
-        open_time = timestamp if timestamp is not None else datetime.now()
+        # =================================
+        # ORARIO APERTURA
+        # =================================
+        #
+        # Live Trading:
+        # viene utilizzata l'ora reale.
+        #
+        # Backtest:
+        # viene utilizzato il timestamp
+        # della candela storica.
+
+        open_time = (
+
+            timestamp
+            if timestamp is not None
+            else datetime.now()
+
+        )
+
+        # =================================
+        # CREAZIONE POSIZIONE
+        # =================================
 
         self.position = {
 
@@ -92,7 +137,8 @@ class PositionController:
 
         Logger.success(
 
-            f"Aperta posizione {side} su {symbol} (size: {size})"
+            f"Aperta posizione {side} su {symbol} "
+            f"(size: {size})"
 
         )
 
@@ -116,165 +162,67 @@ class PositionController:
 
             return None
 
-        current_price = float(current_price)
+        current_price = float(
+            current_price
+        )
 
-        self.position["current_price"] = current_price
+        # =================================
+        # 1. POSITION MONITOR
+        # =================================
+        #
+        # Aggiorna:
+        # - current_price
+        # - current_profit
+        # - max_profit
 
-        entry = self.position["entry"]
+        self.position = self.monitor.update(
 
-        side = self.position["side"]
+            self.position,
 
-        size = self.position.get("size", 1.0)
-
-        if side == "BUY":
-
-            profit = (current_price - entry) * size
-
-        else:
-
-            profit = (entry - current_price) * size
-
-        self.position["current_profit"] = round(
-
-            profit,
-
-            6
+            current_price
 
         )
 
-        if profit > self.position["max_profit"]:
+        # =================================
+        # 2. EXIT MANAGER
+        # =================================
+        #
+        # Gestisce:
+        # - Break Even
+        # - Trailing Stop
+        # - Stop Loss
+        # - Take Profit
+        #
+        # Restituisce:
+        # - None
+        # - STOP LOSS
+        # - TAKE PROFIT
 
-            self.position["max_profit"] = round(
+        exit_reason = self.exit_manager.evaluate(
 
-                profit,
+            self.position,
 
-                6
+            current_price
+
+        )
+
+        # =================================
+        # 3. CHIUSURA
+        # =================================
+
+        if exit_reason is not None:
+
+            return self.close_position(
+
+                exit_reason,
+
+                timestamp
 
             )
 
-        # =====================================
-        # BREAK EVEN
-        # =====================================
-
-        if (
-
-            not self.position["break_even"]
-
-            and profit > 0
-
-        ):
-
-            self.position["stop_loss"] = entry
-
-            self.position["break_even"] = True
-
-            Logger.info(
-
-                "Break Even attivato."
-
-            )
-
-        # =====================================
-        # TRAILING STOP
-        # =====================================
-
-        if self.position["break_even"]:
-
-            distance = abs(
-
-                self.position["take_profit"]
-
-                - entry
-
-            ) * 0.25
-
-            if side == "BUY":
-
-                new_stop = current_price - distance
-
-                if new_stop > self.position["stop_loss"]:
-
-                    self.position["stop_loss"] = round(
-
-                        new_stop,
-
-                        6
-
-                    )
-
-                    Logger.info(
-
-                        f"Trailing Stop -> {self.position['stop_loss']}"
-
-                    )
-
-            else:
-
-                new_stop = current_price + distance
-
-                if new_stop < self.position["stop_loss"]:
-
-                    self.position["stop_loss"] = round(
-
-                        new_stop,
-
-                        6
-
-                    )
-
-                    Logger.info(
-
-                        f"Trailing Stop -> {self.position['stop_loss']}"
-
-                    )
-
-        # =====================================
-        # STOP LOSS / TAKE PROFIT
-        # =====================================
-
-        if side == "BUY":
-
-            if current_price <= self.position["stop_loss"]:
-
-                return self.close_position(
-
-                    "STOP LOSS",
-
-                    timestamp
-
-                )
-
-            if current_price >= self.position["take_profit"]:
-
-                return self.close_position(
-
-                    "TAKE PROFIT",
-
-                    timestamp
-
-                )
-
-        else:
-
-            if current_price >= self.position["stop_loss"]:
-
-                return self.close_position(
-
-                    "STOP LOSS",
-
-                    timestamp
-
-                )
-
-            if current_price <= self.position["take_profit"]:
-
-                return self.close_position(
-
-                    "TAKE PROFIT",
-
-                    timestamp
-
-                )
+        # =================================
+        # POSIZIONE ANCORA APERTA
+        # =================================
 
         return self.position
 
@@ -296,12 +244,20 @@ class PositionController:
 
             return None
 
+        # =================================
+        # STATO
+        # =================================
+
         self.position["status"] = "CLOSED"
 
         self.position["close_reason"] = reason
 
         self.position["close_time"] = (
-            timestamp if timestamp is not None else datetime.now()
+
+            timestamp
+            if timestamp is not None
+            else datetime.now()
+
         )
 
         Logger.success(
@@ -310,14 +266,22 @@ class PositionController:
 
         )
 
+        # =================================
+        # COPIA POSIZIONE CHIUSA
+        # =================================
+
         closed = self.position.copy()
+
+        # =================================
+        # RESET POSIZIONE ATTIVA
+        # =================================
 
         self.position = None
 
         return closed
 
     # =====================================
-    # POSIZIONE
+    # POSIZIONE CORRENTE
     # =====================================
 
     def get_position(self):
@@ -325,7 +289,7 @@ class PositionController:
         return self.position
 
     # =====================================
-    # ESISTE
+    # VERIFICA POSIZIONE
     # =====================================
 
     def has_position(self):
