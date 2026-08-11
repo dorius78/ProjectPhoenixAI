@@ -22,7 +22,9 @@ class AnalysisEngine:
 
     def __init__(self):
 
-        Logger.success("Analysis Engine V9 inizializzato.")
+        Logger.success(
+            "Analysis Engine V9 inizializzato."
+        )
 
         self.indicator_manager = IndicatorManager()
 
@@ -58,9 +60,13 @@ class AnalysisEngine:
 
         Logger.section("ANALYSIS ENGINE")
 
-        indicators = self.indicator_manager.get_indicators(data)
+        indicators = self.indicator_manager.get_indicators(
+            data
+        )
 
-        analysis = self.market_analyzer.analyze(indicators)
+        analysis = self.market_analyzer.analyze(
+            indicators
+        )
 
         # =====================================
         # SMART MONEY
@@ -71,26 +77,56 @@ class AnalysisEngine:
         )
 
         choch = self.smart_money.detect_choch(data)
-        analysis["choch_bullish"] = choch["direction"] == "BULLISH"
-        analysis["choch_bearish"] = choch["direction"] == "BEARISH"
+
+        analysis["choch_bullish"] = (
+            choch["direction"] == "BULLISH"
+        )
+
+        analysis["choch_bearish"] = (
+            choch["direction"] == "BEARISH"
+        )
 
         fvg = self.smart_money.detect_fvg(data)
-        analysis["fvg_bullish"] = fvg["direction"] == "BULLISH"
-        analysis["fvg_bearish"] = fvg["direction"] == "BEARISH"
 
-        order_block = self.smart_money.detect_order_block(data)
-        analysis["order_block_bullish"] = order_block["direction"] == "BULLISH"
-        analysis["order_block_bearish"] = order_block["direction"] == "BEARISH"
+        analysis["fvg_bullish"] = (
+            fvg["direction"] == "BULLISH"
+        )
 
-        liquidity = self.smart_money.detect_liquidity(data)
-        analysis["liquidity_bullish"] = liquidity["direction"] == "BULLISH"
-        analysis["liquidity_bearish"] = liquidity["direction"] == "BEARISH"
+        analysis["fvg_bearish"] = (
+            fvg["direction"] == "BEARISH"
+        )
+
+        order_block = (
+            self.smart_money.detect_order_block(data)
+        )
+
+        analysis["order_block_bullish"] = (
+            order_block["direction"] == "BULLISH"
+        )
+
+        analysis["order_block_bearish"] = (
+            order_block["direction"] == "BEARISH"
+        )
+
+        liquidity = (
+            self.smart_money.detect_liquidity(data)
+        )
+
+        analysis["liquidity_bullish"] = (
+            liquidity["direction"] == "BULLISH"
+        )
+
+        analysis["liquidity_bearish"] = (
+            liquidity["direction"] == "BEARISH"
+        )
 
         # =====================================
         # RISK
         # =====================================
 
-        risk = self.risk_manager.evaluate(analysis)
+        risk = self.risk_manager.evaluate(
+            analysis
+        )
 
         # =====================================
         # AI BRAIN
@@ -108,7 +144,27 @@ class AnalysisEngine:
         # SIGNAL
         # =====================================
 
-        signal = self.signal_manager.validate(brain)
+        signal = self.signal_manager.validate(
+            brain
+        )
+
+        # =====================================
+        # RISK GATE
+        # =====================================
+        #
+        # Il Risk Manager ha la precedenza
+        # sulla validazione del segnale.
+        #
+        # Anche STRONG BUY e STRONG SELL
+        # NON possono aprire un trade quando
+        # il rischio non consente di operare.
+
+        if not risk.get(
+            "allow_trade",
+            False
+        ):
+
+            signal["valid"] = False
 
         # =====================================
         # TRADE
