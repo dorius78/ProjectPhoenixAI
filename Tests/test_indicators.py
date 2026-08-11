@@ -1,12 +1,9 @@
 """
-========================================
 PROJECT PHOENIX AI
-Indicator Tests
-Versione 1.0
-========================================
+Test Indicator Manager
 """
 
-from Indicators.indicator_manager import IndicatorManager
+from Data.Indicators.indicator_manager import IndicatorManager
 
 
 def test_indicator_manager():
