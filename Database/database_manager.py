@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Database Manager
-Versione 5.0
+Versione 6.0
 ========================================
 """
 
@@ -13,12 +13,14 @@ from Logs.logger import Logger
 
 class DatabaseManager:
 
-    def __init__(self):
+    def __init__(self, database_path="phoenix_ai.db"):
 
-        Logger.success("Database Manager V5 inizializzato.")
+        Logger.success("Database Manager V6 inizializzato.")
+
+        self.database_path = database_path
 
         self.connection = sqlite3.connect(
-            "phoenix_ai.db"
+            self.database_path
         )
 
         self.cursor = self.connection.cursor()
@@ -194,7 +196,7 @@ class DatabaseManager:
 
         value = self.cursor.fetchone()[0]
 
-        return 0 if value is None else round(value,2)
+        return 0 if value is None else round(value, 2)
 
     def gross_profit(self):
 
@@ -206,7 +208,7 @@ class DatabaseManager:
 
         value = self.cursor.fetchone()[0]
 
-        return 0 if value is None else round(value,2)
+        return 0 if value is None else round(value, 2)
 
     def gross_loss(self):
 
@@ -218,7 +220,7 @@ class DatabaseManager:
 
         value = self.cursor.fetchone()[0]
 
-        return 0 if value is None else round(abs(value),2)
+        return 0 if value is None else round(abs(value), 2)
 
     def best_trade(self):
 
@@ -230,7 +232,7 @@ class DatabaseManager:
 
         value = self.cursor.fetchone()[0]
 
-        return 0 if value is None else round(value,2)
+        return 0 if value is None else round(value, 2)
 
     def worst_trade(self):
 
@@ -242,7 +244,7 @@ class DatabaseManager:
 
         value = self.cursor.fetchone()[0]
 
-        return 0 if value is None else round(value,2)
+        return 0 if value is None else round(value, 2)
 
     def average_profit(self):
 
@@ -254,7 +256,7 @@ class DatabaseManager:
 
         value = self.cursor.fetchone()[0]
 
-        return 0 if value is None else round(value,2)
+        return 0 if value is None else round(value, 2)
 
     def profit_factor(self):
 
@@ -266,11 +268,11 @@ class DatabaseManager:
 
             return 0
 
-        return round(gp/gl,2)
+        return round(gp / gl, 2)
 
     def win_rate(self):
 
-        total = self.wins()+self.losses()
+        total = self.wins() + self.losses()
 
         if total == 0:
 
@@ -278,7 +280,7 @@ class DatabaseManager:
 
         return round(
 
-            self.wins()*100/total,
+            self.wins() * 100 / total,
 
             2
 
