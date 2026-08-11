@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Execution Builder
-Versione 1.0
+Versione 1.1
 ========================================
 """
 
@@ -16,7 +16,7 @@ class ExecutionBuilder:
     def __init__(self):
 
         Logger.success(
-            "Execution Builder V1 inizializzato."
+            "Execution Builder V1.1 inizializzato."
         )
 
     def build(self, trade):
@@ -28,15 +28,42 @@ class ExecutionBuilder:
             )
         ).upper()
 
-        side = signal
+        # =====================================
+        # DETERMINAZIONE SIDE
+        # =====================================
 
-        if signal == "STRONG BUY":
+        if signal in (
+            "BUY",
+            "STRONG BUY"
+        ):
 
             side = "BUY"
 
-        elif signal == "STRONG SELL":
+        elif signal in (
+            "SELL",
+            "STRONG SELL"
+        ):
 
             side = "SELL"
+
+        else:
+
+            side = signal
+
+        # =====================================
+        # SIZE
+        # =====================================
+
+        size = float(
+            trade.get(
+                "size",
+                0.0
+            )
+        )
+
+        # =====================================
+        # COSTRUZIONE ORDINE
+        # =====================================
 
         return {
 
@@ -64,12 +91,7 @@ class ExecutionBuilder:
                 trade["risk_reward"]
             ),
 
-            "size": float(
-                trade.get(
-                    "size",
-                    1.0
-                )
-            ),
+            "size": size,
 
             "status": "OPEN",
 
