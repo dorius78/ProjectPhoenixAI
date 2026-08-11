@@ -1,3 +1,11 @@
+"""
+========================================
+PROJECT PHOENIX AI
+Position Controller
+Versione 12.5
+========================================
+"""
+
 from datetime import datetime
 
 from Logs.logger import Logger
@@ -18,23 +26,12 @@ class PositionController:
         # =================================
         # POSITION MONITOR
         # =================================
-        #
-        # Responsabile di:
-        # - prezzo corrente
-        # - profitto corrente
-        # - massimo profitto
 
         self.monitor = PositionMonitor()
 
         # =================================
         # EXIT MANAGER
         # =================================
-        #
-        # Responsabile di:
-        # - Break Even
-        # - Trailing Stop
-        # - Stop Loss
-        # - Take Profit
 
         self.exit_manager = ExitManager()
 

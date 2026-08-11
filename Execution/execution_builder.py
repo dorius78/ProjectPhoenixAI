@@ -22,15 +22,10 @@ class ExecutionBuilder:
     def build(self, trade):
 
         signal = str(
-
             trade.get(
-
                 "signal",
-
                 "HOLD"
-
             )
-
         ).upper()
 
         side = signal
@@ -54,33 +49,26 @@ class ExecutionBuilder:
             "signal": signal,
 
             "entry": float(
-
                 trade["entry"]
-
             ),
 
             "stop_loss": float(
-
                 trade["stop_loss"]
-
             ),
 
             "take_profit": float(
-
                 trade["take_profit"]
-
             ),
 
             "risk_reward": float(
-
                 trade["risk_reward"]
-
             ),
 
             "size": float(
-
-                trade.get("size", 1.0)
-
+                trade.get(
+                    "size",
+                    1.0
+                )
             ),
 
             "status": "OPEN",

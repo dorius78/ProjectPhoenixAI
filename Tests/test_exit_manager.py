@@ -1,11 +1,3 @@
-"""
-========================================
-PROJECT PHOENIX AI
-Exit Manager Tests
-Versione 1.0
-========================================
-"""
-
 from Core.exit_manager import ExitManager
 
 
@@ -95,6 +87,8 @@ def test_sell_take_profit():
     )
 
     assert result == "TAKE PROFIT"
+
+
 def test_break_even_buy():
 
     manager = ExitManager()
@@ -165,6 +159,8 @@ def test_break_even_not_activated_in_loss():
 
     assert result["stop_loss"] == 99000.0
     assert result["break_even"] is False
+
+
 def test_trailing_stop_buy():
 
     manager = ExitManager()
@@ -259,3 +255,22 @@ def test_trailing_stop_sell_does_not_move_backward():
 
     assert result["stop_loss"] == 99000.0
     assert result["break_even"] is True
+
+
+if __name__ == "__main__":
+
+    test_buy_stop_loss()
+    test_buy_take_profit()
+    test_sell_stop_loss()
+    test_sell_take_profit()
+
+    test_break_even_buy()
+    test_break_even_sell()
+    test_break_even_not_activated_in_loss()
+
+    test_trailing_stop_buy()
+    test_trailing_stop_sell()
+    test_trailing_stop_buy_does_not_move_backward()
+    test_trailing_stop_sell_does_not_move_backward()
+
+    print("TEST EXIT MANAGER: OK")
