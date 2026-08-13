@@ -1,0 +1,7 @@
+1. Copia mt5_bridge.py nella cartella Data del progetto Phoenix.
+2. Copia run_mt5_phoenix.py nella cartella principale del progetto.
+3. Apri il terminale VS Code nella cartella principale.
+4. Esegui:
+   python run_mt5_phoenix.py
+
+Questo test usa EURUSD M5 e NON invia ordini.
