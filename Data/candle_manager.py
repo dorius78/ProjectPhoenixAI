@@ -1,47 +1,46 @@
-"""
-========================================
-PROJECT PHOENIX AI
-Candle Manager
-Versione 8.0
-========================================
-"""
-
-import yfinance as yf
-
 from Logs.logger import Logger
+from Data.market_provider import MarketProvider
 
 
 class CandleManager:
 
     def __init__(self):
 
-        Logger.success("Candle Manager V8 inizializzato.")
+        Logger.success(
+            "Candle Manager V9 inizializzato."
+        )
+
+        self.provider = MarketProvider()
 
     # =====================================
     # DOWNLOAD
     # =====================================
 
-    def _download(self, symbol, period, interval):
+    def _download(
+        self,
+        symbol,
+        period,
+        interval
+    ):
 
         try:
 
             Logger.info(
-                f"Download dati {symbol} ({period} - {interval})"
+                f"Download dati "
+                f"{symbol} ({period} - {interval})"
             )
 
-            ticker = yf.Ticker(symbol)
-
-            data = ticker.history(
-
+            data = self.provider.provider.get_historical_data(
+                symbol,
                 period=period,
-
                 interval=interval
-
             )
 
             if data is None or data.empty:
 
-                Logger.warning("Nessun dato ricevuto.")
+                Logger.warning(
+                    "Nessun dato ricevuto."
+                )
 
                 return None
 
@@ -53,7 +52,9 @@ class CandleManager:
 
         except Exception as e:
 
-            Logger.error(f"Errore download dati: {e}")
+            Logger.error(
+                f"Errore download dati: {e}"
+            )
 
             return None
 
@@ -120,29 +121,48 @@ class CandleManager:
     # MASSIMO RECENTE
     # =====================================
 
-    def recent_high(self, data, bars=20):
+    def recent_high(
+        self,
+        data,
+        bars=20
+    ):
 
         return float(
-            data["High"].tail(bars).max()
+            data["High"]
+            .tail(bars)
+            .max()
         )
 
     # =====================================
     # MINIMO RECENTE
     # =====================================
 
-    def recent_low(self, data, bars=20):
+    def recent_low(
+        self,
+        data,
+        bars=20
+    ):
 
         return float(
-            data["Low"].tail(bars).min()
+            data["Low"]
+            .tail(bars)
+            .min()
         )
 
     # =====================================
     # RANGE MEDIO
     # =====================================
 
-    def average_range(self, data, bars=20):
+    def average_range(
+        self,
+        data,
+        bars=20
+    ):
 
-        rng = data["High"] - data["Low"]
+        rng = (
+            data["High"]
+            - data["Low"]
+        )
 
         return float(
             rng.tail(bars).mean()
@@ -152,11 +172,18 @@ class CandleManager:
     # TREND PREZZO
     # =====================================
 
-    def price_direction(self, data):
+    def price_direction(
+        self,
+        data
+    ):
 
-        first = float(data["Close"].iloc[0])
+        first = float(
+            data["Close"].iloc[0]
+        )
 
-        last = float(data["Close"].iloc[-1])
+        last = float(
+            data["Close"].iloc[-1]
+        )
 
         if last > first:
 
