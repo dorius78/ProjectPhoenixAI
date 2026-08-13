@@ -1,18 +1,9 @@
-"""
-========================================
-PROJECT PHOENIX AI
-Trade Report
-Versione 1.0
-========================================
-"""
-
 from Logs.logger import Logger
 
 
 class TradeReport:
 
     def __init__(self):
-
         Logger.success(
             "Trade Report V1 inizializzato."
         )
@@ -20,11 +11,9 @@ class TradeReport:
     def print(self, trade):
 
         if trade is None:
-
             Logger.warning(
                 "Nessun trade generato."
             )
-
             return
 
         Logger.section(
@@ -32,29 +21,29 @@ class TradeReport:
         )
 
         Logger.info(
-            f"Symbol       : {trade['symbol']}"
+            f"Symbol       : {trade.get('symbol', 'N/D')}"
         )
 
         Logger.info(
-            f"Signal       : {trade['signal']}"
+            f"Signal       : {trade.get('signal', 'N/D')}"
         )
 
         Logger.info(
-            f"Side         : {trade['side']}"
+            f"Side         : {trade.get('side', 'N/D')}"
         )
 
         Logger.info(
-            f"Entry        : {trade['entry']}"
+            f"Entry        : {trade.get('entry', 'N/D')}"
         )
 
         Logger.info(
-            f"Stop Loss    : {trade['stop_loss']}"
+            f"Stop Loss    : {trade.get('stop_loss', 'N/D')}"
         )
 
         Logger.info(
-            f"Take Profit  : {trade['take_profit']}"
+            f"Take Profit  : {trade.get('take_profit', 'N/D')}"
         )
 
         Logger.info(
-            f"Risk Reward  : {trade['risk_reward']}"
+            f"Risk Reward  : {trade.get('risk_reward', 'N/D')}"
         )
