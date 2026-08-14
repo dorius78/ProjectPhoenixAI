@@ -945,6 +945,154 @@ class PhoenixPositionManager:
         }
 
     # =====================================
+    # POSITION ACTION EVALUATION
+    # =====================================
+
+    def evaluate_position_action(self):
+
+        state = (
+            self.get_position_state()
+        )
+
+        if not state["active"]:
+
+            return {
+
+                "active":
+                    False,
+
+                "action":
+                    "NO_POSITION",
+
+                "status":
+                    "NO_POSITION",
+
+                "symbol":
+                    self.symbol,
+
+                "reason":
+                    "Nessuna posizione Phoenix attiva",
+
+                "message":
+                    "Nessuna posizione da valutare",
+
+            }
+
+        metrics = (
+            self.get_position_metrics()
+        )
+
+        protection = (
+            self.check_position_protection()
+        )
+
+        action = "HOLD"
+
+        reason = (
+            "Posizione Phoenix attiva "
+            "senza condizioni immediate "
+            "di chiusura"
+        )
+
+        # ---------------------------------
+        # PROTECTION CHECK
+        # ---------------------------------
+
+        if not protection["protected"]:
+
+            action = "PROTECT"
+
+            reason = (
+                "La posizione Phoenix "
+                "non risulta completamente protetta"
+            )
+
+        # ---------------------------------
+        # PROFIT / LOSS CHECK
+        # ---------------------------------
+
+        elif metrics["profit_status"] == "LOSS":
+
+            action = "HOLD"
+
+            reason = (
+                "Posizione in perdita: "
+                "nessuna chiusura automatica "
+                "decisa dal Position Manager"
+            )
+
+        elif metrics["profit_status"] == "PROFIT":
+
+            action = "HOLD"
+
+            reason = (
+                "Posizione in profitto: "
+                "monitoraggio attivo"
+            )
+
+        elif metrics["profit_status"] == "BREAKEVEN":
+
+            action = "HOLD"
+
+            reason = (
+                "Posizione prossima al breakeven"
+            )
+
+        return {
+
+            "active":
+                True,
+
+            "action":
+                action,
+
+            "status":
+                "POSITION_OPEN",
+
+            "ticket":
+                metrics["ticket"],
+
+            "symbol":
+                metrics["symbol"],
+
+            "direction":
+                metrics["direction"],
+
+            "volume":
+                metrics["volume"],
+
+            "entry":
+                metrics["entry"],
+
+            "current_price":
+                metrics["current_price"],
+
+            "profit":
+                metrics["profit"],
+
+            "profit_status":
+                metrics["profit_status"],
+
+            "sl":
+                metrics["sl"],
+
+            "tp":
+                metrics["tp"],
+
+            "protection_status":
+                metrics["protection_status"],
+
+            "action_reason":
+                reason,
+
+            "message":
+                "Valutazione posizione completata",
+
+        }
+
+
+
+    # =====================================
     # POSITION ACTION LAYER
     # =====================================
 
@@ -1066,6 +1214,417 @@ class PhoenixPositionManager:
 
         }
 
+    # =====================================
+    # POSITION ACTION EXECUTION
+    # =====================================
+
+    def execute_position_action(
+        self,
+        action,
+        reason="",
+        source="SYSTEM",
+        dry_run=True
+    ):
+
+        # ---------------------------------
+        # PREPARE ACTION
+        # ---------------------------------
+
+        prepared = (
+            self.prepare_position_action(
+                action=action,
+                reason=reason,
+                source=source
+            )
+        )
+
+        # ---------------------------------
+        # INVALID ACTION / NO POSITION
+        # ---------------------------------
+
+        if not prepared["valid"]:
+
+            return {
+
+                "executed":
+                    False,
+
+                "dry_run":
+                    dry_run,
+
+                "action":
+                    prepared.get(
+                        "action",
+                        str(action).strip().upper()
+                        if action is not None
+                        else ""
+                    ),
+
+                "status":
+                    prepared.get(
+                        "status",
+                        "INVALID"
+                    ),
+
+                "message":
+                    prepared.get(
+                        "message",
+                        "Azione non eseguibile"
+                    ),
+
+                "reason":
+                    prepared.get(
+                        "reason",
+                        reason
+                    ),
+
+                "source":
+                    prepared.get(
+                        "source",
+                        source
+                    ),
+
+                "result":
+                    None,
+
+            }
+
+        normalized_action = (
+            prepared["action"]
+        )
+
+        # ---------------------------------
+        # HOLD
+        # ---------------------------------
+
+        if normalized_action == "HOLD":
+
+            return {
+
+                "executed":
+                    False,
+
+                "dry_run":
+                    dry_run,
+
+                "action":
+                    "HOLD",
+
+                "status":
+                    "HELD",
+
+                "ticket":
+                    prepared["ticket"],
+
+                "symbol":
+                    prepared["symbol"],
+
+                "message":
+                    "Posizione mantenuta aperta",
+
+                "reason":
+                    prepared["reason"],
+
+                "source":
+                    prepared["source"],
+
+                "result":
+                    None,
+
+            }
+
+        # ---------------------------------
+        # PROTECT
+        # ---------------------------------
+
+        if normalized_action == "PROTECT":
+
+            return {
+
+                "executed":
+                    False,
+
+                "dry_run":
+                    dry_run,
+
+                "action":
+                    "PROTECT",
+
+                "status":
+                    "NOT_IMPLEMENTED",
+
+                "ticket":
+                    prepared["ticket"],
+
+                "symbol":
+                    prepared["symbol"],
+
+                "message":
+                    "Protezione posizione non ancora collegata al Bridge",
+
+                "reason":
+                    prepared["reason"],
+
+                "source":
+                    prepared["source"],
+
+                "result":
+                    None,
+
+            }
+
+        # ---------------------------------
+        # MODIFY
+        # ---------------------------------
+
+        if normalized_action == "MODIFY":
+
+            return {
+
+                "executed":
+                    False,
+
+                "dry_run":
+                    dry_run,
+
+                "action":
+                    "MODIFY",
+
+                "status":
+                    "NOT_IMPLEMENTED",
+
+                "ticket":
+                    prepared["ticket"],
+
+                "symbol":
+                    prepared["symbol"],
+
+                "message":
+                    "Modifica posizione non ancora collegata al Bridge",
+
+                "reason":
+                    prepared["reason"],
+
+                "source":
+                    prepared["source"],
+
+                "result":
+                    None,
+
+            }
+
+        # ---------------------------------
+        # CLOSE
+        # ---------------------------------
+
+        if normalized_action == "CLOSE":
+
+            position = (
+                self.get_active_position()
+            )
+
+            if position is None:
+
+                return {
+
+                    "executed":
+                        False,
+
+                    "dry_run":
+                        dry_run,
+
+                    "action":
+                        "CLOSE",
+
+                    "status":
+                        "NO_POSITION",
+
+                    "message":
+                        "Nessuna posizione Phoenix da chiudere",
+
+                    "reason":
+                        prepared["reason"],
+
+                    "source":
+                        prepared["source"],
+
+                    "result":
+                        None,
+
+                }
+
+            # ---------------------------------
+            # DRY RUN
+            # ---------------------------------
+
+            if dry_run:
+
+                return {
+
+                    "executed":
+                        False,
+
+                    "dry_run":
+                        True,
+
+                    "action":
+                        "CLOSE",
+
+                    "status":
+                        "DRY_RUN",
+
+                    "ticket":
+                        int(position.ticket),
+
+                    "symbol":
+                        position.symbol,
+
+                    "direction":
+                        (
+                            "BUY"
+                            if int(position.type) == 0
+                            else "SELL"
+                            if int(position.type) == 1
+                            else "UNKNOWN"
+                        ),
+
+                    "volume":
+                        float(position.volume),
+
+                    "message":
+                        "Chiusura simulata: nessuna operazione reale inviata",
+
+                    "reason":
+                        prepared["reason"],
+
+                    "source":
+                        prepared["source"],
+
+                    "result":
+                        None,
+
+                }
+
+            # ---------------------------------
+            # REAL EXECUTION
+            # ---------------------------------
+
+            try:
+
+                result = (
+                    self.bridge.close_position(
+                        position,
+                        dry_run=False
+                    )
+                )
+
+                return {
+
+                    "executed":
+                        True,
+
+                    "dry_run":
+                        False,
+
+                    "action":
+                        "CLOSE",
+
+                    "status":
+                        "EXECUTED",
+
+                    "ticket":
+                        int(position.ticket),
+
+                    "symbol":
+                        position.symbol,
+
+                    "message":
+                        "Chiusura posizione inviata al MT5 Bridge",
+
+                    "reason":
+                        prepared["reason"],
+
+                    "source":
+                        prepared["source"],
+
+                    "result":
+                        result,
+
+                }
+
+            except Exception as exc:
+
+                return {
+
+                    "executed":
+                        False,
+
+                    "dry_run":
+                        False,
+
+                    "action":
+                        "CLOSE",
+
+                    "status":
+                        "ERROR",
+
+                    "ticket":
+                        int(position.ticket),
+
+                    "symbol":
+                        position.symbol,
+
+                    "message":
+                        "Errore durante l'esecuzione della chiusura",
+
+                    "error":
+                        str(exc),
+
+                    "reason":
+                        prepared["reason"],
+
+                    "source":
+                        prepared["source"],
+
+                    "result":
+                        None,
+
+                }
+
+        # ---------------------------------
+        # FALLBACK
+        # ---------------------------------
+
+        return {
+
+            "executed":
+                False,
+
+            "dry_run":
+                dry_run,
+
+            "action":
+                normalized_action,
+
+            "status":
+                "UNHANDLED_ACTION",
+
+            "message":
+                "Azione riconosciuta ma non gestita",
+
+            "reason":
+                prepared["reason"],
+
+            "source":
+                prepared["source"],
+
+            "result":
+                None,
+
+        }
+
+
+
 
 
 
@@ -1115,6 +1674,8 @@ class PhoenixPositionManager:
                 dry_run=dry_run
             )
         )
+
+
 
 
 
