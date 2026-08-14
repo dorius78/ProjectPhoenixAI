@@ -1157,6 +1157,294 @@ class MT5ExecutionEngine:
         }
 
     # =====================================
+    # CLOSE POSITION
+    # =====================================
+
+    def close_position(
+        self,
+        position,
+        dry_run=True
+    ):
+
+        if position is None:
+            return {
+                "executed": False,
+                "dry_run": dry_run,
+                "message": "Posizione non valida",
+                "result": None,
+            }
+
+        ticket = int(
+            getattr(
+                position,
+                "ticket",
+                0
+            )
+        )
+
+        symbol = str(
+            getattr(
+                position,
+                "symbol",
+                self.symbol
+            )
+        )
+
+        volume = float(
+            getattr(
+                position,
+                "volume",
+                0
+            )
+        )
+
+        position_type = int(
+            getattr(
+                position,
+                "type",
+                -1
+            )
+        )
+
+        price = 0.0
+
+        tick = mt5.symbol_info_tick(
+            symbol
+        )
+
+        if tick is None:
+            return {
+                "executed": False,
+                "dry_run": dry_run,
+                "message": (
+                    "Tick non disponibile: "
+                    f"{symbol}"
+                ),
+                "result": None,
+            }
+
+        # ---------------------------------
+        # POSIZIONE BUY -> CHIUSURA SELL
+        # ---------------------------------
+
+        if position_type == mt5.POSITION_TYPE_BUY:
+
+            order_type = (
+                mt5.ORDER_TYPE_SELL
+            )
+
+            price = float(
+                tick.bid
+            )
+
+        # ---------------------------------
+        # POSIZIONE SELL -> CHIUSURA BUY
+        # ---------------------------------
+
+        elif position_type == mt5.POSITION_TYPE_SELL:
+
+            order_type = (
+                mt5.ORDER_TYPE_BUY
+            )
+
+            price = float(
+                tick.ask
+            )
+
+        else:
+
+            return {
+                "executed": False,
+                "dry_run": dry_run,
+                "message": (
+                    "Tipo posizione non valido"
+                ),
+                "result": None,
+            }
+
+        if (
+            ticket <= 0
+            or
+            volume <= 0
+            or
+            price <= 0
+        ):
+
+            return {
+                "executed": False,
+                "dry_run": dry_run,
+                "message": (
+                    "Parametri chiusura non validi"
+                ),
+                "result": None,
+            }
+
+        request = {
+
+            "action":
+                mt5.TRADE_ACTION_DEAL,
+
+            "symbol":
+                symbol,
+
+            "volume":
+                volume,
+
+            "type":
+                order_type,
+
+            "position":
+                ticket,
+
+            "price":
+                price,
+
+            "deviation":
+                20,
+
+            "magic":
+                self.magic,
+
+            "comment":
+                "PROJECT PHOENIX AI CLOSE",
+
+            "type_time":
+                mt5.ORDER_TIME_GTC,
+
+            "type_filling":
+                self.get_filling_mode(),
+
+        }
+
+        # ---------------------------------
+        # DRY RUN
+        # ---------------------------------
+
+        if dry_run:
+
+            return {
+
+                "executed":
+                    False,
+
+                "dry_run":
+                    True,
+
+                "message":
+                    (
+                        "DRY RUN: "
+                        "nessuna chiusura inviata"
+                    ),
+
+                "order":
+                    request,
+
+                "result":
+                    None,
+
+            }
+
+        # ---------------------------------
+        # ORDER CHECK
+        # ---------------------------------
+
+        check = mt5.order_check(
+            request
+        )
+
+        if check is None:
+
+            return {
+
+                "executed":
+                    False,
+
+                "dry_run":
+                    False,
+
+                "message":
+                    (
+                        "Close order_check "
+                        "fallito: "
+                        f"{mt5.last_error()}"
+                    ),
+
+                "order":
+                    request,
+
+                "check":
+                    None,
+
+                "result":
+                    None,
+
+            }
+
+        # ---------------------------------
+        # REAL CLOSE
+        # ---------------------------------
+
+        result = mt5.order_send(
+            request
+        )
+
+        if result is None:
+
+            return {
+
+                "executed":
+                    False,
+
+                "dry_run":
+                    False,
+
+                "message":
+                    (
+                        "Close order_send "
+                        "fallito: "
+                        f"{mt5.last_error()}"
+                    ),
+
+                "order":
+                    request,
+
+                "check":
+                    check,
+
+                "result":
+                    None,
+
+            }
+
+        return {
+
+            "executed":
+                result.retcode
+                == mt5.TRADE_RETCODE_DONE,
+
+            "dry_run":
+                False,
+
+            "message":
+                "Posizione chiusa",
+
+            "order":
+                request,
+
+            "check":
+                check,
+
+            "retcode":
+                result.retcode,
+
+            "result":
+                result,
+
+        }
+
+
+
+    # =====================================
     # EXECUTE
     # =====================================
 
@@ -1268,5 +1556,6 @@ class MT5ExecutionEngine:
                 checked["risk_gate"],
 
         }
+
 
 
