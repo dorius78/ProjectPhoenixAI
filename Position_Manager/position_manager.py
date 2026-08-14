@@ -320,6 +320,104 @@ class PhoenixPositionManager:
 
         }
 
+    # =====================================
+    # SL / TP STATUS
+    # =====================================
+
+    def get_sl_tp_status(self):
+
+        position = (
+            self.get_active_position()
+        )
+
+        if position is None:
+
+            return {
+
+                "active":
+                    False,
+
+                "symbol":
+                    self.symbol,
+
+                "status":
+                    "NO_POSITION",
+
+                "sl_present":
+                    False,
+
+                "tp_present":
+                    False,
+
+                "message":
+                    "Nessuna posizione Phoenix attiva",
+
+            }
+
+        sl = float(
+            getattr(
+                position,
+                "sl",
+                0.0
+            )
+        )
+
+        tp = float(
+            getattr(
+                position,
+                "tp",
+                0.0
+            )
+        )
+
+        return {
+
+            "active":
+                True,
+
+            "ticket":
+                int(position.ticket),
+
+            "symbol":
+                position.symbol,
+
+            "direction":
+                (
+                    "BUY"
+                    if int(position.type) == 0
+                    else "SELL"
+                    if int(position.type) == 1
+                    else "UNKNOWN"
+                ),
+
+            "sl":
+                sl,
+
+            "tp":
+                tp,
+
+            "sl_present":
+                sl > 0,
+
+            "tp_present":
+                tp > 0,
+
+            "sl_tp_protected":
+                sl > 0 and tp > 0,
+
+            "status":
+                (
+                    "PROTECTED"
+                    if sl > 0 and tp > 0
+                    else "PARTIAL_PROTECTION"
+                    if sl > 0 or tp > 0
+                    else "UNPROTECTED"
+                ),
+
+        }
+
+
+
 
 
     # =====================================
@@ -359,4 +457,5 @@ class PhoenixPositionManager:
                 dry_run=dry_run
             )
         )
+
 
