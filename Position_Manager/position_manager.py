@@ -686,6 +686,266 @@ class PhoenixPositionManager:
 
         }
 
+    # =====================================
+    # POSITION METRICS
+    # =====================================
+
+    def get_position_metrics(self):
+
+        position = (
+            self.get_active_position()
+        )
+
+        if position is None:
+
+            return {
+
+                "active":
+                    False,
+
+                "symbol":
+                    self.symbol,
+
+                "status":
+                    "NO_POSITION",
+
+                "message":
+                    "Nessuna posizione Phoenix attiva",
+
+            }
+
+        entry = float(
+            getattr(
+                position,
+                "price_open",
+                0.0
+            )
+        )
+
+        current_price = float(
+            getattr(
+                position,
+                "price_current",
+                0.0
+            )
+        )
+
+        sl = float(
+            getattr(
+                position,
+                "sl",
+                0.0
+            )
+        )
+
+        tp = float(
+            getattr(
+                position,
+                "tp",
+                0.0
+            )
+        )
+
+        volume = float(
+            getattr(
+                position,
+                "volume",
+                0.0
+            )
+        )
+
+        profit = float(
+            getattr(
+                position,
+                "profit",
+                0.0
+            )
+        )
+
+        swap = float(
+            getattr(
+                position,
+                "swap",
+                0.0
+            )
+        )
+
+        position_type = int(
+            getattr(
+                position,
+                "type",
+                -1
+            )
+        )
+
+        # ---------------------------------
+        # DIRECTION
+        # ---------------------------------
+
+        if position_type == 0:
+
+            direction = "BUY"
+
+        elif position_type == 1:
+
+            direction = "SELL"
+
+        else:
+
+            direction = "UNKNOWN"
+
+        # ---------------------------------
+        # PRICE DISTANCES
+        # ---------------------------------
+
+        distance_sl = None
+        distance_tp = None
+
+        if sl > 0:
+
+            distance_sl = abs(
+                current_price - sl
+            )
+
+        if tp > 0:
+
+            distance_tp = abs(
+                tp - current_price
+            )
+
+        # ---------------------------------
+        # PRICE MOVEMENT
+        # ---------------------------------
+
+        price_difference = (
+            current_price - entry
+        )
+
+        if direction == "SELL":
+
+            price_difference = (
+                entry - current_price
+            )
+
+        # ---------------------------------
+        # PROFIT STATUS
+        # ---------------------------------
+
+        if profit > 0:
+
+            profit_status = "PROFIT"
+
+        elif profit < 0:
+
+            profit_status = "LOSS"
+
+        else:
+
+            profit_status = "BREAKEVEN"
+
+        # ---------------------------------
+        # PROTECTION
+        # ---------------------------------
+
+        sl_present = (
+            sl > 0
+        )
+
+        tp_present = (
+            tp > 0
+        )
+
+        if sl_present and tp_present:
+
+            protection_status = (
+                "FULLY_PROTECTED"
+            )
+
+        elif sl_present or tp_present:
+
+            protection_status = (
+                "PARTIALLY_PROTECTED"
+            )
+
+        else:
+
+            protection_status = (
+                "UNPROTECTED"
+            )
+
+        # ---------------------------------
+        # METRICS
+        # ---------------------------------
+
+        return {
+
+            "active":
+                True,
+
+            "status":
+                "POSITION_OPEN",
+
+            "ticket":
+                int(position.ticket),
+
+            "symbol":
+                position.symbol,
+
+            "direction":
+                direction,
+
+            "volume":
+                volume,
+
+            "entry":
+                entry,
+
+            "current_price":
+                current_price,
+
+            "price_difference":
+                price_difference,
+
+            "sl":
+                sl,
+
+            "tp":
+                tp,
+
+            "distance_sl":
+                distance_sl,
+
+            "distance_tp":
+                distance_tp,
+
+            "profit":
+                profit,
+
+            "swap":
+                swap,
+
+            "profit_status":
+                profit_status,
+
+            "sl_present":
+                sl_present,
+
+            "tp_present":
+                tp_present,
+
+            "protection_status":
+                protection_status,
+
+            "magic":
+                int(position.magic),
+
+            "comment":
+                position.comment,
+
+        }
+
+
+
 
 
 
@@ -731,6 +991,7 @@ class PhoenixPositionManager:
                 dry_run=dry_run
             )
         )
+
 
 
 
