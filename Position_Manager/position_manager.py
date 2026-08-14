@@ -416,6 +416,120 @@ class PhoenixPositionManager:
 
         }
 
+    # =====================================
+    # POSITION PROTECTION CHECK
+    # =====================================
+
+    def check_position_protection(self):
+
+        status = (
+            self.get_sl_tp_status()
+        )
+
+        if not status["active"]:
+
+            return {
+
+                "active":
+                    False,
+
+                "protected":
+                    False,
+
+                "status":
+                    "NO_POSITION",
+
+                "message":
+                    "Nessuna posizione Phoenix da proteggere",
+
+            }
+
+        sl_present = bool(
+            status["sl_present"]
+        )
+
+        tp_present = bool(
+            status["tp_present"]
+        )
+
+        if sl_present and tp_present:
+
+            protection_status = (
+                "FULLY_PROTECTED"
+            )
+
+            protected = True
+
+            message = (
+                "Posizione Phoenix "
+                "completamente protetta"
+            )
+
+        elif sl_present or tp_present:
+
+            protection_status = (
+                "PARTIALLY_PROTECTED"
+            )
+
+            protected = False
+
+            message = (
+                "Posizione Phoenix "
+                "parzialmente protetta"
+            )
+
+        else:
+
+            protection_status = (
+                "UNPROTECTED"
+            )
+
+            protected = False
+
+            message = (
+                "ATTENZIONE: posizione Phoenix "
+                "senza SL e TP"
+            )
+
+        return {
+
+            "active":
+                True,
+
+            "protected":
+                protected,
+
+            "status":
+                protection_status,
+
+            "ticket":
+                status["ticket"],
+
+            "symbol":
+                status["symbol"],
+
+            "direction":
+                status["direction"],
+
+            "sl":
+                status["sl"],
+
+            "tp":
+                status["tp"],
+
+            "sl_present":
+                sl_present,
+
+            "tp_present":
+                tp_present,
+
+            "message":
+                message,
+
+        }
+
+
+
 
 
 
@@ -457,5 +571,6 @@ class PhoenixPositionManager:
                 dry_run=dry_run
             )
         )
+
 
 
