@@ -528,6 +528,166 @@ class PhoenixPositionManager:
 
         }
 
+    # =====================================
+    # POSITION STATE ENGINE
+    # =====================================
+
+    def get_position_state(self):
+
+        position = (
+            self.get_active_position()
+        )
+
+        if position is None:
+
+            return {
+
+                "active":
+                    False,
+
+                "state":
+                    "NO_POSITION",
+
+                "symbol":
+                    self.symbol,
+
+                "message":
+                    "Nessuna posizione Phoenix attiva",
+
+            }
+
+        profit = float(
+            getattr(
+                position,
+                "profit",
+                0.0
+            )
+        )
+
+        sl = float(
+            getattr(
+                position,
+                "sl",
+                0.0
+            )
+        )
+
+        tp = float(
+            getattr(
+                position,
+                "tp",
+                0.0
+            )
+        )
+
+        # ---------------------------------
+        # PROFIT / LOSS
+        # ---------------------------------
+
+        if profit > 0:
+
+            result_state = "PROFIT"
+
+        elif profit < 0:
+
+            result_state = "LOSS"
+
+        else:
+
+            result_state = "BREAKEVEN"
+
+        # ---------------------------------
+        # PROTECTION
+        # ---------------------------------
+
+        if sl > 0 and tp > 0:
+
+            protection_state = (
+                "FULLY_PROTECTED"
+            )
+
+        elif sl > 0 or tp > 0:
+
+            protection_state = (
+                "PARTIALLY_PROTECTED"
+            )
+
+        else:
+
+            protection_state = (
+                "UNPROTECTED"
+            )
+
+        # ---------------------------------
+        # POSITION STATE
+        # ---------------------------------
+
+        return {
+
+            "active":
+                True,
+
+            "state":
+                "POSITION_OPEN",
+
+            "result_state":
+                result_state,
+
+            "protection_state":
+                protection_state,
+
+            "ticket":
+                int(position.ticket),
+
+            "symbol":
+                position.symbol,
+
+            "direction":
+                (
+                    "BUY"
+                    if int(position.type) == 0
+                    else "SELL"
+                    if int(position.type) == 1
+                    else "UNKNOWN"
+                ),
+
+            "volume":
+                float(position.volume),
+
+            "entry":
+                float(position.price_open),
+
+            "current_price":
+                float(position.price_current),
+
+            "sl":
+                sl,
+
+            "tp":
+                tp,
+
+            "profit":
+                profit,
+
+            "swap":
+                float(
+                    getattr(
+                        position,
+                        "swap",
+                        0.0
+                    )
+                ),
+
+            "magic":
+                int(position.magic),
+
+            "comment":
+                position.comment,
+
+        }
+
+
+
 
 
 
@@ -571,6 +731,7 @@ class PhoenixPositionManager:
                 dry_run=dry_run
             )
         )
+
 
 
 
