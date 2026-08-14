@@ -1,603 +1,4 @@
-﻿
-ieri 1:05
-
-PHOENIX_AI_MASTER_CONTEXT.md
-File
-Riprendiamo PROJECT PHOENIX AI. Questo è il MASTER CONTEXT. Leggilo e continuiamo esattamente dall'ultimo punto indicato nel documento. Non ricominciare da zero.  
-
-
-Pasted text.txt
-Documento
-
-
-Pasted text(1).txt
-Documento
-
-
-Pasted text(2).txt
-Documento
-
-
-Pasted text(3).txt
-Documento
-
-
-Pasted text(4).txt
-Documento
-
-
-Pasted text(5).txt
-Documento
-
-
-Pasted text(6).txt
-Documento
-
-
-Pasted text(7).txt
-Documento
-
-
-Pasted text(8).txt
-Documento
-
-
-Pasted text(9).txt
-Documento
-
-
-Pasted text(10).txt
-Documento
-
-
-Pasted text(20260812-235314).txt
-Documento
-
-
-Pasted text(20260812-235536).txt
-Documento
-
-
-Pasted text(20260812-235815).txt
-Documento
-
-
-Pasted text(20260812-235907).txt
-Documento
-
-
-Pasted text(20260813-000024).txt
-Documento
-
-
-Pasted text(20260813-000258).txt
-Documento
-
-
-Pasted text(20260813-000731).txt
-Documento
-
-
-Pasted text(20260813-094818).txt
-Documento
-
-
-Pasted text(20260813-094908).txt
-Documento
-
-
-Pasted text(20260813-095126).txt
-Documento
-
-
-Pasted text(20260813-095358).txt
-Documento
-
-
-Pasted text(20260813-095541).txt
-Documento
-
-
-Pasted text(20260813-095859).txt
-Documento
-
-
-Pasted text(20260813-100546).txt
-Documento
-
-
-Pasted text(20260813-101008).txt
-Documento
-
-
-Pasted text(20260813-101111).txt
-Documento
-
-
-Pasted text(20260813-101546).txt
-Documento
-
-
-Pasted text(20260813-101757).txt
-Documento
-
-
-Pasted text(20260813-102039).txt
-Documento
-
-
-Pasted text(20260813-103010).txt
-Documento
-
-
-Pasted text(20260813-103127).txt
-Documento
-
-
-Pasted text(20260813-103621).txt
-Documento
-
-
-Pasted text(20260813-104219).txt
-Documento
-
-
-Pasted text(20260813-104327).txt
-Documento
-
-
-Pasted text(20260813-104518).txt
-Documento
-
-
-Pasted text(20260813-104643).txt
-Documento
-
-
-Pasted text(20260813-104912).txt
-Documento
-
-
-Pasted text(20260813-105016).txt
-Documento
-
-
-Pasted text(20260813-105240).txt
-Documento
-
-
-Pasted text(20260813-105638).txt
-Documento
-
-
-Pasted text(20260813-110122).txt
-Documento
-
-
-Pasted text(20260813-110330).txt
-Documento
-
-
-Pasted text(20260813-110451).txt
-Documento
-
-
-Pasted text(20260813-110624).txt
-Documento
-
-
-Pasted text(20260813-110718).txt
-Documento
-
-
-Pasted text(20260813-110817).txt
-Documento
-
-
-Pasted text(20260813-110859).txt
-Documento
-
-
-Pasted text(20260813-111206).txt
-Documento
-
-
-Pasted text(20260813-111359).txt
-Documento
-
-
-Pasted text(20260813-112116).txt
-Documento
-
-
-Pasted text(20260813-112228).txt
-Documento
-
-
-Pasted text(20260813-112505).txt
-Documento
-
-
-Pasted text(20260813-112909).txt
-Documento
-
-
-Pasted text(20260813-113251).txt
-Documento
-
-
-Pasted text(20260813-113413).txt
-Documento
-
-
-Pasted text(20260813-114034).txt
-Documento
-
-ieri 15:05
-
-Pasted text(20260813-130528).txt
-Documento
-
-
-Pasted text(20260813-131136).txt
-Documento
-
-
-Pasted text(20260813-131221).txt
-Documento
-
-
-Pasted text(20260813-131538).txt
-Documento
-
-
-Pasted text(20260813-132702).txt
-Documento
-
-
-Pasted text(20260813-133204).txt
-Documento
-
-
-Pasted text(20260813-133346).txt
-Documento
-
-
-Pasted text(20260813-133427).txt
-Documento
-
-
-Pasted text(20260813-133625).txt
-Documento
-
-
-Pasted text(20260813-133709).txt
-Documento
-
-
-Pasted text(20260813-134432).txt
-Documento
-
-
-Pasted text(20260813-135016).txt
-Documento
-
-
-Pasted text(20260813-183155).txt
-Documento
-
-
-Pasted text(20260813-184151).txt
-Documento
-
-
-CProjectPhoenixAI.zip
-Archivio zip
-
-chat di chatgpt.zip
-Archivio zip
-
-
-CProjectPhoenixAI(1).zip
-Archivio zip
-
-
-Pasted text(20260813-204850).txt
-Documento
-
-
-Pasted text(20260813-210914).txt
-Documento
-
-
-Pasted code.py
-Python
-dammi file corretto  
-
-
-Pasted text(20260814-091114).txt
-Documento
-
-
-Pasted text(20260814-091247).txt
-Documento
-
-
-Pasted text(20260814-091506).txt
-Documento
-
-cosa faccio?
-
-
-
-
-Pasted text(20260814-093344).txt
-Documento
-dammi file corretto io lo incollo 
-
-
-
-Pasted text(20260814-095706).txt
-Documento
-
-come lo incollo non mi da la voce 
-
-
-
-
-
-Pasted text(20260814-103103).txt
-Documento
-
-Screenshot (1053).png
-Screenshot (1052).png
-Screenshot (1051).png
-
-
-Pasted text(20260814-104719).txt
-Documento
-
-Screenshot (1057).png
-Screenshot (1056).png
-Screenshot (1055).png
-
-Screenshot (1059).png
-Screenshot (1058).png
-
-Screenshot (1065).png
-Screenshot (1066).png
-Screenshot (1067).png
-Screenshot (1061).png
-Screenshot (1062).png
-Screenshot (1063).png
-Screenshot (1064).png
-
-
-Pasted text(20260814-110504).txt
-Documento
-
-Screenshot (1069).png
-Screenshot (1068).png
-
-Screenshot (1070).png
-Screenshot (1071).png
-
-Screenshot (1072).png
-Screenshot (1073).png
-Screenshot (1074).png
-
-Screenshot (1075).png
-Screenshot (1076).png
-
-
-CProjectPhoenixAI(2).zip
-Archivio zip
-
-
-GitHub.zip
-Archivio zip
-
-
-Pasted text(20260814-115625).txt
-Documento
-
-Screenshot (1077).png
-Screenshot (1078).png
-Screenshot (1079).png
-
-
-
-
-Pasted code(1).py
-Python
-
-
-Pasted text(20260814-122238).txt
-Documento
-
-
-Pasted text(20260814-124404).txt
-Documento
-
-
-Pasted text(20260814-124650).txt
-Documento
-
-
-Pasted text(20260814-125653).txt
-Documento
-
-
-Pasted code(2).py
-Python
-dammi file gia' corretto e io incollo 
-
-
-Pasted text(20260814-133658).txt
-Documento
-dammi file modificato 
-
-Procediamo. Però non voglio farti incollare un file di oltre 1.000 righe alla cieca, perché abbiamo appena rischiato di corromperlo due volte.
-
-La modifica necessaria è solo prepare_volume(). Il resto del file deve rimanere quello integro che hai appena ripristinato.
-
-1. Apri il file
-notepad .\MT5_Bridge\mt5_execution_recovered.py
-2. Cerca questa funzione
-def prepare_volume(
-    self,
-    trade
-):
-e sostituisci tutta la funzione, fino a prima di:
-
-# =====================================
-# VALIDATE TRADE
-# =====================================
-con questa:
-
-    # =====================================
-    # PREPARE VOLUME
-    # =====================================
-
-    def prepare_volume(
-        self,
-        trade
-    ):
-
-        if not trade:
-            return 0.0
-
-        size = float(
-            trade.get(
-                "size",
-                0
-            )
-        )
-
-        if size <= 0:
-            return 0.0
-
-        size_unit = str(
-            trade.get(
-                "size_unit",
-                "lots"
-            )
-        ).lower().strip()
-
-        # =================================
-        # RISK-BASED SIZE
-        # =================================
-        #
-        # Il Core può restituire:
-        #
-        # size_unit = "units"
-3. Salva il file
-In Blocco Note:
-
-File → Salva
-
-Poi chiudi.
-
-4. Prima verifica: sintassi
-Esegui:
-
-python -m py_compile .\MT5_Bridge\mt5_execution_recovered.py
-Deve tornare senza nessun messaggio.
-
-5. Poi verifica che la classe sia ancora presente
-Select-String -Path .\MT5_Bridge\mt5_execution_recovered.py -Pattern "^class "
-Deve uscire:
-
-MT5_Bridge\mt5_execution_recovered.py:34:class MT5ExecutionEngine:
-6. Infine facciamo il test della size
-Non eseguire ancora ordini reali.
-
-Mandami soltanto l'output dei primi due comandi. Se sono OK, facciamo il test EURUSD/GBPUSD/USDJPY/XAUUSD/BTCUSD e verifichiamo che il calcolo del rischio sia finalmente coerente.
-
-Siamo nella fase di correzione del sizing MT5; non passiamo ancora all'esecuzione live.
-
-
-
-Pasted text(20260814-134407).txt
-Documento
-dammi file modificato  
-
-Fatto. Ho preso il file che hai caricato e ho modificato esclusivamente prepare_volume(), lasciando invariato il resto del Bridge. 
-
-
-File corretto:
-
-
-Dopo averlo scaricato
-Vai nella cartella:
-MT5_Bridge
-
-Sostituisci il vecchio:
-mt5_execution_recovered.py
-
-Rinomina il nuovo file in:
-mt5_execution_recovered.py
-
-Poi esegui solo questo:
-
-python -m py_compile .\MT5_Bridge\mt5_execution_recovered.py
-Se non compare nessun errore, non fare altro: mandami l'output e procediamo con il test della size. 
-
-
-
- C:\Users\mario rossi\OneDrive\Documenti\GitHub\ProjectPhoenixAI> notepad .\MT5_Bridge\mt5_execution_recovered.py
-PS C:\Users\mario rossi\OneDrive\Documenti\GitHub\ProjectPhoenixAI> python -m py_compile .\MT5_Bridge\mt5_execution_recovered.py
-  File ".\MT5_Bridge\mt5_execution_recovered.py", line 2
-    ieri 1:05
-           ^
-SyntaxError: leading zeros in decimal integer literals are not permitted; use an 0o prefix for octal integers
-PS C:\Users\mario rossi\OneDrive\Documenti\GitHub\ProjectPhoenixAI> 
-
-
-
-Sì. Il problema non è più il codice corretto: il tuo file locale è stato nuovamente sovrascritto con contenuto estraneo. La riga:
-
-ieri 1:05
-alla riga 2 non deve assolutamente essere presente nel file Python.
-
-Ti ho preparato il file corretto, già ripulito e con la correzione del calcolo della size.
-
-Scaricalo qui:
-
-
-Adesso facciamo SOLO questi passaggi
-Scarica il file.
-
-Vai nella cartella:
-ProjectPhoenixAI\MT5_Bridge
-
-Non modificare il file con Notepad.
-
-Sostituisci mt5_execution_recovered.py con quello appena scaricato.
-
-Poi esegui:
-
-python -m py_compile .\MT5_Bridge\mt5_execution_recovered.py
-Se non compare nulla, è OK.
-
-Poi:
-
-python -c "import sys; sys.path.insert(0,'.'); from MT5_Bridge.mt5_execution_recovered import MT5ExecutionEngine; print('IMPORT OK:', MT5ExecutionEngine)"
-Deve comparire:
-
-IMPORT OK: <class 'MT5_Bridge.mt5_execution_recovered.MT5ExecutionEngine'>
-Non fare altri cambiamenti per ora. Mandami l'output di questi due comandi e continuiamo da lì.
-
-
-
-Libreria
-/
-Riprendiamo PROJECT PHOENIX
-/
-mt5_execution_recovered_corrected.py
-
-
-"""
+﻿"""
 ========================================
 PROJECT PHOENIX AI
 MT5 Execution Bridge
@@ -760,6 +161,9 @@ class MT5ExecutionEngine:
 
         volume = float(volume)
 
+        if volume <= 0:
+            return 0.0
+
         volume_min = float(
             info.volume_min
         )
@@ -772,11 +176,34 @@ class MT5ExecutionEngine:
             info.volume_step
         )
 
-        if volume_step <= 0:
-            volume_step = 0.01
+        if (
+            volume_min <= 0
+            or
+            volume_max <= 0
+            or
+            volume_step <= 0
+        ):
+            return 0.0
 
         # ---------------------------------
-        # ROUND DOWN
+        # VOLUME SUPERIORE AL MASSIMO MT5
+        # ---------------------------------
+        #
+        # NON riduciamo automaticamente la
+        # size a volume_max.
+        #
+        # Se la size necessaria per il rischio
+        # supera il limite del broker, l'ordine
+        # deve essere BLOCCATO.
+        #
+        # ---------------------------------
+
+        if volume > volume_max:
+
+            return 0.0
+
+        # ---------------------------------
+        # ROUND DOWN ALLO STEP MT5
         # ---------------------------------
 
         units = math.floor(
@@ -791,7 +218,7 @@ class MT5ExecutionEngine:
         )
 
         # ---------------------------------
-        # DECIMALS
+        # DECIMALI
         # ---------------------------------
 
         step_text = (
@@ -813,29 +240,23 @@ class MT5ExecutionEngine:
         )
 
         # ---------------------------------
-        # LIMITS
+        # VOLUME MINIMO
         # ---------------------------------
 
         if normalized < volume_min:
+
             return 0.0
+
+        # ---------------------------------
+        # CONTROLLO FINALE
+        # ---------------------------------
 
         if normalized > volume_max:
 
-            normalized = volume_max
-
-            units = math.floor(
-                normalized /
-                volume_step
-                + 1e-12
-            )
-
-            normalized = round(
-                units *
-                volume_step,
-                decimals
-            )
+            return 0.0
 
         return normalized
+
 
     # =====================================
     # FILLING MODE
@@ -892,23 +313,19 @@ class MT5ExecutionEngine:
             )
         ).lower().strip()
 
-        # =================================
-        # RISK-BASED SIZE
-        # =================================
+        # ---------------------------------
+        # CORE UNITS
+        # ---------------------------------
         #
-        # Quando il Core restituisce
-        # size_unit="units", la size è
-        # astratta. Il Bridge determina i
-        # lotti MT5 dal rischio monetario
-        # e dalla distanza reale tra entry
-        # e stop loss.
+        # Il Core fornisce una size astratta
+        # pari al rischio monetario.
         #
-        # Formula:
+        # Il Bridge calcola i lotti reali
+        # usando il valore monetario dello
+        # Stop Loss calcolato direttamente
+        # da MetaTrader 5.
         #
-        # rischio monetario / perdita di
-        # 1 lotto = lotti necessari
-        #
-        # =================================
+        # ---------------------------------
 
         if size_unit == "units":
 
@@ -956,15 +373,7 @@ class MT5ExecutionEngine:
                 or
                 stop_loss <= 0
             ):
-                return 0.0
 
-            risk_money = (
-                account_balance *
-                risk_percent /
-                100.0
-            )
-
-            if risk_money <= 0:
                 return 0.0
 
             if side == "BUY":
@@ -983,6 +392,24 @@ class MT5ExecutionEngine:
 
                 return 0.0
 
+            # ---------------------------------
+            # RISCHIO MONETARIO
+            # ---------------------------------
+
+            risk_money = (
+                account_balance *
+                risk_percent /
+                100.0
+            )
+
+            if risk_money <= 0:
+
+                return 0.0
+
+            # ---------------------------------
+            # PERDITA DI 1 LOTTO
+            # ---------------------------------
+
             profit_1_lot = (
                 mt5.order_calc_profit(
                     order_type,
@@ -994,33 +421,45 @@ class MT5ExecutionEngine:
             )
 
             if profit_1_lot is None:
+
                 return 0.0
 
             loss_1_lot = abs(
-                float(
-                    profit_1_lot
-                )
+                float(profit_1_lot)
             )
 
             if loss_1_lot <= 0:
+
                 return 0.0
+
+            # ---------------------------------
+            # LOTTI BASATI SUL RISCHIO
+            # ---------------------------------
 
             lots = (
                 risk_money /
                 loss_1_lot
             )
 
-        # =================================
-        # SIZE GIÀ IN LOTTI
-        # =================================
+        # ---------------------------------
+        # GIÀ IN LOTTI
+        # ---------------------------------
 
         else:
 
             lots = size
 
+        # ---------------------------------
+        # NORMALIZZAZIONE MT5
+        # ---------------------------------
+
         return self.normalize_volume(
             lots
         )
+
+    # =====================================
+    # VALIDATE TRADE
+    # =====================================
 
     # =====================================
     # VALIDATE TRADE
@@ -1829,3 +1268,5 @@ class MT5ExecutionEngine:
                 checked["risk_gate"],
 
         }
+
+
