@@ -944,6 +944,130 @@ class PhoenixPositionManager:
 
         }
 
+    # =====================================
+    # POSITION ACTION LAYER
+    # =====================================
+
+    def prepare_position_action(
+        self,
+        action,
+        reason="",
+        source="SYSTEM"
+    ):
+
+        if action is None:
+            action = ""
+
+        action = str(
+            action
+        ).strip().upper()
+
+        reason = str(
+            reason
+        ).strip()
+
+        source = str(
+            source
+        ).strip()
+
+        allowed_actions = {
+            "HOLD",
+            "CLOSE",
+            "PROTECT",
+            "MODIFY",
+        }
+
+        if action not in allowed_actions:
+
+            return {
+
+                "valid":
+                    False,
+
+                "action":
+                    action,
+
+                "reason":
+                    reason,
+
+                "source":
+                    source,
+
+                "message":
+                    "Azione posizione non valida",
+
+            }
+
+        position = (
+            self.get_active_position()
+        )
+
+        if position is None:
+
+            return {
+
+                "valid":
+                    False,
+
+                "action":
+                    action,
+
+                "reason":
+                    reason,
+
+                "source":
+                    source,
+
+                "status":
+                    "NO_POSITION",
+
+                "message":
+                    "Nessuna posizione Phoenix attiva",
+
+            }
+
+        return {
+
+            "valid":
+                True,
+
+            "action":
+                action,
+
+            "reason":
+                reason,
+
+            "source":
+                source,
+
+            "status":
+                "POSITION_OPEN",
+
+            "ticket":
+                int(position.ticket),
+
+            "symbol":
+                position.symbol,
+
+            "direction":
+                (
+                    "BUY"
+                    if int(position.type) == 0
+                    else "SELL"
+                    if int(position.type) == 1
+                    else "UNKNOWN"
+                ),
+
+            "volume":
+                float(position.volume),
+
+            "message":
+                "Azione posizione preparata",
+
+        }
+
+
+
 
 
 
@@ -991,6 +1115,7 @@ class PhoenixPositionManager:
                 dry_run=dry_run
             )
         )
+
 
 
 
