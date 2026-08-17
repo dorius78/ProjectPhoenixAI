@@ -1237,6 +1237,188 @@ class PhoenixPositionManager:
 
         }
 
+    # =====================================
+    # POSITION DECISION PIPELINE
+    # =====================================
+
+    def run_position_decision_pipeline(self):
+
+        evaluation = (
+            self.evaluate_position_action()
+        )
+
+        # ---------------------------------
+        # NO POSITION
+        # ---------------------------------
+
+        if not evaluation["active"]:
+
+            return {
+
+                "approved":
+                    False,
+
+                "decision":
+                    "NO_POSITION",
+
+                "action":
+                    "NO_POSITION",
+
+                "status":
+                    "NO_POSITION",
+
+                "symbol":
+                    self.symbol,
+
+                "reason":
+                    evaluation.get(
+                        "reason",
+                        "Nessuna posizione Phoenix attiva"
+                    ),
+
+                "message":
+                    "Position Decision Pipeline completata",
+            }
+
+        action = str(
+            evaluation.get(
+                "action",
+                "HOLD"
+            )
+        ).strip().upper()
+
+        # ---------------------------------
+        # RISK GUARD
+        # ---------------------------------
+
+        risk = (
+            self.check_position_risk(
+                action=action
+            )
+        )
+
+        # ---------------------------------
+        # RISK BLOCK
+        # ---------------------------------
+
+        if not risk["approved"]:
+
+            return {
+
+                "approved":
+                    False,
+
+                "decision":
+                    "BLOCKED",
+
+                "action":
+                    action,
+
+                "status":
+                    risk.get(
+                        "status",
+                        "BLOCKED"
+                    ),
+
+                "ticket":
+                    evaluation.get(
+                        "ticket"
+                    ),
+
+                "symbol":
+                    evaluation.get(
+                        "symbol",
+                        self.symbol
+                    ),
+
+                "reason":
+                    risk.get(
+                        "reason",
+                        "Risk Guard ha bloccato l'azione"
+                    ),
+
+                "risk":
+                    risk,
+
+                "evaluation":
+                    evaluation,
+
+                "message":
+                    "Decisione bloccata dal Position Risk Guard",
+            }
+
+        # ---------------------------------
+        # APPROVED DECISION
+        # ---------------------------------
+
+        return {
+
+            "approved":
+                True,
+
+            "decision":
+                action,
+
+            "action":
+                action,
+
+            "status":
+                "APPROVED",
+
+            "ticket":
+                evaluation.get(
+                    "ticket"
+                ),
+
+            "symbol":
+                evaluation.get(
+                    "symbol",
+                    self.symbol
+                ),
+
+            "direction":
+                evaluation.get(
+                    "direction"
+                ),
+
+            "volume":
+                evaluation.get(
+                    "volume"
+                ),
+
+            "profit":
+                evaluation.get(
+                    "profit"
+                ),
+
+            "profit_status":
+                evaluation.get(
+                    "profit_status"
+                ),
+
+            "protection_status":
+                evaluation.get(
+                    "protection_status"
+                ),
+
+            "reason":
+                evaluation.get(
+                    "action_reason",
+                    "Azione approvata"
+                ),
+
+            "risk":
+                risk,
+
+            "evaluation":
+                evaluation,
+
+            "message":
+                "Decisione posizione approvata dal Risk Guard",
+        }
+
+
+
 
 
     # =====================================
@@ -1969,6 +2151,7 @@ class PhoenixPositionManager:
                 dry_run=dry_run
             )
         )
+
 
 
 
