@@ -945,6 +945,301 @@ class PhoenixPositionManager:
         }
 
     # =====================================
+    # POSITION RISK GUARD
+    # =====================================
+
+    def check_position_risk(
+        self,
+        action,
+        expected_symbol=None,
+        expected_magic=None
+    ):
+
+        action = str(
+            action
+        ).strip().upper()
+
+        if expected_symbol is None:
+
+            expected_symbol = self.symbol
+
+        if expected_magic is None:
+
+            expected_magic = self.magic
+
+        allowed_actions = {
+            "HOLD",
+            "CLOSE",
+            "PROTECT",
+            "MODIFY",
+        }
+
+        # ---------------------------------
+        # ACTION VALIDATION
+        # ---------------------------------
+
+        if action not in allowed_actions:
+
+            return {
+
+                "approved":
+                    False,
+
+                "status":
+                    "BLOCKED",
+
+                "action":
+                    action,
+
+                "reason":
+                    "Azione posizione non consentita",
+
+                "message":
+                    "Risk Guard ha bloccato l'azione",
+
+            }
+
+        # ---------------------------------
+        # ACTIVE POSITION
+        # ---------------------------------
+
+        position = (
+            self.get_active_position()
+        )
+
+        if position is None:
+
+            return {
+
+                "approved":
+                    False,
+
+                "status":
+                    "NO_POSITION",
+
+                "action":
+                    action,
+
+                "reason":
+                    "Nessuna posizione Phoenix attiva",
+
+                "message":
+                    "Impossibile autorizzare l'azione",
+
+            }
+
+        # ---------------------------------
+        # MAGIC VALIDATION
+        # ---------------------------------
+
+        position_magic = int(
+            getattr(
+                position,
+                "magic",
+                -1
+            )
+        )
+
+        if position_magic != int(
+            expected_magic
+        ):
+
+            return {
+
+                "approved":
+                    False,
+
+                "status":
+                    "BLOCKED",
+
+                "action":
+                    action,
+
+                "reason":
+                    "Magic number non corrispondente",
+
+                "message":
+                    "Posizione non riconosciuta come Phoenix",
+
+                "ticket":
+                    int(position.ticket),
+
+                "position_magic":
+                    position_magic,
+
+                "expected_magic":
+                    int(expected_magic),
+
+            }
+
+        # ---------------------------------
+        # SYMBOL VALIDATION
+        # ---------------------------------
+
+        position_symbol = str(
+            getattr(
+                position,
+                "symbol",
+                ""
+            )
+        )
+
+        if position_symbol != str(
+            expected_symbol
+        ):
+
+            return {
+
+                "approved":
+                    False,
+
+                "status":
+                    "BLOCKED",
+
+                "action":
+                    action,
+
+                "reason":
+                    "Simbolo non corrispondente",
+
+                "message":
+                    "Il simbolo della posizione non coincide",
+
+                "ticket":
+                    int(position.ticket),
+
+                "position_symbol":
+                    position_symbol,
+
+                "expected_symbol":
+                    str(expected_symbol),
+
+            }
+
+        # ---------------------------------
+        # VOLUME VALIDATION
+        # ---------------------------------
+
+        volume = float(
+            getattr(
+                position,
+                "volume",
+                0.0
+            )
+        )
+
+        if volume <= 0:
+
+            return {
+
+                "approved":
+                    False,
+
+                "status":
+                    "BLOCKED",
+
+                "action":
+                    action,
+
+                "reason":
+                    "Volume posizione non valido",
+
+                "message":
+                    "Il volume deve essere maggiore di zero",
+
+                "ticket":
+                    int(position.ticket),
+
+                "volume":
+                    volume,
+
+            }
+
+        # ---------------------------------
+        # PROTECTION CHECK
+        # ---------------------------------
+
+        sl = float(
+            getattr(
+                position,
+                "sl",
+                0.0
+            )
+        )
+
+        tp = float(
+            getattr(
+                position,
+                "tp",
+                0.0
+            )
+        )
+
+        protection_status = (
+
+            "FULLY_PROTECTED"
+
+            if sl > 0 and tp > 0
+
+            else
+
+            "PARTIALLY_PROTECTED"
+
+            if sl > 0 or tp > 0
+
+            else
+
+            "UNPROTECTED"
+
+        )
+
+        # ---------------------------------
+        # FINAL APPROVAL
+        # ---------------------------------
+
+        return {
+
+            "approved":
+                True,
+
+            "status":
+                "APPROVED",
+
+            "action":
+                action,
+
+            "ticket":
+                int(position.ticket),
+
+            "symbol":
+                position_symbol,
+
+            "magic":
+                position_magic,
+
+            "volume":
+                volume,
+
+            "sl":
+                sl,
+
+            "tp":
+                tp,
+
+            "protection_status":
+                protection_status,
+
+            "reason":
+                "Controlli Risk Guard superati",
+
+            "message":
+                "Azione posizione autorizzata",
+
+        }
+
+
+
+    # =====================================
     # POSITION ACTION EVALUATION
     # =====================================
 
@@ -1674,6 +1969,7 @@ class PhoenixPositionManager:
                 dry_run=dry_run
             )
         )
+
 
 
 
