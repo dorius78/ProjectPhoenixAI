@@ -406,6 +406,61 @@ class ExecutionEngine:
                 "position":
                     closed_position,
 
+                "symbol":
+                    closed_position.get(
+                        "symbol"
+                    ),
+
+                "side":
+                    closed_position.get(
+                        "side"
+                    ),
+
+                "entry":
+                    closed_position.get(
+                        "entry"
+                    ),
+
+                "exit":
+                    closed_position.get(
+                        "current_price"
+                    ),
+
+                "current_price":
+                    closed_position.get(
+                        "current_price"
+                    ),
+
+                "stop_loss":
+                    closed_position.get(
+                        "stop_loss"
+                    ),
+
+                "take_profit":
+                    closed_position.get(
+                        "take_profit"
+                    ),
+
+                "size":
+                    closed_position.get(
+                        "size"
+                    ),
+
+                "close_reason":
+                    closed_position.get(
+                        "close_reason"
+                    ),
+
+                "status":
+                    closed_position.get(
+                        "status"
+                    ),
+
+                "reason":
+                    closed_position.get(
+                        "close_reason"
+                    ),
+
                 "report":
                     report,
 
@@ -523,6 +578,16 @@ class ExecutionEngine:
 
             "position":
                 closed_position,
+
+            "symbol":
+                closed_position.get(
+                    "symbol"
+                ),
+
+            "side":
+                closed_position.get(
+                    "side"
+                ),
 
             "report":
                 None,

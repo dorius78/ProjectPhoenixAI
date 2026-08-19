@@ -57,11 +57,17 @@ class ExitManager:
             position["entry"]
         )
 
-        initial_stop_loss = float(
-            position.get(
-                "initial_stop_loss",
-                position["stop_loss"]
+        initial_stop_loss = position.get(
+            "initial_stop_loss"
+        )
+
+        if initial_stop_loss is None:
+            initial_stop_loss = position.get(
+                "stop_loss"
             )
+
+        initial_stop_loss = float(
+            initial_stop_loss
         )
 
         return abs(
@@ -257,10 +263,56 @@ class ExitManager:
         )
 
         # =================================
-        # TRAILING NON ANCORA ATTIVO
+        # POSIZIONE GIA' IN BREAK EVEN
+        # =================================
+        #
+        # Se la posizione arriva già in Break Even
+        # senza initial_stop_loss, il rischio originale
+        # non è più ricostruibile.
+        #
+        # In questo caso il trailing viene valutato
+        # direttamente sul movimento favorevole.
         # =================================
 
-        if profit_r < self.trailing_trigger_r:
+        risk_distance = self._risk_distance(
+            position
+        )
+
+        if risk_distance <= 0:
+
+            entry = float(
+                position["entry"]
+            )
+
+            favorable_move = 0.0
+
+            side_check = str(
+                position["side"]
+            ).upper()
+
+            if side_check in (
+                "BUY",
+                "STRONG BUY"
+            ):
+
+                favorable_move = (
+                    current_price - entry
+                )
+
+            elif side_check in (
+                "SELL",
+                "STRONG SELL"
+            ):
+
+                favorable_move = (
+                    entry - current_price
+                )
+
+            if favorable_move <= 0:
+
+                return position
+
+        elif profit_r < self.trailing_trigger_r:
 
             return position
 
