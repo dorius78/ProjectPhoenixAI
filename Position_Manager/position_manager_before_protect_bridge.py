@@ -1816,98 +1816,19 @@ class PhoenixPositionManager:
 
         if normalized_action == "PROTECT":
 
-            position = (
-                self.get_active_position()
-            )
-
-            if position is None:
-
-                return {
-
-                    "executed":
-                        False,
-
-                    "dry_run":
-                        dry_run,
-
-                    "action":
-                        "PROTECT",
-
-                    "status":
-                        "NO_POSITION",
-
-                    "message":
-                        "Nessuna posizione Phoenix da proteggere",
-
-                    "reason":
-                        prepared["reason"],
-
-                    "source":
-                        prepared["source"],
-
-                    "result":
-                        None,
-
-                }
-
-            current_sl = float(
-                getattr(
-                    position,
-                    "sl",
-                    0.0
-                ) or 0.0
-            )
-
-            current_tp = float(
-                getattr(
-                    position,
-                    "tp",
-                    0.0
-                ) or 0.0
-            )
-
-            result = self.bridge.modify_position(
-
-                position=position,
-
-                stop_loss=current_sl,
-
-                take_profit=current_tp,
-
-                dry_run=dry_run
-
-            )
-
             return {
 
                 "executed":
-                    result.get(
-                        "executed",
-                        False
-                    ),
+                    False,
 
                 "dry_run":
-                    result.get(
-                        "dry_run",
-                        dry_run
-                    ),
+                    dry_run,
 
                 "action":
                     "PROTECT",
 
                 "status":
-                    (
-                        "PROTECTED"
-                        if result.get(
-                            "executed",
-                            False
-                        )
-                        else
-                        "DRY_RUN"
-                        if dry_run
-                        else
-                        "FAILED"
-                    ),
+                    "NOT_IMPLEMENTED",
 
                 "ticket":
                     prepared["ticket"],
@@ -1916,10 +1837,7 @@ class PhoenixPositionManager:
                     prepared["symbol"],
 
                 "message":
-                    result.get(
-                        "message",
-                        "Protezione posizione elaborata"
-                    ),
+                    "Protezione posizione non ancora collegata al Bridge",
 
                 "reason":
                     prepared["reason"],
@@ -1928,7 +1846,7 @@ class PhoenixPositionManager:
                     prepared["source"],
 
                 "result":
-                    result,
+                    None,
 
             }
 
@@ -2233,7 +2151,6 @@ class PhoenixPositionManager:
                 dry_run=dry_run
             )
         )
-
 
 
 

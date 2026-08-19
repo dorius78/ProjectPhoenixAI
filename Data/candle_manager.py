@@ -13,6 +13,52 @@ class CandleManager:
         self.provider = MarketProvider()
 
     # =====================================
+    # PREZZO CORRENTE
+    # =====================================
+
+    def get_current_price(
+        self,
+        symbol
+    ):
+
+        try:
+
+            price = self.provider.get_price(
+                symbol
+            )
+
+            if price is None:
+
+                Logger.warning(
+                    f"Prezzo corrente non disponibile "
+                    f"per {symbol}"
+                )
+
+                return None
+
+            price = float(price)
+
+            if price <= 0:
+
+                Logger.warning(
+                    f"Prezzo corrente non valido "
+                    f"per {symbol}: {price}"
+                )
+
+                return None
+
+            return price
+
+        except Exception as e:
+
+            Logger.error(
+                f"Errore prezzo corrente "
+                f"{symbol}: {e}"
+            )
+
+            return None
+
+    # =====================================
     # DOWNLOAD
     # =====================================
 
@@ -113,7 +159,10 @@ class CandleManager:
     # ULTIMA CANDELA
     # =====================================
 
-    def last_candle(self, data):
+    def last_candle(
+        self,
+        data
+    ):
 
         return data.iloc[-1]
 

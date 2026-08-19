@@ -2,321 +2,681 @@
 ========================================
 PROJECT PHOENIX AI
 Live Trading Engine
-Versione 4.0
+Versione 5.2
+========================================
+
+Responsabilità:
+
+- Ciclo continuo di Live Trading
+- Analisi mercato
+- Trading Guard
+- Apertura posizione
+- Gestione posizione
+- Chiusura posizione
+- Database
+- Backtest
+- Portfolio
+- Compatibilità Paper Trading / MT5
+- Aggiornamento prezzo corrente
+- Evita download storico durante
+  la gestione di una posizione aperta
 ========================================
 """
 
 import time
-from datetime import datetime
 
 from Logs.logger import Logger
-
 from Core.trading_guard import TradingGuard
 
 
 class LiveTradingEngine:
 
     def __init__(
-
         self,
-
         candles,
-
         analysis,
-
         execution,
-
         position_controller,
-
         portfolio,
-
         backtest,
-
         database
-
     ):
 
         Logger.success(
-
-            "Live Trading Engine V4 inizializzato."
-
+            "Live Trading Engine V5.2 inizializzato."
         )
 
         self.candles = candles
-
         self.analysis = analysis
-
         self.execution = execution
-
         self.position_controller = position_controller
-
         self.portfolio = portfolio
-
         self.backtest = backtest
-
         self.database = database
 
-        self.guard = TradingGuard(self.portfolio.get_balance())
+        self.guard = TradingGuard(
+            self.portfolio.get_balance()
+        )
+
+    # =====================================
+    # PREZZO CORRENTE
+    # =====================================
+
+    def _get_current_price(
+        self,
+        symbol,
+        data=None
+    ):
+        """
+        Recupera il prezzo piu' aggiornato disponibile.
+
+        Priorita':
+
+        1. CandleManager.get_current_price()
+        2. CandleManager.current_price()
+        3. Ultimo Close delle candele
+
+        Il fallback sulle candele mantiene
+        la compatibilita' con l'architettura
+        esistente.
+        """
+
+        # =================================
+        # METODO 1
+        # =================================
+
+        try:
+
+            method = getattr(
+                self.candles,
+                "get_current_price",
+                None
+            )
+
+            if callable(method):
+
+                value = method(symbol)
+
+                if value is not None:
+
+                    value = float(value)
+
+                    if value > 0:
+
+                        return value
+
+        except Exception as error:
+
+            Logger.warning(
+                "get_current_price non disponibile: "
+                f"{error}"
+            )
+
+        # =================================
+        # METODO 2
+        # =================================
+
+        try:
+
+            value = getattr(
+                self.candles,
+                "current_price",
+                None
+            )
+
+            if callable(value):
+
+                value = value(symbol)
+
+            if value is not None:
+
+                value = float(value)
+
+                if value > 0:
+
+                    return value
+
+        except Exception:
+
+            pass
+
+        # =================================
+        # FALLBACK
+        # =================================
+
+        if data is not None:
+
+            try:
+
+                value = float(
+                    data["Close"].iloc[-1]
+                )
+
+                if value > 0:
+
+                    return value
+
+            except Exception as error:
+
+                Logger.error(
+                    "Impossibile determinare "
+                    f"il prezzo di {symbol}: {error}"
+                )
+
+        return None
+
+    # =====================================
+    # CHIUSURA TRADE
+    # =====================================
+
+    def _process_closed_position(
+        self,
+        closed
+    ):
+
+        if closed is None:
+
+            return
+
+        if closed.get("status") != "CLOSED":
+
+            return
+
+        # =================================
+        # EXECUTION CLOSE
+        # =================================
+
+        report = self.execution.close(
+            closed
+        )
+
+        if not report.get(
+            "success",
+            True
+        ):
+
+            Logger.warning(
+                "Execution close non confermato: "
+                f"{report.get('message', '')}"
+            )
+
+        # =================================
+        # DATI CHIUSURA
+        # =================================
+
+        close_time = report.get(
+            "close_time",
+            closed.get("close_time")
+        )
+
+        if close_time is None:
+
+            close_time = closed.get(
+                "close_time"
+            )
+
+        # =================================
+        # DURATA
+        # =================================
+
+        duration = 0.0
+
+        open_time = closed.get(
+            "open_time"
+        )
+
+        if (
+            close_time is not None
+            and open_time is not None
+        ):
+
+            try:
+
+                duration = (
+                    close_time - open_time
+                ).total_seconds()
+
+            except Exception:
+
+                duration = 0.0
+
+        # =================================
+        # PNL
+        # =================================
+
+        pnl = float(
+            report.get(
+                "pnl",
+                closed.get(
+                    "current_profit",
+                    0.0
+                )
+            )
+        )
+
+        # =================================
+        # RISULTATO
+        # =================================
+
+        result = (
+            "WIN"
+            if pnl > 0
+            else "LOSS"
+        )
+
+        # =================================
+        # RISK
+        # =================================
+
+        risk = abs(
+            float(
+                closed["entry"]
+            )
+            -
+            float(
+                closed["initial_stop_loss"]
+            )
+        )
+
+        # =================================
+        # REWARD
+        # =================================
+
+        exit_price = float(
+            report.get(
+                "exit",
+                closed.get(
+                    "current_price",
+                    closed["entry"]
+                )
+            )
+        )
+
+        reward = abs(
+            exit_price
+            -
+            float(
+                closed["entry"]
+            )
+        )
+
+        # =================================
+        # RISK / REWARD
+        # =================================
+
+        rr = 0.0
+
+        if risk > 0:
+
+            rr = round(
+                reward / risk,
+                2
+            )
+
+        # =================================
+        # TRADE DATABASE
+        # =================================
+
+        trade = {
+
+            "symbol":
+                report.get(
+                    "symbol",
+                    closed["symbol"]
+                ),
+
+            "side":
+                report.get(
+                    "side",
+                    closed["side"]
+                ),
+
+            "entry":
+                report.get(
+                    "entry",
+                    closed["entry"]
+                ),
+
+            "exit":
+                exit_price,
+
+            "stop_loss":
+                closed["stop_loss"],
+
+            "take_profit":
+                closed["take_profit"],
+
+            "pnl":
+                pnl,
+
+            "status":
+                "CLOSED",
+
+            "reason":
+                report.get(
+                    "reason",
+                    closed.get(
+                        "close_reason"
+                    )
+                ),
+
+            "open_time":
+                closed["open_time"],
+
+            "close_time":
+                close_time,
+
+            "duration":
+                duration,
+
+            "result":
+                result,
+
+            "risk_reward":
+                rr
+
+        }
+
+        # =================================
+        # DATABASE
+        # =================================
+
+        self.database.save_trade(
+            trade
+        )
+
+        # =================================
+        # BACKTEST
+        # =================================
+
+        self.backtest.add_trade(
+            trade
+        )
+
+        # =================================
+        # PORTFOLIO
+        # =================================
+
+        self.portfolio.update_balance(
+            pnl
+        )
+
+        # =================================
+        # TRADING GUARD
+        # =================================
+
+        self.guard.register_trade(
+            pnl,
+            self.portfolio.get_balance()
+        )
+
+        # =================================
+        # RIMUOVI PORTFOLIO
+        # =================================
+
+        self.portfolio.remove(
+            trade["symbol"]
+        )
+
+        Logger.success(
+            f"Trade chiuso #{trade['symbol']} "
+            f"| {trade['reason']} "
+            f"| PnL {pnl:.2f}"
+        )
+
+        Logger.success(
+            "Trade registrato."
+        )
 
     # =====================================
     # AVVIO
     # =====================================
 
     def start(
-
         self,
-
         symbol,
-
         interval="1h",
-
         delay=30
-
     ):
 
         Logger.section(
-
             "LIVE TRADING ENGINE"
-
         )
 
         Logger.info(
-
             f"Monitoraggio {symbol}"
-
         )
 
         while True:
 
             try:
 
-                data = self.candles.get_candles(
+                # =================================
+                # POSIZIONE APERTA
+                # =================================
+                #
+                # Se esiste gia' una posizione,
+                # NON scarichiamo nuovamente
+                # tutte le candele.
+                #
+                # Recuperiamo direttamente
+                # il prezzo corrente.
+                # =================================
 
-                    symbol,
+                if self.position_controller.has_position():
 
-                    period="5d",
+                    price = self._get_current_price(
+                        symbol
+                    )
 
-                    interval=interval
+                    if price is None:
 
-                )
+                        Logger.warning(
+                            f"Prezzo {symbol} "
+                            "non disponibile."
+                        )
 
-                if data is None or len(data) == 0:
+                        time.sleep(delay)
+
+                        continue
+
+                    position_before = (
+                        self.position_controller.get_position()
+                    )
+
+                    if position_before is not None:
+
+                        Logger.info(
+                            f"Gestione posizione "
+                            f"{symbol} @ {price:.6f}"
+                        )
+
+                    # =================================
+                    # AGGIORNAMENTO POSIZIONE
+                    # =================================
+
+                    closed = (
+                        self.position_controller.update(
+                            price
+                        )
+                    )
+
+                    # =================================
+                    # SINCRONIZZAZIONE PORTFOLIO
+                    # =================================
+
+                    if (
+                        closed is None
+                        and
+                        self.position_controller.has_position()
+                    ):
+
+                        current_position = (
+                            self.position_controller.get_position()
+                        )
+
+                        self.portfolio.update(
+                            symbol,
+                            current_position
+                        )
+
+                    # =================================
+                    # POSIZIONE CHIUSA
+                    # =================================
+
+                    if (
+                        closed is not None
+                        and
+                        closed.get("status") == "CLOSED"
+                    ):
+
+                        self._process_closed_position(
+                            closed
+                        )
+
+                    # =================================
+                    # ATTESA
+                    # =================================
 
                     time.sleep(delay)
 
                     continue
 
-                price = float(
+                # =================================
+                # NESSUNA POSIZIONE
+                # =================================
+                #
+                # Solo qui scarichiamo le candele
+                # necessarie per una nuova analisi.
+                # =================================
 
-                    data["Close"].iloc[-1]
-
+                data = self.candles.get_candles(
+                    symbol,
+                    period="5d",
+                    interval=interval
                 )
 
-                # ==========================
-                # POSIZIONE APERTA
-                # ==========================
+                if (
+                    data is None
+                    or len(data) == 0
+                ):
 
-                if self.position_controller.has_position():
-
-                    closed = self.position_controller.update(
-
-                        price
-
+                    Logger.warning(
+                        "Nessun dato mercato disponibile."
                     )
 
-                    if (
+                    time.sleep(delay)
 
-                        closed is not None
+                    continue
 
-                        and closed["status"] == "CLOSED"
+                # =================================
+                # PREZZO
+                # =================================
 
+                price = self._get_current_price(
+                    symbol,
+                    data
+                )
+
+                if price is None:
+
+                    Logger.warning(
+                        f"Prezzo {symbol} "
+                        "non disponibile."
+                    )
+
+                    time.sleep(delay)
+
+                    continue
+
+                # =================================
+                # TRADING GUARD
+                # =================================
+
+                can_trade, reason = (
+                    self.guard.can_trade(
+                        self.portfolio.get_balance()
+                    )
+                )
+
+                if not can_trade:
+
+                    Logger.warning(
+                        "Live Trading fermato "
+                        "dal Trading Guard: "
+                        f"{reason}"
+                    )
+
+                    break
+
+                # =================================
+                # ANALISI
+                # =================================
+
+                result = self.analysis.analyze(
+                    data,
+                    price,
+                    symbol,
+                    account_balance=(
+                        self.portfolio.get_balance()
+                    )
+                )
+
+                signal = result["signal"]
+
+                trade = result["trade"]
+
+                # =================================
+                # TRADE VALIDO
+                # =================================
+
+                if (
+                    trade is not None
+                    and
+                    signal["valid"]
+                ):
+
+                    order = (
+                        self.execution.execute(
+                            trade
+                        )
+                    )
+
+                    # =================================
+                    # ORDINE NON ESEGUITO
+                    # =================================
+
+                    if not order.get(
+                        "success",
+                        False
                     ):
 
-                        report = self.execution.close(
+                        if order.get(
+                            "dry_run",
+                            False
+                        ):
 
-                            closed
-
-                        )
-
-                        duration = (
-
-                            report["close_time"]
-
-                            -
-
-                            closed["open_time"]
-
-                        ).total_seconds()
-
-                        result = (
-
-                            "WIN"
-
-                            if report["pnl"] > 0
-
-                            else "LOSS"
-
-                        )
-
-                        risk = abs(
-
-                            closed["entry"]
-
-                            -
-
-                            closed["initial_stop_loss"]
-
-                        )
-
-                        reward = abs(
-
-                            report["exit"]
-
-                            -
-
-                            closed["entry"]
-
-                        )
-
-                        rr = 0
-
-                        if risk > 0:
-
-                            rr = round(
-
-                                reward / risk,
-
-                                2
-
+                            Logger.info(
+                                "MT5 DRY RUN: "
+                                "nessuna posizione "
+                                "aperta nel Core."
                             )
 
-                        trade = {
+                        else:
 
-                            "symbol": report["symbol"],
+                            Logger.warning(
+                                "Ordine non eseguito: "
+                                f"{order.get('message', '')}"
+                            )
 
-                            "side": report["side"],
+                    # =================================
+                    # ORDINE ESEGUITO
+                    # =================================
 
-                            "entry": report["entry"],
+                    else:
 
-                            "exit": report["exit"],
-
-                            "stop_loss": closed["stop_loss"],
-
-                            "take_profit": closed["take_profit"],
-
-                            "pnl": report["pnl"],
-
-                            "status": "CLOSED",
-
-                            "reason": report["reason"],
-
-                            "open_time": closed["open_time"],
-
-                            "close_time": report["close_time"],
-
-                            "duration": duration,
-
-                            "result": result,
-
-                            "risk_reward": rr
-
-                        }
-
-                        self.database.save_trade(
-
-                            trade
-
-                        )
-
-                        self.backtest.add_trade(
-
-                            trade
-
-                        )
-
-                        self.portfolio.update_balance(
-
-                            report["pnl"]
-
-                        )
-
-                        self.guard.register_trade(
-
-                            report["pnl"],
-
-                            self.portfolio.get_balance()
-
-                        )
-
-                        self.portfolio.remove(
-
-                            report["symbol"]
-
-                        )
-
-                        Logger.success(
-
-                            "Trade registrato."
-
-                        )
-
-                # ==========================
-                # NUOVO TRADE
-                # ==========================
-
-                if not self.position_controller.has_position():
-
-                    can_trade, reason = self.guard.can_trade(
-
-                        self.portfolio.get_balance()
-
-                    )
-
-                    if not can_trade:
-
-                        Logger.warning(
-
-                            f"Live Trading fermato dal Trading Guard: "
-
-                            f"{reason}"
-
-                        )
-
-                        break
-
-                    result = self.analysis.analyze(
-
-                        data,
-
-                        price,
-
-                        symbol,
-
-                        account_balance=self.portfolio.get_balance()
-
-                    )
-
-                    signal = result["signal"]
-
-                    trade = result["trade"]
-
-                    if (
-
-                        trade is not None
-
-                        and signal["valid"]
-
-                    ):
-
-                        order = self.execution.execute(
-
-                            trade
-
-                        )
-
-                        if order["success"]:
-
-                            opened = self.position_controller.open_position(
+                        opened = (
+                            self.position_controller.open_position(
 
                                 side=order["side"],
 
@@ -331,35 +691,49 @@ class LiveTradingEngine:
                                 size=order["size"]
 
                             )
+                        )
 
-                            if opened:
+                        if opened:
 
-                                self.portfolio.add(
+                            self.portfolio.add(
 
-                                    order["symbol"],
+                                order["symbol"],
 
-                                    self.position_controller.get_position()
+                                self.position_controller.get_position()
 
-                                )
+                            )
+
+                            Logger.success(
+                                "Posizione registrata "
+                                "nel Portfolio."
+                            )
+
+                # =================================
+                # ATTESA
+                # =================================
 
                 time.sleep(delay)
+
+            # =================================
+            # INTERRUZIONE MANUALE
+            # =================================
 
             except KeyboardInterrupt:
 
                 Logger.warning(
-
-                    "Live Trading interrotto."
-
+                    "Live Trading interrotto manualmente."
                 )
 
                 break
 
+            # =================================
+            # ERRORE
+            # =================================
+
             except Exception as error:
 
                 Logger.error(
-
                     str(error)
-
                 )
 
                 time.sleep(delay)

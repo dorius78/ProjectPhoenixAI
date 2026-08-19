@@ -92,6 +92,106 @@ class PositionController:
         size = float(size)
 
         # =================================
+        # VALIDAZIONE BASE
+        # =================================
+
+        if size <= 0:
+
+            Logger.warning(
+                "Size posizione non valida."
+            )
+
+            return False
+
+        if entry <= 0:
+
+            Logger.warning(
+                "Prezzo entry non valido."
+            )
+
+            return False
+
+        if stop_loss <= 0:
+
+            Logger.warning(
+                "Stop Loss non valido."
+            )
+
+            return False
+
+        if take_profit <= 0:
+
+            Logger.warning(
+                "Take Profit non valido."
+            )
+
+            return False
+
+        # =================================
+        # VALIDAZIONE DIREZIONE
+        # =================================
+
+        side = str(
+            side
+        ).upper()
+
+        if side not in (
+            "BUY",
+            "SELL",
+            "STRONG BUY",
+            "STRONG SELL"
+        ):
+
+            Logger.warning(
+                f"Direzione non valida: {side}"
+            )
+
+            return False
+
+        # =================================
+        # VALIDAZIONE SL / TP
+        # =================================
+
+        if side in (
+            "BUY",
+            "STRONG BUY"
+        ):
+
+            if stop_loss >= entry:
+
+                Logger.warning(
+                    "BUY: Stop Loss non valido."
+                )
+
+                return False
+
+            if take_profit <= entry:
+
+                Logger.warning(
+                    "BUY: Take Profit non valido."
+                )
+
+                return False
+
+        else:
+
+            if stop_loss <= entry:
+
+                Logger.warning(
+                    "SELL: Stop Loss non valido."
+                )
+
+                return False
+
+            if take_profit >= entry:
+
+                Logger.warning(
+                    "SELL: Take Profit non valido."
+                )
+
+                return False
+
+        # =================================
         # CREAZIONE POSIZIONE
         # =================================
 
@@ -366,6 +466,41 @@ class PositionController:
             self.position["current_profit"] = round(
 
                 (entry - exit_price) * size,
+
+                6
+
+            )
+
+        # =================================
+        # AGGIORNA MAX PROFIT FINALE
+        # =================================
+
+        previous_max = float(
+            self.position.get(
+                "max_profit",
+                0.0
+            )
+        )
+
+        final_profit = float(
+            self.position["current_profit"]
+        )
+
+        if final_profit > previous_max:
+
+            self.position["max_profit"] = round(
+
+                final_profit,
+
+                6
+
+            )
+
+        else:
+
+            self.position["max_profit"] = round(
+
+                previous_max,
 
                 6
 
