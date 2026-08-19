@@ -1,0 +1,20 @@
+﻿216e05f (HEAD -> main, tag: PHOENIX_PHASE_D3_2026-08-19, origin/main, origin/HEAD) Integrate Trading Guard into backtest cycle
+bc25a62 Fix exit management and execution close contract
+9ef9347 (tag: PHOENIX_STATE_2026-08-19_FINAL) CHECKPOINT: Phoenix AI current integrated state
+dd0f81a DOCS: create Phoenix Master State
+b47aa39 (tag: PHOENIX_CHECKPOINT_2026-08-19) CHECKPOINT: Phoenix AI state before final integration
+31ff13e Phoenix AI checkpoint MT5 position management
+6402a90 Add Phoenix position decision pipeline
+9e8e1e0 Add Phoenix position risk guard
+6c53f72 Add Phoenix position action evaluation
+3de8047 Add Phoenix position action layer
+08e7cb7 Add Phoenix position metrics
+aed92a9 Add Phoenix position state engine
+8879142 Add Phoenix position protection check
+b5033c9 Add Phoenix SL TP status monitoring
+803afcc Add Phoenix position monitoring
+585bef6 Add Phoenix Position Manager
+1668fea Add Phoenix position close execution
+c41055d Fix MT5 risk based volume and max volume protection
+3ea7ee6 Checkpoint Phoenix AI - MT5 risk sizing investigation
+0997c66 Backup completo Phoenix AI - 2026-08-14

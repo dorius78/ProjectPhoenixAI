@@ -451,7 +451,9 @@ class ExitManager:
     def evaluate(
         self,
         position,
-        current_price
+        current_price,
+        high=None,
+        low=None
     ):
 
         if position is None:
@@ -463,7 +465,57 @@ class ExitManager:
         )
 
         # =================================
-        # 1. BREAK EVEN
+        # INTRABAR OHLC
+        # =================================
+        #
+        # Se High/Low sono disponibili,
+        # vengono usati per determinare se
+        # SL/TP sono stati raggiunti durante
+        # la candela.
+        #
+        # Se non disponibili, viene mantenuta
+        # la logica precedente basata sul prezzo
+        # corrente.
+        # =================================
+
+        if high is None:
+            high = current_price
+        else:
+            high = float(high)
+
+        if low is None:
+            low = current_price
+        else:
+            low = float(low)
+
+        # =================================
+        # 1. SNAPSHOT LIVELLI DI USCITA
+        # =================================
+        #
+        # Gli SL/Trailing esistenti all'inizio
+        # della candela sono quelli validi per
+        # valutare l'OHLC della candela stessa.
+        #
+        # Un nuovo Break Even o Trailing Stop
+        # creato durante questa valutazione diventa
+        # effettivo dalla candela successiva.
+        # =================================
+
+        evaluated_stop_loss = float(
+            position["stop_loss"]
+        )
+
+        evaluated_trailing_stop = position.get(
+            "trailing_stop"
+        )
+
+        if evaluated_trailing_stop is not None:
+            evaluated_trailing_stop = float(
+                evaluated_trailing_stop
+            )
+
+        # =================================
+        # 2. BREAK EVEN
         # =================================
 
         position = self.apply_break_even(
@@ -472,7 +524,7 @@ class ExitManager:
         )
 
         # =================================
-        # 2. TRAILING STOP
+        # 3. TRAILING STOP
         # =================================
 
         position = self.apply_trailing_stop(
@@ -484,17 +536,13 @@ class ExitManager:
             position["side"]
         ).upper()
 
-        stop_loss = float(
-            position["stop_loss"]
-        )
+        stop_loss = evaluated_stop_loss
 
         take_profit = float(
             position["take_profit"]
         )
 
-        trailing_stop = position.get(
-            "trailing_stop"
-        )
+        trailing_stop = evaluated_trailing_stop
 
         # =================================
         # BUY
@@ -506,30 +554,10 @@ class ExitManager:
         ):
 
             # -----------------------------
-            # TAKE PROFIT
-            # -----------------------------
-
-            if current_price >= take_profit:
-
-                return "TAKE PROFIT"
-
-            # -----------------------------
-            # TRAILING STOP
-            # -----------------------------
-
-            if trailing_stop is not None:
-
-                if current_price <= float(
-                    trailing_stop
-                ):
-
-                    return "TRAILING STOP"
-
-            # -----------------------------
             # STOP LOSS
             # -----------------------------
 
-            if current_price <= stop_loss:
+            if low <= stop_loss:
 
                 if position.get(
                     "break_even",
@@ -544,6 +572,26 @@ class ExitManager:
 
                 return "STOP LOSS"
 
+            # -----------------------------
+            # TRAILING STOP
+            # -----------------------------
+
+            if trailing_stop is not None:
+
+                if low <= float(
+                    trailing_stop
+                ):
+
+                    return "TRAILING STOP"
+
+            # -----------------------------
+            # TAKE PROFIT
+            # -----------------------------
+
+            if high >= take_profit:
+
+                return "TAKE PROFIT"
+
         # =================================
         # SELL
         # =================================
@@ -554,30 +602,10 @@ class ExitManager:
         ):
 
             # -----------------------------
-            # TAKE PROFIT
-            # -----------------------------
-
-            if current_price <= take_profit:
-
-                return "TAKE PROFIT"
-
-            # -----------------------------
-            # TRAILING STOP
-            # -----------------------------
-
-            if trailing_stop is not None:
-
-                if current_price >= float(
-                    trailing_stop
-                ):
-
-                    return "TRAILING STOP"
-
-            # -----------------------------
             # STOP LOSS
             # -----------------------------
 
-            if current_price >= stop_loss:
+            if high >= stop_loss:
 
                 if position.get(
                     "break_even",
@@ -591,5 +619,25 @@ class ExitManager:
                         return "BREAK EVEN"
 
                 return "STOP LOSS"
+
+            # -----------------------------
+            # TRAILING STOP
+            # -----------------------------
+
+            if trailing_stop is not None:
+
+                if high >= float(
+                    trailing_stop
+                ):
+
+                    return "TRAILING STOP"
+
+            # -----------------------------
+            # TAKE PROFIT
+            # -----------------------------
+
+            if low <= take_profit:
+
+                return "TAKE PROFIT"
 
         return None

@@ -1,0 +1,32 @@
+﻿PROJECT PHOENIX AI
+SNAPSHOT: 20260820_000111
+
+Questo snapshot rappresenta lo stato del progetto prima della
+prossima fase di sviluppo.
+
+NON MODIFICARE IL CODICE IN QUESTA FASE.
+
+Consultare:
+- PHOENIX_MASTER_STATE.md
+- git_status.txt
+- git_log.txt
+- git_diff.txt
+- project_files.txt
+
+Ultimo stato test noto:
+89 passed
+
+Ultima fase:
+D.4.11 - FIX TRAILING INTRABAR
+
+Modifica principale:
+ExitManager.evaluate() riceve High/Low OHLC e utilizza
+uno snapshot dei livelli SL/Trailing esistenti all'inizio
+della candela.
+
+Regola:
+nuovi Break Even / Trailing diventano effettivi dalla
+candela successiva.
+
+Roadmap:
+NON MODIFICARE.

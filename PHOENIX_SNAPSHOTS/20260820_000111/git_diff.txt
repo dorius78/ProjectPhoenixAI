@@ -1,0 +1,448 @@
+﻿diff --git a/Core/core_system.py b/Core/core_system.py
+index 43dfdb3..48d0b5e 100644
+--- a/Core/core_system.py
++++ b/Core/core_system.py
+@@ -598,6 +598,14 @@ class CoreSystem:
+                 window["Close"].iloc[-1]
+             )
+ 
++            candle_high = float(
++                window["High"].iloc[-1]
++            )
++
++            candle_low = float(
++                window["Low"].iloc[-1]
++            )
++
+             candle_time = (
+                 window.index[-1]
+             )
+@@ -611,7 +619,9 @@ class CoreSystem:
+                 closed = (
+                     self.position_controller.update(
+                         current_price,
+-                        candle_time
++                        candle_time,
++                        high=candle_high,
++                        low=candle_low
+                     )
+                 )
+ 
+diff --git a/Core/exit_manager.py b/Core/exit_manager.py
+index 9512f44..ec0389e 100644
+--- a/Core/exit_manager.py
++++ b/Core/exit_manager.py
+@@ -451,7 +451,9 @@ class ExitManager:
+     def evaluate(
+         self,
+         position,
+-        current_price
++        current_price,
++        high=None,
++        low=None
+     ):
+ 
+         if position is None:
+@@ -463,7 +465,57 @@ class ExitManager:
+         )
+ 
+         # =================================
+-        # 1. BREAK EVEN
++        # INTRABAR OHLC
++        # =================================
++        #
++        # Se High/Low sono disponibili,
++        # vengono usati per determinare se
++        # SL/TP sono stati raggiunti durante
++        # la candela.
++        #
++        # Se non disponibili, viene mantenuta
++        # la logica precedente basata sul prezzo
++        # corrente.
++        # =================================
++
++        if high is None:
++            high = current_price
++        else:
++            high = float(high)
++
++        if low is None:
++            low = current_price
++        else:
++            low = float(low)
++
++        # =================================
++        # 1. SNAPSHOT LIVELLI DI USCITA
++        # =================================
++        #
++        # Gli SL/Trailing esistenti all'inizio
++        # della candela sono quelli validi per
++        # valutare l'OHLC della candela stessa.
++        #
++        # Un nuovo Break Even o Trailing Stop
++        # creato durante questa valutazione diventa
++        # effettivo dalla candela successiva.
++        # =================================
++
++        evaluated_stop_loss = float(
++            position["stop_loss"]
++        )
++
++        evaluated_trailing_stop = position.get(
++            "trailing_stop"
++        )
++
++        if evaluated_trailing_stop is not None:
++            evaluated_trailing_stop = float(
++                evaluated_trailing_stop
++            )
++
++        # =================================
++        # 2. BREAK EVEN
+         # =================================
+ 
+         position = self.apply_break_even(
+@@ -472,7 +524,7 @@ class ExitManager:
+         )
+ 
+         # =================================
+-        # 2. TRAILING STOP
++        # 3. TRAILING STOP
+         # =================================
+ 
+         position = self.apply_trailing_stop(
+@@ -484,17 +536,13 @@ class ExitManager:
+             position["side"]
+         ).upper()
+ 
+-        stop_loss = float(
+-            position["stop_loss"]
+-        )
++        stop_loss = evaluated_stop_loss
+ 
+         take_profit = float(
+             position["take_profit"]
+         )
+ 
+-        trailing_stop = position.get(
+-            "trailing_stop"
+-        )
++        trailing_stop = evaluated_trailing_stop
+ 
+         # =================================
+         # BUY
+@@ -506,12 +554,23 @@ class ExitManager:
+         ):
+ 
+             # -----------------------------
+-            # TAKE PROFIT
++            # STOP LOSS
+             # -----------------------------
+ 
+-            if current_price >= take_profit:
++            if low <= stop_loss:
+ 
+-                return "TAKE PROFIT"
++                if position.get(
++                    "break_even",
++                    False
++                ):
++
++                    if stop_loss >= float(
++                        position["entry"]
++                    ):
++
++                        return "BREAK EVEN"
++
++                return "STOP LOSS"
+ 
+             # -----------------------------
+             # TRAILING STOP
+@@ -519,30 +578,19 @@ class ExitManager:
+ 
+             if trailing_stop is not None:
+ 
+-                if current_price <= float(
++                if low <= float(
+                     trailing_stop
+                 ):
+ 
+                     return "TRAILING STOP"
+ 
+             # -----------------------------
+-            # STOP LOSS
++            # TAKE PROFIT
+             # -----------------------------
+ 
+-            if current_price <= stop_loss:
+-
+-                if position.get(
+-                    "break_even",
+-                    False
+-                ):
+-
+-                    if stop_loss >= float(
+-                        position["entry"]
+-                    ):
++            if high >= take_profit:
+ 
+-                        return "BREAK EVEN"
+-
+-                return "STOP LOSS"
++                return "TAKE PROFIT"
+ 
+         # =================================
+         # SELL
+@@ -554,12 +602,23 @@ class ExitManager:
+         ):
+ 
+             # -----------------------------
+-            # TAKE PROFIT
++            # STOP LOSS
+             # -----------------------------
+ 
+-            if current_price <= take_profit:
++            if high >= stop_loss:
+ 
+-                return "TAKE PROFIT"
++                if position.get(
++                    "break_even",
++                    False
++                ):
++
++                    if stop_loss <= float(
++                        position["entry"]
++                    ):
++
++                        return "BREAK EVEN"
++
++                return "STOP LOSS"
+ 
+             # -----------------------------
+             # TRAILING STOP
+@@ -567,29 +626,18 @@ class ExitManager:
+ 
+             if trailing_stop is not None:
+ 
+-                if current_price >= float(
++                if high >= float(
+                     trailing_stop
+                 ):
+ 
+                     return "TRAILING STOP"
+ 
+             # -----------------------------
+-            # STOP LOSS
++            # TAKE PROFIT
+             # -----------------------------
+ 
+-            if current_price >= stop_loss:
+-
+-                if position.get(
+-                    "break_even",
+-                    False
+-                ):
+-
+-                    if stop_loss <= float(
+-                        position["entry"]
+-                    ):
+-
+-                        return "BREAK EVEN"
++            if low <= take_profit:
+ 
+-                return "STOP LOSS"
++                return "TAKE PROFIT"
+ 
+         return None
+\ No newline at end of file
+diff --git a/Core/position_controller.py b/Core/position_controller.py
+index 2d8de6f..85cabbe 100644
+--- a/Core/position_controller.py
++++ b/Core/position_controller.py
+@@ -258,7 +258,11 @@ class PositionController:
+ 
+         current_price,
+ 
+-        timestamp=None
++        timestamp=None,
++
++        high=None,
++
++        low=None
+ 
+     ):
+ 
+@@ -290,7 +294,11 @@ class PositionController:
+ 
+             self.position,
+ 
+-            current_price
++            current_price,
++
++            high=high,
++
++            low=low
+ 
+         )
+ 
+diff --git a/Tests/test_exit_manager.py b/Tests/test_exit_manager.py
+index a7ea5f2..850e3d3 100644
+--- a/Tests/test_exit_manager.py
++++ b/Tests/test_exit_manager.py
+@@ -273,4 +273,154 @@ if __name__ == "__main__":
+     test_trailing_stop_buy_does_not_move_backward()
+     test_trailing_stop_sell_does_not_move_backward()
+ 
+-    print("TEST EXIT MANAGER: OK")
+\ No newline at end of file
++    print("TEST EXIT MANAGER: OK")
++def test_buy_intrabar_stop_loss():
++
++    manager = ExitManager()
++
++    position = {
++        "symbol": "BTC-USD",
++        "side": "BUY",
++        "entry": 100000.0,
++        "stop_loss": 99000.0,
++        "take_profit": 102000.0,
++        "size": 0.01,
++        "status": "OPEN",
++        "break_even": True
++    }
++
++    result = manager.evaluate(
++        position,
++        100500.0,
++        high=101000.0,
++        low=98900.0
++    )
++
++    assert result == "STOP LOSS"
++
++
++def test_buy_intrabar_take_profit():
++
++    manager = ExitManager()
++
++    position = {
++        "symbol": "BTC-USD",
++        "side": "BUY",
++        "entry": 100000.0,
++        "stop_loss": 99000.0,
++        "take_profit": 102000.0,
++        "size": 0.01,
++        "status": "OPEN",
++        "break_even": True
++    }
++
++    result = manager.evaluate(
++        position,
++        101500.0,
++        high=102100.0,
++        low=100500.0
++    )
++
++    assert result == "TAKE PROFIT"
++
++
++def test_sell_intrabar_stop_loss():
++
++    manager = ExitManager()
++
++    position = {
++        "symbol": "BTC-USD",
++        "side": "SELL",
++        "entry": 100000.0,
++        "stop_loss": 101000.0,
++        "take_profit": 98000.0,
++        "size": 0.01,
++        "status": "OPEN",
++        "break_even": True
++    }
++
++    result = manager.evaluate(
++        position,
++        100500.0,
++        high=101100.0,
++        low=99500.0
++    )
++
++    assert result == "STOP LOSS"
++
++
++def test_sell_intrabar_take_profit():
++
++    manager = ExitManager()
++
++    position = {
++        "symbol": "BTC-USD",
++        "side": "SELL",
++        "entry": 100000.0,
++        "stop_loss": 101000.0,
++        "take_profit": 98000.0,
++        "size": 0.01,
++        "status": "OPEN",
++        "break_even": True
++    }
++
++    result = manager.evaluate(
++        position,
++        98500.0,
++        high=99500.0,
++        low=97900.0
++    )
++
++    assert result == "TAKE PROFIT"
++
++
++def test_buy_intrabar_stop_loss_has_priority_over_take_profit():
++
++    manager = ExitManager()
++
++    position = {
++        "symbol": "BTC-USD",
++        "side": "BUY",
++        "entry": 100000.0,
++        "stop_loss": 99000.0,
++        "take_profit": 102000.0,
++        "size": 0.01,
++        "status": "OPEN",
++        "break_even": True
++    }
++
++    result = manager.evaluate(
++        position,
++        100000.0,
++        high=102500.0,
++        low=98500.0
++    )
++
++    assert result == "STOP LOSS"
++
++
++def test_sell_intrabar_stop_loss_has_priority_over_take_profit():
++
++    manager = ExitManager()
++
++    position = {
++        "symbol": "BTC-USD",
++        "side": "SELL",
++        "entry": 100000.0,
++        "stop_loss": 101000.0,
++        "take_profit": 98000.0,
++        "size": 0.01,
++        "status": "OPEN",
++        "break_even": True
++    }
++
++    result = manager.evaluate(
++        position,
++        100000.0,
++        high=101500.0,
++        low=97500.0
++    )
++
++    assert result == "STOP LOSS"
++
++from Core.exit_manager import ExitManager

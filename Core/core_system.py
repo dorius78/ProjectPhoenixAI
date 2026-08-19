@@ -598,6 +598,14 @@ class CoreSystem:
                 window["Close"].iloc[-1]
             )
 
+            candle_high = float(
+                window["High"].iloc[-1]
+            )
+
+            candle_low = float(
+                window["Low"].iloc[-1]
+            )
+
             candle_time = (
                 window.index[-1]
             )
@@ -611,7 +619,9 @@ class CoreSystem:
                 closed = (
                     self.position_controller.update(
                         current_price,
-                        candle_time
+                        candle_time,
+                        high=candle_high,
+                        low=candle_low
                     )
                 )
 

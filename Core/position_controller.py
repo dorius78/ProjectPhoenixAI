@@ -258,7 +258,11 @@ class PositionController:
 
         current_price,
 
-        timestamp=None
+        timestamp=None,
+
+        high=None,
+
+        low=None
 
     ):
 
@@ -290,7 +294,11 @@ class PositionController:
 
             self.position,
 
-            current_price
+            current_price,
+
+            high=high,
+
+            low=low
 
         )
 
