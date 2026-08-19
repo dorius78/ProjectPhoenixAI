@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Core System
-Versione 20.0
+Versione 21.0
 ========================================
 """
 
@@ -29,16 +29,15 @@ class CoreSystem:
 
     def __init__(self):
 
-        Logger.success("Core System V20 inizializzato.")
+        Logger.success(
+            "Core System V21 inizializzato."
+        )
 
         self.market = MarketData()
-
         self.candles = CandleManager()
-
         self.analysis = AnalysisEngine()
 
         self.position_controller = PositionController()
-
         self.portfolio = PortfolioManager()
 
         self.execution = ExecutionEngine()
@@ -48,31 +47,20 @@ class CoreSystem:
         self.database = DatabaseManager()
 
         self.performance = PerformanceAnalytics(
-
             self.database
-
         )
 
         self.scanner = MarketScanner()
-
         self.scanner.load_default()
 
         self.live_engine = LiveTradingEngine(
-
             self.candles,
-
             self.analysis,
-
             self.execution,
-
             self.position_controller,
-
             self.portfolio,
-
             self.backtest,
-
             self.database
-
         )
 
     # =====================================
@@ -89,9 +77,13 @@ class CoreSystem:
 
     def run_live(self):
 
-        Logger.section("PROJECT PHOENIX AI")
+        Logger.section(
+            "PROJECT PHOENIX AI"
+        )
 
-        Logger.info("Modalità LIVE SCANNER")
+        Logger.info(
+            "Modalità LIVE SCANNER"
+        )
 
         self.market.load_markets()
 
@@ -100,71 +92,50 @@ class CoreSystem:
         symbols = self.scanner.get_symbols()
 
         Logger.info(
-
             f"Scanner: {len(symbols)} strumenti"
-
         )
 
         best_result = None
 
         for symbol in symbols:
 
-            Logger.info(f"Analisi {symbol}")
+            Logger.info(
+                f"Analisi {symbol}"
+            )
 
             data = self.candles.get_candles(
-
                 symbol,
-
                 period="5d",
-
                 interval="1h"
-
             )
 
             if data is None or len(data) == 0:
-
                 continue
 
             current_price = float(
-
                 data["Close"].iloc[-1]
-
             )
 
             result = self.analysis.analyze(
-
                 data,
-
                 current_price,
-
                 symbol,
-
                 account_balance=self.portfolio.get_balance()
-
             )
 
             decision = result["decision"]
 
             self.scanner.add_result(
-
                 symbol,
-
                 decision["action"],
-
                 decision["score"],
-
                 decision["confidence"]
-
             )
 
             if (
-
                 best_result is None
-
                 or decision["score"]
-
                 > best_result["decision"]["score"]
-
             ):
 
                 best_result = result
@@ -174,41 +145,29 @@ class CoreSystem:
         if best_result is None:
 
             Logger.warning(
-
                 "Nessun mercato disponibile."
-
             )
 
             return
 
         Logger.section(
-
             "MIGLIOR SEGNALE"
-
         )
 
         self.print_result(
-
             best_result
-
         )
 
-        # Lo Scanner Multi Market e' pensato per segnalare, non per
-        # operare: mostra solo la classifica e il miglior segnale.
-        # L'operativita' continua viene gestita dal Live Trading.
-
-        Logger.section("DATABASE")
+        Logger.section(
+            "DATABASE"
+        )
 
         Logger.info(
-
             f"Trade salvati : {self.database.count()}"
-
         )
 
         Logger.success(
-
             "Core System completato."
-
         )
 
     # =====================================
@@ -216,17 +175,12 @@ class CoreSystem:
     # =====================================
 
     def run_live_trading(
-
         self,
-
         symbol="BTC-USD"
-
     ):
 
         Logger.section(
-
             "LIVE TRADING"
-
         )
 
         self.market.load_markets()
@@ -234,21 +188,15 @@ class CoreSystem:
         if MODE == "LIVE":
 
             self._run_live_trading_broker(
-
                 symbol
-
             )
 
         else:
 
             self.live_engine.start(
-
                 symbol=symbol,
-
                 interval="1h",
-
                 delay=30
-
             )
 
     # =====================================
@@ -256,122 +204,55 @@ class CoreSystem:
     # =====================================
 
     def _run_live_trading_broker(
-
         self,
-
         symbol
-
     ):
 
-        """
-        Percorso LIVE ufficiale di Phoenix.
-
-        Utilizza:
-
-        Core
-          ↓
-        ExecutionEngine V9
-          ↓
-        MT5ExecutionEngine
-          ↓
-        MetaTrader 5
-
-        Il vecchio MT5Broker non viene piu'
-        utilizzato da questo percorso.
-
-        IMPORTANTE:
-        il nuovo percorso parte in DRY RUN
-        per sicurezza.
-        """
-
         Logger.warning(
-
             "MODE = LIVE: utilizzo del nuovo "
             "Execution Engine V9 + MT5 Bridge."
-
         )
 
         Logger.warning(
-
             "MT5 parte in DRY RUN: "
-            "nessun ordine reale verra' inviato."
-
+            "nessun ordine reale verrà inviato."
         )
-
-        # =================================
-        # EXECUTION ENGINE
-        # =================================
 
         execution = ExecutionEngine(
-
             symbol=symbol,
-
             magic=260813,
-
             mt5_enabled=True,
-
             mt5_dry_run=True
-
         )
-
-        # =================================
-        # CONNESSIONE MT5
-        # =================================
 
         if not execution.connect_mt5():
 
             Logger.warning(
-
                 "Connessione MT5 fallita. "
                 "Live Trading annullato."
-
             )
 
             return
 
         try:
 
-            # =================================
-            # LIVE ENGINE
-            # =================================
-
             live_engine = LiveTradingEngine(
-
                 self.candles,
-
                 self.analysis,
-
                 execution,
-
                 self.position_controller,
-
                 self.portfolio,
-
                 self.backtest,
-
                 self.database
-
             )
 
-            # =================================
-            # AVVIO CICLO
-            # =================================
-
             live_engine.start(
-
                 symbol=symbol,
-
                 interval="1h",
-
                 delay=30
-
             )
 
         finally:
-
-            # =================================
-            # DISCONNESSIONE
-            # =================================
 
             execution.disconnect_mt5()
 
@@ -384,51 +265,283 @@ class CoreSystem:
         self.performance.report()
 
     # =====================================
+    # RESET BACKTEST
+    # =====================================
+
+    def _reset_backtest_state(self):
+
+        self.position_controller = PositionController()
+
+        self.portfolio.reset()
+
+        self.backtest.reset()
+
+        # Ricostruzione del Live Engine con
+        # i riferimenti aggiornati.
+        self.live_engine = LiveTradingEngine(
+            self.candles,
+            self.analysis,
+            self.execution,
+            self.position_controller,
+            self.portfolio,
+            self.backtest,
+            self.database
+        )
+
+    # =====================================
+    # REGISTRA TRADE CHIUSO
+    # =====================================
+
+    def _register_closed_trade(
+        self,
+        closed
+    ):
+
+        if closed is None:
+            return None
+
+        if closed.get("status") != "CLOSED":
+            return None
+
+        report = self.execution.close(
+            closed
+        )
+
+        if not report:
+            return None
+
+        close_time = report.get(
+            "close_time",
+            closed.get("close_time")
+        )
+
+        open_time = closed.get(
+            "open_time"
+        )
+
+        duration = 0.0
+
+        if (
+            open_time is not None
+            and close_time is not None
+        ):
+
+            duration = (
+                close_time - open_time
+            ).total_seconds()
+
+        pnl = float(
+            report.get(
+                "pnl",
+                closed.get(
+                    "current_profit",
+                    0.0
+                )
+            )
+        )
+
+        result = (
+            "WIN"
+            if pnl > 0
+            else
+            "LOSS"
+            if pnl < 0
+            else
+            "BREAKEVEN"
+        )
+
+        risk = abs(
+            float(
+                closed.get(
+                    "entry",
+                    0.0
+                )
+            )
+            -
+            float(
+                closed.get(
+                    "initial_stop_loss",
+                    closed.get(
+                        "stop_loss",
+                        0.0
+                    )
+                )
+            )
+        )
+
+        reward = abs(
+            float(
+                report.get(
+                    "exit",
+                    closed.get(
+                        "current_price",
+                        0.0
+                    )
+                )
+            )
+            -
+            float(
+                closed.get(
+                    "entry",
+                    0.0
+                )
+            )
+        )
+
+        risk_reward = (
+
+            round(
+                reward / risk,
+                2
+            )
+
+            if risk > 0
+
+            else 0.0
+        )
+
+        trade = {
+
+            "symbol":
+                report.get(
+                    "symbol",
+                    closed.get("symbol")
+                ),
+
+            "side":
+                report.get(
+                    "side",
+                    closed.get("side")
+                ),
+
+            "entry":
+                report.get(
+                    "entry",
+                    closed.get("entry")
+                ),
+
+            "exit":
+                report.get(
+                    "exit",
+                    closed.get("current_price")
+                ),
+
+            "stop_loss":
+                closed.get(
+                    "stop_loss"
+                ),
+
+            "take_profit":
+                closed.get(
+                    "take_profit"
+                ),
+
+            "pnl":
+                pnl,
+
+            "status":
+                "CLOSED",
+
+            "reason":
+                report.get(
+                    "reason",
+                    closed.get(
+                        "close_reason"
+                    )
+                ),
+
+            "open_time":
+                open_time,
+
+            "close_time":
+                close_time,
+
+            "duration":
+                duration,
+
+            "result":
+                result,
+
+            "risk_reward":
+                risk_reward
+        }
+
+        self.database.save_trade(
+            trade
+        )
+
+        self.backtest.add_trade(
+            trade
+        )
+
+        self.portfolio.update_balance(
+            pnl
+        )
+
+        self.portfolio.remove(
+            trade["symbol"]
+        )
+
+        return trade
+
+    # =====================================
+    # CHIUSURA FORZATA FINE BACKTEST
+    # =====================================
+
+    def _close_backtest_position(
+        self,
+        final_price,
+        final_time
+    ):
+
+        if not self.position_controller.has_position():
+
+            return None
+
+        closed = self.position_controller.close_position(
+            reason="BACKTEST END",
+            timestamp=final_time,
+            current_price=final_price
+        )
+
+        if closed is None:
+            return None
+
+        return self._register_closed_trade(
+            closed
+        )
+
+    # =====================================
     # BACKTEST
     # =====================================
 
     def run_backtest(
-
         self,
-
         symbol="BTC-USD",
-
         period="3mo",
-
         interval="1h"
-
     ):
 
         Logger.section(
-
             "BACKTEST"
-
         )
 
         Logger.info(
-
             f"Backtest {symbol} "
             f"({period} - {interval})"
-
         )
 
         data = self.candles.get_backtest_data(
-
             symbol,
-
             period=period,
-
             interval=interval
-
         )
 
         if data is None or len(data) < 100:
 
             Logger.warning(
-
                 "Dati insufficienti per il backtest "
                 "(servono almeno 100 candele)."
-
             )
 
             return
@@ -437,216 +550,57 @@ class CoreSystem:
         # RESET STATO
         # =================================
 
-        self.position_controller = PositionController()
-
-        self.portfolio.reset()
-
-        self.backtest.reset()
+        self._reset_backtest_state()
 
         total_bars = len(data)
 
-        # =================================
-        # WARM-UP
-        # =================================
-
         start = 100
 
+        analysed_bars = total_bars - start
+
+        # =================================
+        # CICLO STORICO
+        # =================================
+
         for i in range(
-
             start,
-
             total_bars
-
         ):
 
             window = data.iloc[
-
                 :i + 1
-
             ]
 
             current_price = float(
-
                 window["Close"].iloc[-1]
-
             )
 
             candle_time = (
-
                 window.index[-1]
-
             )
 
             # =================================
-            # POSIZIONE APERTA
+            # GESTIONE POSIZIONE ESISTENTE
             # =================================
 
             if self.position_controller.has_position():
 
                 closed = (
-
                     self.position_controller.update(
-
                         current_price,
-
                         candle_time
-
                     )
-
                 )
 
                 if (
-
                     closed is not None
-
-                    and closed["status"] == "CLOSED"
-
+                    and closed.get(
+                        "status"
+                    ) == "CLOSED"
                 ):
 
-                    report = self.execution.close(
-
+                    self._register_closed_trade(
                         closed
-
-                    )
-
-                    duration = (
-
-                        report["close_time"]
-
-                        -
-
-                        closed["open_time"]
-
-                    ).total_seconds()
-
-                    result = (
-
-                        "WIN"
-
-                        if report["pnl"] > 0
-
-                        else "LOSS"
-
-                    )
-
-                    risk = abs(
-
-                        closed["entry"]
-
-                        -
-
-                        closed["initial_stop_loss"]
-
-                    )
-
-                    reward = abs(
-
-                        report["exit"]
-
-                        -
-
-                        closed["entry"]
-
-                    )
-
-                    rr = (
-
-                        round(
-
-                            reward / risk,
-
-                            2
-
-                        )
-
-                        if risk > 0
-
-                        else 0
-
-                    )
-
-                    trade = {
-
-                        "symbol":
-
-                            report["symbol"],
-
-                        "side":
-
-                            report["side"],
-
-                        "entry":
-
-                            report["entry"],
-
-                        "exit":
-
-                            report["exit"],
-
-                        "stop_loss":
-
-                            closed["stop_loss"],
-
-                        "take_profit":
-
-                            closed["take_profit"],
-
-                        "pnl":
-
-                            report["pnl"],
-
-                        "status":
-
-                            "CLOSED",
-
-                        "reason":
-
-                            report["reason"],
-
-                        "open_time":
-
-                            closed["open_time"],
-
-                        "close_time":
-
-                            report["close_time"],
-
-                        "duration":
-
-                            duration,
-
-                        "result":
-
-                            result,
-
-                        "risk_reward":
-
-                            rr
-
-                    }
-
-                    self.database.save_trade(
-
-                        trade
-
-                    )
-
-                    self.backtest.add_trade(
-
-                        trade
-
-                    )
-
-                    self.portfolio.update_balance(
-
-                        report["pnl"]
-
-                    )
-
-                    self.portfolio.remove(
-
-                        report["symbol"]
-
                     )
 
             # =================================
@@ -656,108 +610,109 @@ class CoreSystem:
             if not self.position_controller.has_position():
 
                 result_analysis = (
-
                     self.analysis.analyze(
-
                         window,
-
                         current_price,
-
                         symbol,
-
                         account_balance=(
-
                             self.portfolio.get_balance()
-
                         )
-
                     )
-
                 )
 
-                signal = (
-
-                    result_analysis["signal"]
-
+                signal = result_analysis.get(
+                    "signal"
                 )
 
-                trade = (
-
-                    result_analysis["trade"]
-
+                trade = result_analysis.get(
+                    "trade"
                 )
 
                 if (
-
                     trade is not None
-
-                    and signal["valid"]
-
+                    and signal is not None
+                    and signal.get(
+                        "valid",
+                        False
+                    )
                 ):
 
                     order = (
-
                         self.execution.execute(
-
                             trade
-
                         )
-
                     )
 
-                    if order["success"]:
+                    if order.get(
+                        "success",
+                        False
+                    ):
 
                         opened = (
-
                             self.position_controller.open_position(
-
                                 side=order["side"],
-
                                 entry=order["entry"],
-
                                 stop_loss=order["stop_loss"],
-
                                 take_profit=order["take_profit"],
-
                                 symbol=order["symbol"],
-
                                 size=order["size"],
-
                                 timestamp=candle_time
-
                             )
-
                         )
 
                         if opened:
 
                             self.portfolio.add(
-
                                 order["symbol"],
-
                                 self.position_controller.get_position()
-
                             )
 
-        self.backtest.set_total_bars(
+        # =================================
+        # CHIUSURA FINALE
+        # =================================
 
-            total_bars - start
-
+        final_price = float(
+            data["Close"].iloc[-1]
         )
+
+        final_time = data.index[-1]
+
+        self._close_backtest_position(
+            final_price,
+            final_time
+        )
+
+        # =================================
+        # ATTIVITÀ
+        # =================================
+
+        self.backtest.set_total_bars(
+            analysed_bars
+        )
+
+        # =================================
+        # REPORT
+        # =================================
 
         self.print_backtest()
 
         Logger.section(
-
             "DATABASE"
-
         )
 
         Logger.info(
-
             f"Trade salvati : "
             f"{self.database.count()}"
+        )
 
+        Logger.section(
+            "PORTFOLIO"
+        )
+
+        self.portfolio.report()
+
+        Logger.success(
+            "Backtest completato."
         )
 
     # =====================================
@@ -765,85 +720,49 @@ class CoreSystem:
     # =====================================
 
     def print_result(
-
         self,
-
         result
-
     ):
 
         Logger.section(
-
             "RISULTATI"
-
         )
 
-        decision = (
-
-            result["decision"]
-
-        )
-
-        signal = (
-
-            result["signal"]
-
-        )
-
-        trade = (
-
-            result["trade"]
-
-        )
+        decision = result["decision"]
+        signal = result["signal"]
+        trade = result["trade"]
 
         print()
 
         print(
-
             "Decisione :",
-
             decision["action"]
-
         )
 
         print(
-
             "Segnale   :",
-
             signal["signal"]
-
         )
 
         print()
 
         print(
-
             "Score     :",
-
             decision["score"]
-
         )
 
         print(
-
             "Confidence:",
-
             decision["confidence"]
-
         )
 
         print()
 
         print(
-
             "Validazione:",
-
             "SI"
-
             if signal["valid"]
-
             else "NO"
-
         )
 
         print()
@@ -851,19 +770,14 @@ class CoreSystem:
         if decision["reasons"]:
 
             print(
-
                 "Motivazioni:"
-
             )
 
             for reason in decision["reasons"]:
 
                 print(
-
                     " -",
-
                     reason
-
                 )
 
             print()
@@ -871,35 +785,23 @@ class CoreSystem:
         if trade:
 
             print(
-
                 "Symbol     :",
-
                 trade["symbol"]
-
             )
 
             print(
-
                 "Entry      :",
-
                 trade["entry"]
-
             )
 
             print(
-
                 "Stop Loss  :",
-
                 trade["stop_loss"]
-
             )
 
             print(
-
                 "Take Profit:",
-
                 trade["take_profit"]
-
             )
 
             print()
@@ -911,9 +813,7 @@ class CoreSystem:
     def print_backtest(self):
 
         Logger.section(
-
             "BACKTEST"
-
         )
 
         stats = self.backtest.run()
@@ -923,7 +823,5 @@ class CoreSystem:
         for key, value in stats.items():
 
             print(
-
                 f"{key:15}: {value}"
-
             )
