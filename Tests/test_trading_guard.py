@@ -153,3 +153,31 @@ if __name__ == "__main__":
     test_consecutive_loss_limit()
 
     print("TEST TRADING GUARD: OK")
+
+def test_historical_day_reset():
+
+    from datetime import date
+
+    guard = TradingGuard(10000.0)
+
+    first_day = date(2025, 1, 2)
+    second_day = date(2025, 1, 3)
+
+    guard.register_trade(
+        -100.0,
+        9900.0,
+        current_day=first_day
+    )
+
+    assert guard.daily_pnl == -100.0
+    assert guard.current_day == first_day
+
+    can_trade, reason = guard.can_trade(
+        9900.0,
+        current_day=second_day
+    )
+
+    assert can_trade is True
+    assert reason is None
+    assert guard.daily_pnl == 0.0
+    assert guard.current_day == second_day

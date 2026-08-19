@@ -17,6 +17,7 @@ from Core.analysis_engine import AnalysisEngine
 from Core.backtest_engine import BacktestEngine
 from Core.position_controller import PositionController
 from Core.portfolio_manager import PortfolioManager
+from Core.trading_guard import TradingGuard
 from Core.market_scanner import MarketScanner
 from Core.live_trading_engine import LiveTradingEngine
 from Core.performance_analytics import PerformanceAnalytics
@@ -43,6 +44,11 @@ class CoreSystem:
         self.execution = ExecutionEngine()
 
         self.backtest = BacktestEngine()
+
+        # Guard dedicato al Backtest.
+        # Il Live Trading mantiene il proprio Guard
+        # all'interno di LiveTradingEngine.
+        self.backtest_guard = None
 
         self.database = DatabaseManager()
 
@@ -276,6 +282,11 @@ class CoreSystem:
 
         self.backtest.reset()
 
+        # Nuova sessione Guard per ogni Backtest.
+        self.backtest_guard = TradingGuard(
+            self.portfolio.get_balance()
+        )
+
         # Ricostruzione del Live Engine con
         # i riferimenti aggiornati.
         self.live_engine = LiveTradingEngine(
@@ -294,7 +305,8 @@ class CoreSystem:
 
     def _register_closed_trade(
         self,
-        closed
+        closed,
+        guard=None
     ):
 
         if closed is None:
@@ -478,6 +490,16 @@ class CoreSystem:
             pnl
         )
 
+        # Trading Guard: nel Backtest utilizziamo
+        # la data storica della chiusura.
+        if guard is not None:
+
+            guard.register_trade(
+                pnl,
+                self.portfolio.get_balance(),
+                current_day=close_time
+            )
+
         self.portfolio.remove(
             trade["symbol"]
         )
@@ -508,7 +530,8 @@ class CoreSystem:
             return None
 
         return self._register_closed_trade(
-            closed
+            closed,
+            guard=self.backtest_guard
         )
 
     # =====================================
@@ -600,7 +623,8 @@ class CoreSystem:
                 ):
 
                     self._register_closed_trade(
-                        closed
+                        closed,
+                        guard=self.backtest_guard
                     )
 
             # =================================
@@ -608,6 +632,22 @@ class CoreSystem:
             # =================================
 
             if not self.position_controller.has_position():
+
+                can_trade, guard_reason = (
+                    self.backtest_guard.can_trade(
+                        self.portfolio.get_balance(),
+                        current_day=candle_time
+                    )
+                )
+
+                if not can_trade:
+
+                    Logger.warning(
+                        "Backtest fermato dal Trading Guard: "
+                        f"{guard_reason}"
+                    )
+
+                    break
 
                 result_analysis = (
                     self.analysis.analyze(

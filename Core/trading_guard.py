@@ -40,9 +40,20 @@ class TradingGuard:
     # NUOVO GIORNO
     # =====================================
 
-    def _check_new_day(self, current_balance):
+    def _check_new_day(
+        self,
+        current_balance,
+        current_day=None
+    ):
 
-        today = date.today()
+        if current_day is None:
+            today = date.today()
+
+        elif hasattr(current_day, "date"):
+            today = current_day.date()
+
+        else:
+            today = current_day
 
         if today != self.current_day:
 
@@ -60,9 +71,17 @@ class TradingGuard:
     # REGISTRA UN TRADE CHIUSO
     # =====================================
 
-    def register_trade(self, pnl, current_balance):
+    def register_trade(
+        self,
+        pnl,
+        current_balance,
+        current_day=None
+    ):
 
-        self._check_new_day(current_balance)
+        self._check_new_day(
+            current_balance,
+            current_day
+        )
 
         self.daily_pnl += float(pnl)
 
@@ -83,9 +102,16 @@ class TradingGuard:
     # SI PUO' ANCORA OPERARE?
     # =====================================
 
-    def can_trade(self, current_balance):
+    def can_trade(
+        self,
+        current_balance,
+        current_day=None
+    ):
 
-        self._check_new_day(current_balance)
+        self._check_new_day(
+            current_balance,
+            current_day
+        )
 
         if self.day_start_balance > 0:
 
