@@ -1,0 +1,5429 @@
+================================================================================
+PROJECT PHOENIX AI - AUDIT COMPLETO DEL PROGETTO
+================================================================================
+
+
+### 1. GIT STATUS ###
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	Core/exit_manager.py.bak
+	Execution/execution_engine.py.bak
+	PHOENIX_FULL_PROJECT_DUMP.txt
+	create_phoenix_audit.py
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+
+### 2. ULTIMI 20 COMMIT ###
+bc25a62 (HEAD -> main, origin/main, origin/HEAD) Fix exit management and execution close contract
+9ef9347 (tag: PHOENIX_STATE_2026-08-19_FINAL) CHECKPOINT: Phoenix AI current integrated state
+dd0f81a DOCS: create Phoenix Master State
+b47aa39 (tag: PHOENIX_CHECKPOINT_2026-08-19) CHECKPOINT: Phoenix AI state before final integration
+31ff13e Phoenix AI checkpoint MT5 position management
+6402a90 Add Phoenix position decision pipeline
+9e8e1e0 Add Phoenix position risk guard
+6c53f72 Add Phoenix position action evaluation
+3de8047 Add Phoenix position action layer
+08e7cb7 Add Phoenix position metrics
+aed92a9 Add Phoenix position state engine
+8879142 Add Phoenix position protection check
+b5033c9 Add Phoenix SL TP status monitoring
+803afcc Add Phoenix position monitoring
+585bef6 Add Phoenix Position Manager
+1668fea Add Phoenix position close execution
+c41055d Fix MT5 risk based volume and max volume protection
+3ea7ee6 Checkpoint Phoenix AI - MT5 risk sizing investigation
+0997c66 Backup completo Phoenix AI - 2026-08-14
+e6c140e Checkpoint Phoenix AI risk and MT5 execution
+
+
+### 3. TAG ###
+PHOENIX_STATE_2026-08-19_FINAL
+PHOENIX_CHECKPOINT_2026-08-19
+v0.1-stable
+
+
+
+### 4. STRUTTURA COMPLETA FILE ###
+.gitignore
+AI\__init__.py
+AI\main.py
+audit_dependencies.py
+audit_modules.py
+Config\__init__.py
+Config\mt5_credentials.example.py
+Config\mt5_credentials.py
+Config\settings.py
+Core\analysis_engine.py
+Core\backtest_engine.py
+Core\calmar_ratio.py
+Core\core_system.py
+Core\equity_curve.py
+Core\exit_manager.py
+Core\exit_manager.py.bak
+Core\kelly_criterion.py
+Core\live_trading_engine.py
+Core\market_analyzer.py
+Core\market_scanner.py
+Core\monthly_statistics.py
+Core\omega_ratio.py
+Core\payoff_ratio.py
+Core\performance_analytics.py
+Core\performance_analytics_calculator.py
+Core\performance_analytics_report.py
+Core\performance_report.py
+Core\phoenix_brain.py
+Core\phoenix_brain_logic.py
+Core\portfolio_manager.py
+Core\position_controller.py
+Core\position_manager.py
+Core\position_monitor.py
+Core\profit_to_drawdown.py
+Core\recovery_factor.py
+Core\report_csv.py
+Core\report_exporter.py
+Core\report_factory.py
+Core\report_formats.py
+Core\report_html.py
+Core\report_json.py
+Core\report_pdf.py
+Core\report_service.py
+Core\report_statistics.py
+Core\risk_drawdown.py
+Core\risk_limits.py
+Core\risk_manager.py
+Core\risk_position_size.py
+Core\risk_statistics.py
+Core\sharpe_ratio.py
+Core\signal_manager.py
+Core\smart_money.py
+Core\smart_money_fvg.py
+Core\smart_money_liquidity.py
+Core\smart_money_orderblocks.py
+Core\smart_money_structure.py
+Core\sortino_ratio.py
+Core\symbol_statistics.py
+Core\timeframe_statistics.py
+Core\trade_builder.py
+Core\trade_manager.py
+Core\trade_report.py
+Core\trade_statistics.py
+Core\trading_guard.py
+Core\ulcer_index.py
+Core\win_loss_ratio.py
+create_phoenix_audit.py
+Data\__init__.py
+Data\candle_manager.py
+Data\Indicators\__init__.py
+Data\Indicators\adx.py
+Data\Indicators\atr.py
+Data\Indicators\bollinger.py
+Data\Indicators\Documentation\BRAIN_INTERFACE.md
+Data\Indicators\Documentation\PHOENIX_BRAIN.md
+Data\Indicators\ema.py
+Data\Indicators\indicator_manager.py
+Data\Indicators\macd.py
+Data\Indicators\PHOENIX_MASTER.md
+Data\Indicators\rsi.py
+Data\Indicators\sma.py
+Data\Indicators\stochastic.py
+Data\Indicators\volume.py
+Data\market_data.py
+Data\market_provider.py
+Data\price_manager.py
+Data\PROJECT_STATUS.md
+Data\symbols.py
+Data\yfinance_provider.py
+Database\__init__.py
+Database\database_manager.py
+Docs\001_Project_Vision.md
+Docs\002_System_Architecture.md
+Docs\003_Decision_Engine.md
+Docs\00_PROJECT_BOOK.md
+Docs\01_SPRINTS.md
+Docs\Docs\02_DECISIONI_PROGETTUALI.md
+Docs\Docs\Docs\03_ROADMAP.md
+Docs\Docs\Docs\Docs\04_ARCHITETTURA.md
+Docs\Docs\Docs\Docs\Docs\05_CHANGELOG.md
+Docs\Docs\Docs\Docs\Docs\06_TODO.md
+Docs\TRADE_LIFECYCLE.md
+Execution\execution_builder.py
+Execution\execution_engine.py
+Execution\execution_engine.py.bak
+Execution\execution_report.py
+Execution\execution_validator.py
+Execution\mt5_broker.py
+find_symbol.py
+Logs\logger.py
+MT5_Bridge\INSTALLA_MT5_BRIDGE.txt
+MT5_Bridge\mt5_bridge.py
+MT5_Bridge\mt5_execution.py
+MT5_Bridge\mt5_execution_backup.txt
+MT5_Bridge\mt5_execution_before_risk_fix.py
+MT5_Bridge\mt5_execution_recovered.py
+MT5_Bridge\mt5_execution_recovered_before_protect.py
+MT5_Bridge\run_mt5_phoenix.py
+performance_report.csv
+performance_report.html
+performance_report.json
+performance_report.pdf
+performance_report.txt
+phoenix_ai.db
+PHOENIX_FULL_PROJECT_DUMP.txt
+PHOENIX_MASTER_STATE.md
+Position_Manager\position_manager.py
+Position_Manager\position_manager_before_protect_bridge.py
+Position_Manager\position_manager_before_protect_bridge_v2.py
+README.md
+run.py
+run_phoenix_live_demo.py
+Tests\find_symbol.py
+Tests\run_all_tests.py
+Tests\test_analysis.py
+Tests\test_backtest.py
+Tests\test_core.py
+Tests\test_end_to_end.py
+Tests\test_execution.py
+Tests\test_exit_manager.py
+Tests\test_indicators.py
+Tests\test_market.py
+Tests\test_mt5_connection.py
+Tests\test_position_controller.py
+Tests\test_position_cycle.py
+Tests\test_position_manager.py
+Tests\test_position_monitor.py
+Tests\test_risk.py
+Tests\test_signal.py
+Tests\test_trade_builder.py
+Tests\test_trade_manager.py
+Tests\test_trading_guard.py
+
+
+### 5. PHOENIX MASTER STATE ###
+# PROJECT PHOENIX AI
+# PHOENIX MASTER STATE
+# Versione 1.0
+# Data: 2026-08-19
+
+---
+
+# 1. IDENTITÀ DEL PROGETTO
+
+PROJECT PHOENIX AI non è un semplice Expert Advisor basato su indicatori.
+
+Obiettivo finale:
+
+costruire un vero SISTEMA OPERATIVO DI TRADING BASATO SU IA.
+
+Il sistema deve essere capace di:
+
+- acquisire dati di mercato;
+- analizzare il mercato;
+- utilizzare indicatori tecnici;
+- analizzare struttura e Smart Money;
+- generare segnali;
+- valutare il rischio;
+- costruire il trade;
+- eseguire ordini;
+- aprire posizioni;
+- monitorare posizioni;
+- modificare la gestione della posizione;
+- applicare Stop Loss e Take Profit;
+- applicare Break Even e Trailing Stop;
+- chiudere posizioni;
+- calcolare PnL;
+- registrare i trade;
+- aggiornare il capitale;
+- effettuare backtest;
+- effettuare Paper Trading;
+- supportare MT5;
+- supportare successivamente Live Trading;
+- produrre statistiche e report.
+
+Il sistema deve essere modulare, estendibile e progressivamente autonomo.
+
+---
+
+# 2. STATO DEL PROGETTO
+
+STATO GENERALE:
+
+INTEGRAZIONE AVANZATA / FASE DI STABILIZZAZIONE FINALE
+
+Il progetto possiede già una struttura significativa.
+
+NON ripartire da zero.
+
+NON ricostruire i moduli già esistenti senza necessità.
+
+Il lavoro futuro deve partire dallo stato GitHub:
+
+COMMIT:
+b47aa39
+
+TAG:
+PHOENIX_CHECKPOINT_2026-08-19
+
+BACKUP LOCALE:
+
+C:\ProjectPhoenixAI_BACKUP_2026-08-19
+
+---
+
+# 3. CONFIGURAZIONE CENTRALE
+
+File:
+
+Config/settings.py
+
+Versione:
+
+8.0
+
+Configurazione attuale principale:
+
+APP_NAME = "PROJECT PHOENIX AI"
+
+VERSION = "0.0.1"
+
+MODE = "DEMO"
+
+SYMBOL = "BTC-USD"
+
+MT5_SYMBOL = "BTCUSD"
+
+PERIOD = "5d"
+
+INTERVAL = "1h"
+
+START_BALANCE = 10000
+
+MAX_RISK = 1.0
+
+MIN_CONFIDENCE = 60
+
+STOP_LOSS_ATR = 1.5
+
+TAKE_PROFIT_ATR = 3.0
+
+MAX_DAILY_LOSS_PERCENT = 3.0
+
+MAX_CONSECUTIVE_LOSSES = 4
+
+COMMISSION = 0.001
+
+SLIPPAGE = 0.0
+
+Config/settings.py è considerato la fonte centrale della configurazione.
+
+---
+
+# 4. PIPELINE PRINCIPALE
+
+Il pipeline logico di Phoenix è:
+
+MARKET DATA
+    ↓
+CANDLES
+    ↓
+INDICATORS
+    ↓
+MARKET ANALYSIS
+    ↓
+SMART MONEY
+    ↓
+PHOENIX BRAIN
+    ↓
+SIGNAL MANAGER
+    ↓
+RISK MANAGER
+    ↓
+TRADE BUILDER
+    ↓
+EXECUTION
+    ↓
+POSITION CONTROLLER
+    ↓
+POSITION MONITOR
+    ↓
+EXIT MANAGER
+    ↓
+CLOSE
+    ↓
+TRADE REPORT
+    ↓
+DATABASE
+    ↓
+PORTFOLIO
+    ↓
+TRADING GUARD
+    ↓
+PERFORMANCE ANALYTICS
+    ↓
+REPORTING
+
+---
+
+# 5. MARKET DATA
+
+Componenti presenti:
+
+- Market Provider
+- Yahoo Finance Provider
+- Market Data Manager
+- Candle Manager
+- Symbols Manager
+- Market Scanner
+
+Il sistema è stato verificato con:
+
+ETH-USD
+
+e ha ricevuto:
+
+106 candele
+
+periodo:
+
+5d
+
+intervallo:
+
+1h
+
+---
+
+# 6. ANALYSIS ENGINE
+
+Presente:
+
+Core/analysis_engine.py
+
+Versione osservata:
+
+9
+
+Componenti:
+
+- Indicator Manager
+- Market Analyzer
+- Smart Money
+- Phoenix Brain
+- Signal Manager
+- Risk Manager
+- Trade Manager
+
+Il sistema ha già prodotto un esempio reale di:
+
+STRONG BUY
+
+e ha costruito:
+
+BUY ETH-USD
+
+con size:
+
+15.57
+
+---
+
+# 7. INDICATOR ENGINE
+
+Indicator Manager presente.
+
+Indicatori presenti:
+
+- EMA
+- SMA
+- RSI
+- MACD
+- ATR
+- ADX
+- Bollinger Bands
+
+---
+
+# 8. SMART MONEY
+
+Componenti presenti:
+
+Smart Money
+
+Smart Money Structure
+
+Smart Money FVG
+
+Smart Money Order Blocks
+
+Smart Money Liquidity
+
+Versioni osservate:
+
+Smart Money V13
+
+Structure V4
+
+FVG V2
+
+Order Blocks V2
+
+Liquidity V2
+
+---
+
+# 9. PHOENIX BRAIN
+
+Componenti presenti:
+
+Phoenix Brain
+
+Phoenix Brain Logic
+
+Versioni osservate:
+
+Phoenix Brain V10
+
+Phoenix Brain Logic V4
+
+---
+
+# 10. SIGNAL MANAGER
+
+Presente.
+
+Versione osservata:
+
+Signal Manager V10
+
+Il sistema ha già validato:
+
+STRONG BUY
+
+---
+
+# 11. RISK MANAGEMENT
+
+Presente:
+
+Risk Manager
+
+Risk Limits
+
+Risk Drawdown
+
+Trading Guard
+
+Versioni osservate:
+
+Risk Manager V11
+
+Risk Limits V1
+
+Risk Drawdown V1
+
+Trading Guard V1
+
+Protections:
+
+MAX_DAILY_LOSS_PERCENT = 3.0
+
+MAX_CONSECUTIVE_LOSSES = 4
+
+---
+
+# 12. TRADE MANAGER
+
+File:
+
+Core/trade_manager.py
+
+Versione:
+
+12.0
+
+Componenti:
+
+- RiskManager
+- TradeBuilder
+- TradeReport
+
+Funzione principale:
+
+generate_trade()
+
+Responsabilità:
+
+- ricevere signal;
+- utilizzare risk manager;
+- costruire trade;
+- produrre report.
+
+---
+
+# 13. POSITION CONTROLLER
+
+File:
+
+Core/position_controller.py
+
+Versione:
+
+12.5
+
+Componenti:
+
+- PositionMonitor
+- ExitManager
+
+Gestisce:
+
+- apertura posizione;
+- aggiornamento;
+- monitoraggio;
+- PnL;
+- Stop Loss;
+- Take Profit;
+- Break Even;
+- Trailing Stop;
+- chiusura;
+- motivo chiusura;
+- timestamp;
+- posizione attiva.
+
+La posizione contiene:
+
+symbol
+side
+entry
+initial_stop_loss
+stop_loss
+take_profit
+size
+status
+open_time
+close_time
+close_reason
+current_price
+current_profit
+max_profit
+break_even
+trailing_stop
+
+È stato verificato il ciclo:
+
+OPEN
+→ UPDATE
+→ CLOSE
+
+Il PnL viene calcolato in base a:
+
+BUY:
+(exit - entry) * size
+
+SELL:
+(entry - exit) * size
+
+---
+
+# 14. POSITION MONITOR
+
+Presente:
+
+Core/position_monitor.py
+
+Responsabilità:
+
+aggiornare:
+
+- current_price
+- current_profit
+- max_profit
+
+e supportare la gestione dinamica della posizione.
+
+---
+
+# 15. EXIT MANAGER
+
+Presente:
+
+Core/exit_manager.py
+
+Responsabilità:
+
+valutare condizioni di uscita.
+
+Possibili motivi:
+
+- STOP LOSS
+- TAKE PROFIT
+- BREAK EVEN
+- TRAILING STOP
+- MANUALE / altro
+
+---
+
+# 16. PORTFOLIO MANAGER
+
+File:
+
+Core/portfolio_manager.py
+
+Versione:
+
+2.0
+
+Gestisce:
+
+- balance;
+- positions;
+- equity;
+- profitto corrente;
+- esposizione;
+- aggiunta posizione;
+- rimozione posizione;
+- aggiornamento posizione.
+
+START_BALANCE:
+
+10000
+
+Il portfolio viene aggiornato quando una posizione viene aperta e quando viene chiusa.
+
+---
+
+# 17. BACKTEST ENGINE
+
+File:
+
+Core/backtest_engine.py
+
+Versione:
+
+12.0
+
+Gestisce:
+
+- storico trade;
+- numero trade;
+- BUY;
+- SELL;
+- wins;
+- losses;
+- win rate;
+- gross profit;
+- gross loss;
+- net profit;
+- capital;
+- ROI;
+- profit factor;
+- max drawdown;
+- activity;
+- market bias.
+
+È già presente una correzione importante:
+
+activity non viene più calcolata come:
+
+(BUY + SELL) / total * 100
+
+perché avrebbe prodotto quasi sempre 100%.
+
+Ora viene calcolata in rapporto alle candele realmente analizzate.
+
+---
+
+# 18. DATABASE
+
+File:
+
+Database/database_manager.py
+
+Versione:
+
+6.0
+
+Database:
+
+SQLite
+
+Tabella:
+
+trades
+
+Campi:
+
+id
+symbol
+side
+entry
+exit
+stop_loss
+take_profit
+pnl
+status
+reason
+open_time
+close_time
+duration
+result
+risk_reward
+
+Funzioni disponibili:
+
+save_trade()
+load_trades()
+count()
+wins()
+losses()
+breakeven()
+total_profit()
+gross_profit()
+gross_loss()
+best_trade()
+worst_trade()
+average_profit()
+profit_factor()
+win_rate()
+reset()
+close()
+
+IMPORTANTE:
+
+DatabaseManager NON si trova in:
+
+Core/database_manager.py
+
+Si trova in:
+
+Database/database_manager.py
+
+Questo percorso deve essere mantenuto oppure uniformato successivamente senza rompere gli import.
+
+---
+
+# 19. EXECUTION ENGINE
+
+File:
+
+Execution/execution_engine.py
+
+Versione:
+
+9.0
+
+Supporta:
+
+- Paper Trading;
+- Execution Validator;
+- Execution Builder;
+- Execution Report;
+- MT5 Bridge;
+- DRY RUN;
+- apertura;
+- chiusura.
+
+Configurazione:
+
+mt5_enabled=False
+
+mt5_dry_run=True
+
+Paper Trading è attualmente il percorso principale verificato.
+
+---
+
+# 20. MT5 BRIDGE
+
+File principale:
+
+MT5_Bridge/mt5_execution_recovered.py
+
+Supporta:
+
+- connessione MT5;
+- apertura ordine;
+- modifica SL/TP;
+- chiusura posizione;
+- DRY RUN;
+- order_check;
+- order_send;
+- BUY;
+- SELL.
+
+La logica di chiusura è:
+
+BUY → SELL
+
+SELL → BUY
+
+con prezzo:
+
+BUY close → BID
+
+SELL close → ASK
+
+---
+
+# 21. LIVE TRADING ENGINE
+
+File:
+
+Core/live_trading_engine.py
+
+Versione osservata:
+
+5.2
+
+Comportamento attuale:
+
+Se non esiste una posizione:
+
+1. scarica dati;
+2. ottiene prezzo;
+3. controlla Trading Guard;
+4. analizza;
+5. genera signal;
+6. costruisce trade;
+7. esegue;
+8. apre posizione;
+9. registra nel Portfolio.
+
+Se esiste una posizione:
+
+1. recupera prezzo corrente;
+2. aggiorna Position Controller;
+3. aggiorna Portfolio;
+4. verifica chiusura;
+5. registra trade chiuso;
+6. aggiorna database;
+7. aggiorna backtest;
+8. aggiorna balance;
+9. aggiorna Trading Guard.
+
+Questo evita di scaricare inutilmente tutte le candele durante la gestione di una posizione già aperta.
+
+---
+
+# 22. TRADE CLOSE PIPELINE
+
+Quando una posizione viene chiusa:
+
+1. viene calcolato il prezzo finale;
+2. viene calcolato il PnL;
+3. viene determinato il motivo;
+4. viene calcolata la durata;
+5. viene calcolato Risk/Reward;
+6. viene creato il record trade;
+7. viene salvato nel Database;
+8. viene aggiunto al Backtest Engine;
+9. viene aggiornato il Portfolio balance;
+10. viene aggiornato Trading Guard;
+11. viene rimossa la posizione dal Portfolio.
+
+---
+
+# 23. PERFORMANCE ANALYTICS
+
+Presenti:
+
+- Equity Curve
+- Risk Statistics
+- Trade Statistics
+- Monthly Statistics
+- Symbol Statistics
+- Timeframe Statistics
+- Sharpe Ratio
+- Sortino Ratio
+- Calmar Ratio
+- Recovery Factor
+- Ulcer Index
+- Omega Ratio
+- Profit to Drawdown
+- Kelly Criterion
+- Payoff Ratio
+- Win Loss Ratio
+
+---
+
+# 24. REPORTING
+
+Presenti:
+
+- Performance Report
+- Report Statistics
+- Report Service
+- Report Factory
+- Report Exporter
+- CSV
+- JSON
+- HTML
+- PDF
+- Report Formats
+
+---
+
+# 25. MARKET SCANNER
+
+Presente:
+
+Market Scanner V2
+
+Watchlist:
+
+12 strumenti
+
+---
+
+# 26. CORE SYSTEM
+
+Presente:
+
+Core System V20
+
+Responsabile dell'integrazione dei principali moduli Phoenix.
+
+Il Core è già riuscito ad avviare Live Trading.
+
+Esempio verificato:
+
+ETH-USD
+
+Prezzo:
+
+1921.6700439453125
+
+Segnale:
+
+STRONG BUY
+
+Trade:
+
+BUY ETH-USD
+
+Size:
+
+15.57
+
+Esecuzione:
+
+Paper Trading
+
+Posizione:
+
+OPEN
+
+Portfolio:
+
+registrato
+
+---
+
+# 27. TEST GIÀ ESEGUITI
+
+È stato verificato:
+
+PositionController:
+
+OPEN
+→ UPDATE
+→ CLOSE
+
+Esempio:
+
+entry = 100
+
+SL = 95
+
+TP = 110
+
+size = 1
+
+update = 102
+
+close = 105
+
+PnL finale:
+
++5
+
+È stato verificato anche:
+
+Integration Import Test
+
+con:
+
+DatabaseManager OK
+
+BacktestEngine OK
+
+PortfolioManager OK
+
+PositionController OK
+
+ExecutionEngine OK
+
+---
+
+# 28. GIT / BACKUP
+
+Repository:
+
+ProjectPhoenixAI
+
+Branch:
+
+main
+
+Checkpoint:
+
+b47aa39
+
+Tag:
+
+PHOENIX_CHECKPOINT_2026-08-19
+
+Tag precedente:
+
+v0.1-stable
+
+Backup locale:
+
+C:\ProjectPhoenixAI_BACKUP_2026-08-19
+
+Il checkpoint è stato pubblicato su origin/main.
+
+Il tag checkpoint è stato pubblicato su origin.
+
+NON cancellare il backup.
+
+NON modificare il checkpoint.
+
+---
+
+# 29. PROBLEMI NOTI / DA RISOLVERE
+
+## PROBLEMA 1 — ExecutionEngine.close()
+
+Nel codice attuale esiste una struttura errata nel dizionario di ritorno della chiusura MT5.
+
+Deve essere verificato/corretto il campo:
+
+dry_run
+
+La struttura corretta deve essere:
+
+"dry_run": result.get(
+    "dry_run",
+    self.mt5_dry_run
+)
+
+e non un valore senza chiave.
+
+---
+
+## PROBLEMA 2 — CONTRATTI TRA MODULI
+
+Devono essere uniformati i contratti:
+
+Trade
+Order
+Position
+Closed Trade
+Execution Result
+Report
+
+senza rompere il Core esistente.
+
+---
+
+## PROBLEMA 3 — PAPER vs MT5
+
+Deve essere garantito che:
+
+PAPER TRADING
+
+e
+
+MT5
+
+utilizzino lo stesso contratto logico.
+
+Il Core non deve conoscere dettagli specifici del broker.
+
+---
+
+## PROBLEMA 4 — CHIUSURA MT5
+
+La chiusura MT5 deve essere integrata correttamente con:
+
+Position Controller
+Portfolio
+Database
+Trading Guard
+Performance Analytics
+
+---
+
+## PROBLEMA 5 — GESTIONE POSIZIONI
+
+Occorre completare e stabilizzare:
+
+- Break Even;
+- Trailing Stop;
+- modifica SL;
+- sincronizzazione Portfolio;
+- sincronizzazione MT5;
+- protezione da doppia chiusura.
+
+---
+
+## PROBLEMA 6 — BACKTEST
+
+Il Backtest Engine esiste, ma deve essere collegato definitivamente al ciclo storico completo.
+
+Obiettivo:
+
+Candele
+→ Analisi
+→ Signal
+→ Risk
+→ Trade
+→ Position
+→ Exit
+→ PnL
+→ Statistics
+
+---
+
+## PROBLEMA 7 — DATABASE
+
+Il Database Manager esiste e deve diventare il registro persistente ufficiale dei trade chiusi.
+
+---
+
+## PROBLEMA 8 — LIVE TRADING
+
+Prima del LIVE reale deve essere completato:
+
+Paper Trading
+→ MT5 DRY RUN
+→ MT5 DEMO
+→ MT5 LIVE
+
+senza saltare livelli.
+
+---
+
+# 30. ARCHITETTURA FINALE DESIDERATA
+
+PROJECT PHOENIX AI deve arrivare a:
+
+DATA INTELLIGENCE
++
+MARKET INTELLIGENCE
++
+NEWS INTELLIGENCE
++
+SENTIMENT AI
++
+TECHNICAL AI
++
+PATTERN RECOGNITION
++
+SMART MONEY
++
+RISK AI
++
+DECISION AI
++
+EXECUTION
++
+POSITION MANAGEMENT
++
+PORTFOLIO
++
+BACKTEST
++
+PAPER TRADING
++
+LIVE TRADING
++
+PERFORMANCE ANALYTICS
++
+DATABASE
++
+REPORTING
+
+---
+
+# 31. REGOLA DI SVILUPPO
+
+NON ricominciare da zero.
+
+NON sostituire moduli funzionanti senza motivo.
+
+NON duplicare funzionalità.
+
+NON introdurre configurazioni duplicate.
+
+Ogni modifica deve:
+
+1. preservare il funzionamento esistente;
+2. migliorare l'integrazione;
+3. mantenere compatibilità;
+4. essere salvata in Git;
+5. essere documentata nel MASTER STATE quando cambia l'architettura.
+
+---
+
+# 32. ORDINE DELLE PROSSIME FASI
+
+FASE A
+Stabilizzazione Execution Engine.
+
+FASE B
+Stabilizzazione ciclo completo Position → Close.
+
+FASE C
+Integrazione Database + Portfolio + Guard.
+
+FASE D
+Backtest end-to-end.
+
+FASE E
+Paper Trading end-to-end.
+
+FASE F
+MT5 DRY RUN.
+
+FASE G
+MT5 DEMO.
+
+FASE H
+Performance e Reporting finale.
+
+FASE I
+Live Trading controllato.
+
+FASE L
+Espansione AI:
+
+- News Intelligence
+- Sentiment AI
+- Decision AI avanzata
+- Pattern Recognition avanzata
+- Market Regime Detection
+- Adaptive Risk
+- Multi-market intelligence
+
+---
+
+# 33. OBIETTIVO RELEASE
+
+La prima release completa deve essere:
+
+PROJECT PHOENIX AI
+
+Trading Operating System
+
+con:
+
+DATA
+→ INTELLIGENCE
+→ DECISION
+→ RISK
+→ EXECUTION
+→ POSITION
+→ PORTFOLIO
+→ PERFORMANCE
+
+completamente integrati.
+
+---
+
+# 34. STATO MASTER
+
+Questo file diventa il riferimento ufficiale dello stato del progetto a partire dal:
+
+2026-08-19
+
+Checkpoint precedente:
+
+PHOENIX_CHECKPOINT_2026-08-19
+
+Prossimo obiettivo:
+
+FINAL INTEGRATION
+
+
+### 6. DOCUMENTAZIONE PRINCIPALE ###
+
+--- README.md ---
+
+
+
+--- PHOENIX_MASTER_STATE.md ---
+# PROJECT PHOENIX AI
+# PHOENIX MASTER STATE
+# Versione 1.0
+# Data: 2026-08-19
+
+---
+
+# 1. IDENTITÀ DEL PROGETTO
+
+PROJECT PHOENIX AI non è un semplice Expert Advisor basato su indicatori.
+
+Obiettivo finale:
+
+costruire un vero SISTEMA OPERATIVO DI TRADING BASATO SU IA.
+
+Il sistema deve essere capace di:
+
+- acquisire dati di mercato;
+- analizzare il mercato;
+- utilizzare indicatori tecnici;
+- analizzare struttura e Smart Money;
+- generare segnali;
+- valutare il rischio;
+- costruire il trade;
+- eseguire ordini;
+- aprire posizioni;
+- monitorare posizioni;
+- modificare la gestione della posizione;
+- applicare Stop Loss e Take Profit;
+- applicare Break Even e Trailing Stop;
+- chiudere posizioni;
+- calcolare PnL;
+- registrare i trade;
+- aggiornare il capitale;
+- effettuare backtest;
+- effettuare Paper Trading;
+- supportare MT5;
+- supportare successivamente Live Trading;
+- produrre statistiche e report.
+
+Il sistema deve essere modulare, estendibile e progressivamente autonomo.
+
+---
+
+# 2. STATO DEL PROGETTO
+
+STATO GENERALE:
+
+INTEGRAZIONE AVANZATA / FASE DI STABILIZZAZIONE FINALE
+
+Il progetto possiede già una struttura significativa.
+
+NON ripartire da zero.
+
+NON ricostruire i moduli già esistenti senza necessità.
+
+Il lavoro futuro deve partire dallo stato GitHub:
+
+COMMIT:
+b47aa39
+
+TAG:
+PHOENIX_CHECKPOINT_2026-08-19
+
+BACKUP LOCALE:
+
+C:\ProjectPhoenixAI_BACKUP_2026-08-19
+
+---
+
+# 3. CONFIGURAZIONE CENTRALE
+
+File:
+
+Config/settings.py
+
+Versione:
+
+8.0
+
+Configurazione attuale principale:
+
+APP_NAME = "PROJECT PHOENIX AI"
+
+VERSION = "0.0.1"
+
+MODE = "DEMO"
+
+SYMBOL = "BTC-USD"
+
+MT5_SYMBOL = "BTCUSD"
+
+PERIOD = "5d"
+
+INTERVAL = "1h"
+
+START_BALANCE = 10000
+
+MAX_RISK = 1.0
+
+MIN_CONFIDENCE = 60
+
+STOP_LOSS_ATR = 1.5
+
+TAKE_PROFIT_ATR = 3.0
+
+MAX_DAILY_LOSS_PERCENT = 3.0
+
+MAX_CONSECUTIVE_LOSSES = 4
+
+COMMISSION = 0.001
+
+SLIPPAGE = 0.0
+
+Config/settings.py è considerato la fonte centrale della configurazione.
+
+---
+
+# 4. PIPELINE PRINCIPALE
+
+Il pipeline logico di Phoenix è:
+
+MARKET DATA
+    ↓
+CANDLES
+    ↓
+INDICATORS
+    ↓
+MARKET ANALYSIS
+    ↓
+SMART MONEY
+    ↓
+PHOENIX BRAIN
+    ↓
+SIGNAL MANAGER
+    ↓
+RISK MANAGER
+    ↓
+TRADE BUILDER
+    ↓
+EXECUTION
+    ↓
+POSITION CONTROLLER
+    ↓
+POSITION MONITOR
+    ↓
+EXIT MANAGER
+    ↓
+CLOSE
+    ↓
+TRADE REPORT
+    ↓
+DATABASE
+    ↓
+PORTFOLIO
+    ↓
+TRADING GUARD
+    ↓
+PERFORMANCE ANALYTICS
+    ↓
+REPORTING
+
+---
+
+# 5. MARKET DATA
+
+Componenti presenti:
+
+- Market Provider
+- Yahoo Finance Provider
+- Market Data Manager
+- Candle Manager
+- Symbols Manager
+- Market Scanner
+
+Il sistema è stato verificato con:
+
+ETH-USD
+
+e ha ricevuto:
+
+106 candele
+
+periodo:
+
+5d
+
+intervallo:
+
+1h
+
+---
+
+# 6. ANALYSIS ENGINE
+
+Presente:
+
+Core/analysis_engine.py
+
+Versione osservata:
+
+9
+
+Componenti:
+
+- Indicator Manager
+- Market Analyzer
+- Smart Money
+- Phoenix Brain
+- Signal Manager
+- Risk Manager
+- Trade Manager
+
+Il sistema ha già prodotto un esempio reale di:
+
+STRONG BUY
+
+e ha costruito:
+
+BUY ETH-USD
+
+con size:
+
+15.57
+
+---
+
+# 7. INDICATOR ENGINE
+
+Indicator Manager presente.
+
+Indicatori presenti:
+
+- EMA
+- SMA
+- RSI
+- MACD
+- ATR
+- ADX
+- Bollinger Bands
+
+---
+
+# 8. SMART MONEY
+
+Componenti presenti:
+
+Smart Money
+
+Smart Money Structure
+
+Smart Money FVG
+
+Smart Money Order Blocks
+
+Smart Money Liquidity
+
+Versioni osservate:
+
+Smart Money V13
+
+Structure V4
+
+FVG V2
+
+Order Blocks V2
+
+Liquidity V2
+
+---
+
+# 9. PHOENIX BRAIN
+
+Componenti presenti:
+
+Phoenix Brain
+
+Phoenix Brain Logic
+
+Versioni osservate:
+
+Phoenix Brain V10
+
+Phoenix Brain Logic V4
+
+---
+
+# 10. SIGNAL MANAGER
+
+Presente.
+
+Versione osservata:
+
+Signal Manager V10
+
+Il sistema ha già validato:
+
+STRONG BUY
+
+---
+
+# 11. RISK MANAGEMENT
+
+Presente:
+
+Risk Manager
+
+Risk Limits
+
+Risk Drawdown
+
+Trading Guard
+
+Versioni osservate:
+
+Risk Manager V11
+
+Risk Limits V1
+
+Risk Drawdown V1
+
+Trading Guard V1
+
+Protections:
+
+MAX_DAILY_LOSS_PERCENT = 3.0
+
+MAX_CONSECUTIVE_LOSSES = 4
+
+---
+
+# 12. TRADE MANAGER
+
+File:
+
+Core/trade_manager.py
+
+Versione:
+
+12.0
+
+Componenti:
+
+- RiskManager
+- TradeBuilder
+- TradeReport
+
+Funzione principale:
+
+generate_trade()
+
+Responsabilità:
+
+- ricevere signal;
+- utilizzare risk manager;
+- costruire trade;
+- produrre report.
+
+---
+
+# 13. POSITION CONTROLLER
+
+File:
+
+Core/position_controller.py
+
+Versione:
+
+12.5
+
+Componenti:
+
+- PositionMonitor
+- ExitManager
+
+Gestisce:
+
+- apertura posizione;
+- aggiornamento;
+- monitoraggio;
+- PnL;
+- Stop Loss;
+- Take Profit;
+- Break Even;
+- Trailing Stop;
+- chiusura;
+- motivo chiusura;
+- timestamp;
+- posizione attiva.
+
+La posizione contiene:
+
+symbol
+side
+entry
+initial_stop_loss
+stop_loss
+take_profit
+size
+status
+open_time
+close_time
+close_reason
+current_price
+current_profit
+max_profit
+break_even
+trailing_stop
+
+È stato verificato il ciclo:
+
+OPEN
+→ UPDATE
+→ CLOSE
+
+Il PnL viene calcolato in base a:
+
+BUY:
+(exit - entry) * size
+
+SELL:
+(entry - exit) * size
+
+---
+
+# 14. POSITION MONITOR
+
+Presente:
+
+Core/position_monitor.py
+
+Responsabilità:
+
+aggiornare:
+
+- current_price
+- current_profit
+- max_profit
+
+e supportare la gestione dinamica della posizione.
+
+---
+
+# 15. EXIT MANAGER
+
+Presente:
+
+Core/exit_manager.py
+
+Responsabilità:
+
+valutare condizioni di uscita.
+
+Possibili motivi:
+
+- STOP LOSS
+- TAKE PROFIT
+- BREAK EVEN
+- TRAILING STOP
+- MANUALE / altro
+
+---
+
+# 16. PORTFOLIO MANAGER
+
+File:
+
+Core/portfolio_manager.py
+
+Versione:
+
+2.0
+
+Gestisce:
+
+- balance;
+- positions;
+- equity;
+- profitto corrente;
+- esposizione;
+- aggiunta posizione;
+- rimozione posizione;
+- aggiornamento posizione.
+
+START_BALANCE:
+
+10000
+
+Il portfolio viene aggiornato quando una posizione viene aperta e quando viene chiusa.
+
+---
+
+# 17. BACKTEST ENGINE
+
+File:
+
+Core/backtest_engine.py
+
+Versione:
+
+12.0
+
+Gestisce:
+
+- storico trade;
+- numero trade;
+- BUY;
+- SELL;
+- wins;
+- losses;
+- win rate;
+- gross profit;
+- gross loss;
+- net profit;
+- capital;
+- ROI;
+- profit factor;
+- max drawdown;
+- activity;
+- market bias.
+
+È già presente una correzione importante:
+
+activity non viene più calcolata come:
+
+(BUY + SELL) / total * 100
+
+perché avrebbe prodotto quasi sempre 100%.
+
+Ora viene calcolata in rapporto alle candele realmente analizzate.
+
+---
+
+# 18. DATABASE
+
+File:
+
+Database/database_manager.py
+
+Versione:
+
+6.0
+
+Database:
+
+SQLite
+
+Tabella:
+
+trades
+
+Campi:
+
+id
+symbol
+side
+entry
+exit
+stop_loss
+take_profit
+pnl
+status
+reason
+open_time
+close_time
+duration
+result
+risk_reward
+
+Funzioni disponibili:
+
+save_trade()
+load_trades()
+count()
+wins()
+losses()
+breakeven()
+total_profit()
+gross_profit()
+gross_loss()
+best_trade()
+worst_trade()
+average_profit()
+profit_factor()
+win_rate()
+reset()
+close()
+
+IMPORTANTE:
+
+DatabaseManager NON si trova in:
+
+Core/database_manager.py
+
+Si trova in:
+
+Database/database_manager.py
+
+Questo percorso deve essere mantenuto oppure uniformato successivamente senza rompere gli import.
+
+---
+
+# 19. EXECUTION ENGINE
+
+File:
+
+Execution/execution_engine.py
+
+Versione:
+
+9.0
+
+Supporta:
+
+- Paper Trading;
+- Execution Validator;
+- Execution Builder;
+- Execution Report;
+- MT5 Bridge;
+- DRY RUN;
+- apertura;
+- chiusura.
+
+Configurazione:
+
+mt5_enabled=False
+
+mt5_dry_run=True
+
+Paper Trading è attualmente il percorso principale verificato.
+
+---
+
+# 20. MT5 BRIDGE
+
+File principale:
+
+MT5_Bridge/mt5_execution_recovered.py
+
+Supporta:
+
+- connessione MT5;
+- apertura ordine;
+- modifica SL/TP;
+- chiusura posizione;
+- DRY RUN;
+- order_check;
+- order_send;
+- BUY;
+- SELL.
+
+La logica di chiusura è:
+
+BUY → SELL
+
+SELL → BUY
+
+con prezzo:
+
+BUY close → BID
+
+SELL close → ASK
+
+---
+
+# 21. LIVE TRADING ENGINE
+
+File:
+
+Core/live_trading_engine.py
+
+Versione osservata:
+
+5.2
+
+Comportamento attuale:
+
+Se non esiste una posizione:
+
+1. scarica dati;
+2. ottiene prezzo;
+3. controlla Trading Guard;
+4. analizza;
+5. genera signal;
+6. costruisce trade;
+7. esegue;
+8. apre posizione;
+9. registra nel Portfolio.
+
+Se esiste una posizione:
+
+1. recupera prezzo corrente;
+2. aggiorna Position Controller;
+3. aggiorna Portfolio;
+4. verifica chiusura;
+5. registra trade chiuso;
+6. aggiorna database;
+7. aggiorna backtest;
+8. aggiorna balance;
+9. aggiorna Trading Guard.
+
+Questo evita di scaricare inutilmente tutte le candele durante la gestione di una posizione già aperta.
+
+---
+
+# 22. TRADE CLOSE PIPELINE
+
+Quando una posizione viene chiusa:
+
+1. viene calcolato il prezzo finale;
+2. viene calcolato il PnL;
+3. viene determinato il motivo;
+4. viene calcolata la durata;
+5. viene calcolato Risk/Reward;
+6. viene creato il record trade;
+7. viene salvato nel Database;
+8. viene aggiunto al Backtest Engine;
+9. viene aggiornato il Portfolio balance;
+10. viene aggiornato Trading Guard;
+11. viene rimossa la posizione dal Portfolio.
+
+---
+
+# 23. PERFORMANCE ANALYTICS
+
+Presenti:
+
+- Equity Curve
+- Risk Statistics
+- Trade Statistics
+- Monthly Statistics
+- Symbol Statistics
+- Timeframe Statistics
+- Sharpe Ratio
+- Sortino Ratio
+- Calmar Ratio
+- Recovery Factor
+- Ulcer Index
+- Omega Ratio
+- Profit to Drawdown
+- Kelly Criterion
+- Payoff Ratio
+- Win Loss Ratio
+
+---
+
+# 24. REPORTING
+
+Presenti:
+
+- Performance Report
+- Report Statistics
+- Report Service
+- Report Factory
+- Report Exporter
+- CSV
+- JSON
+- HTML
+- PDF
+- Report Formats
+
+---
+
+# 25. MARKET SCANNER
+
+Presente:
+
+Market Scanner V2
+
+Watchlist:
+
+12 strumenti
+
+---
+
+# 26. CORE SYSTEM
+
+Presente:
+
+Core System V20
+
+Responsabile dell'integrazione dei principali moduli Phoenix.
+
+Il Core è già riuscito ad avviare Live Trading.
+
+Esempio verificato:
+
+ETH-USD
+
+Prezzo:
+
+1921.6700439453125
+
+Segnale:
+
+STRONG BUY
+
+Trade:
+
+BUY ETH-USD
+
+Size:
+
+15.57
+
+Esecuzione:
+
+Paper Trading
+
+Posizione:
+
+OPEN
+
+Portfolio:
+
+registrato
+
+---
+
+# 27. TEST GIÀ ESEGUITI
+
+È stato verificato:
+
+PositionController:
+
+OPEN
+→ UPDATE
+→ CLOSE
+
+Esempio:
+
+entry = 100
+
+SL = 95
+
+TP = 110
+
+size = 1
+
+update = 102
+
+close = 105
+
+PnL finale:
+
++5
+
+È stato verificato anche:
+
+Integration Import Test
+
+con:
+
+DatabaseManager OK
+
+BacktestEngine OK
+
+PortfolioManager OK
+
+PositionController OK
+
+ExecutionEngine OK
+
+---
+
+# 28. GIT / BACKUP
+
+Repository:
+
+ProjectPhoenixAI
+
+Branch:
+
+main
+
+Checkpoint:
+
+b47aa39
+
+Tag:
+
+PHOENIX_CHECKPOINT_2026-08-19
+
+Tag precedente:
+
+v0.1-stable
+
+Backup locale:
+
+C:\ProjectPhoenixAI_BACKUP_2026-08-19
+
+Il checkpoint è stato pubblicato su origin/main.
+
+Il tag checkpoint è stato pubblicato su origin.
+
+NON cancellare il backup.
+
+NON modificare il checkpoint.
+
+---
+
+# 29. PROBLEMI NOTI / DA RISOLVERE
+
+## PROBLEMA 1 — ExecutionEngine.close()
+
+Nel codice attuale esiste una struttura errata nel dizionario di ritorno della chiusura MT5.
+
+Deve essere verificato/corretto il campo:
+
+dry_run
+
+La struttura corretta deve essere:
+
+"dry_run": result.get(
+    "dry_run",
+    self.mt5_dry_run
+)
+
+e non un valore senza chiave.
+
+---
+
+## PROBLEMA 2 — CONTRATTI TRA MODULI
+
+Devono essere uniformati i contratti:
+
+Trade
+Order
+Position
+Closed Trade
+Execution Result
+Report
+
+senza rompere il Core esistente.
+
+---
+
+## PROBLEMA 3 — PAPER vs MT5
+
+Deve essere garantito che:
+
+PAPER TRADING
+
+e
+
+MT5
+
+utilizzino lo stesso contratto logico.
+
+Il Core non deve conoscere dettagli specifici del broker.
+
+---
+
+## PROBLEMA 4 — CHIUSURA MT5
+
+La chiusura MT5 deve essere integrata correttamente con:
+
+Position Controller
+Portfolio
+Database
+Trading Guard
+Performance Analytics
+
+---
+
+## PROBLEMA 5 — GESTIONE POSIZIONI
+
+Occorre completare e stabilizzare:
+
+- Break Even;
+- Trailing Stop;
+- modifica SL;
+- sincronizzazione Portfolio;
+- sincronizzazione MT5;
+- protezione da doppia chiusura.
+
+---
+
+## PROBLEMA 6 — BACKTEST
+
+Il Backtest Engine esiste, ma deve essere collegato definitivamente al ciclo storico completo.
+
+Obiettivo:
+
+Candele
+→ Analisi
+→ Signal
+→ Risk
+→ Trade
+→ Position
+→ Exit
+→ PnL
+→ Statistics
+
+---
+
+## PROBLEMA 7 — DATABASE
+
+Il Database Manager esiste e deve diventare il registro persistente ufficiale dei trade chiusi.
+
+---
+
+## PROBLEMA 8 — LIVE TRADING
+
+Prima del LIVE reale deve essere completato:
+
+Paper Trading
+→ MT5 DRY RUN
+→ MT5 DEMO
+→ MT5 LIVE
+
+senza saltare livelli.
+
+---
+
+# 30. ARCHITETTURA FINALE DESIDERATA
+
+PROJECT PHOENIX AI deve arrivare a:
+
+DATA INTELLIGENCE
++
+MARKET INTELLIGENCE
++
+NEWS INTELLIGENCE
++
+SENTIMENT AI
++
+TECHNICAL AI
++
+PATTERN RECOGNITION
++
+SMART MONEY
++
+RISK AI
++
+DECISION AI
++
+EXECUTION
++
+POSITION MANAGEMENT
++
+PORTFOLIO
++
+BACKTEST
++
+PAPER TRADING
++
+LIVE TRADING
++
+PERFORMANCE ANALYTICS
++
+DATABASE
++
+REPORTING
+
+---
+
+# 31. REGOLA DI SVILUPPO
+
+NON ricominciare da zero.
+
+NON sostituire moduli funzionanti senza motivo.
+
+NON duplicare funzionalità.
+
+NON introdurre configurazioni duplicate.
+
+Ogni modifica deve:
+
+1. preservare il funzionamento esistente;
+2. migliorare l'integrazione;
+3. mantenere compatibilità;
+4. essere salvata in Git;
+5. essere documentata nel MASTER STATE quando cambia l'architettura.
+
+---
+
+# 32. ORDINE DELLE PROSSIME FASI
+
+FASE A
+Stabilizzazione Execution Engine.
+
+FASE B
+Stabilizzazione ciclo completo Position → Close.
+
+FASE C
+Integrazione Database + Portfolio + Guard.
+
+FASE D
+Backtest end-to-end.
+
+FASE E
+Paper Trading end-to-end.
+
+FASE F
+MT5 DRY RUN.
+
+FASE G
+MT5 DEMO.
+
+FASE H
+Performance e Reporting finale.
+
+FASE I
+Live Trading controllato.
+
+FASE L
+Espansione AI:
+
+- News Intelligence
+- Sentiment AI
+- Decision AI avanzata
+- Pattern Recognition avanzata
+- Market Regime Detection
+- Adaptive Risk
+- Multi-market intelligence
+
+---
+
+# 33. OBIETTIVO RELEASE
+
+La prima release completa deve essere:
+
+PROJECT PHOENIX AI
+
+Trading Operating System
+
+con:
+
+DATA
+→ INTELLIGENCE
+→ DECISION
+→ RISK
+→ EXECUTION
+→ POSITION
+→ PORTFOLIO
+→ PERFORMANCE
+
+completamente integrati.
+
+---
+
+# 34. STATO MASTER
+
+Questo file diventa il riferimento ufficiale dello stato del progetto a partire dal:
+
+2026-08-19
+
+Checkpoint precedente:
+
+PHOENIX_CHECKPOINT_2026-08-19
+
+Prossimo obiettivo:
+
+FINAL INTEGRATION
+
+--- Docs/TRADE_LIFECYCLE.md ---
+# ========================================
+# PROJECT PHOENIX AI
+# TRADE LIFECYCLE
+# Versione 1.0
+# ========================================
+
+# OBIETTIVO
+
+Phoenix AI non è un semplice generatore di segnali.
+
+È una piattaforma completa capace di:
+
+- Analizzare il mercato
+- Prendere decisioni
+- Aprire operazioni
+- Gestire operazioni
+- Chiudere operazioni
+- Analizzare i risultati
+- Migliorare nel tempo
+
+------------------------------------------------------------
+
+FASE 1
+ACQUISIZIONE DATI
+
+Market Provider
+
+↓
+
+Market Data
+
+↓
+
+Candle Manager
+
+Output:
+
+- Prezzo Live
+- Storico
+- Timeframe
+
+------------------------------------------------------------
+
+FASE 2
+INDICATORI
+
+Indicator Manager
+
+Calcola:
+
+- EMA
+- SMA
+- RSI
+- MACD
+- ATR
+- ADX
+- Bollinger
+
+Output:
+
+Indicatori pronti.
+
+------------------------------------------------------------
+
+FASE 3
+ANALISI
+
+Market Analyzer
+
+Analizza:
+
+- Trend
+- Trend Strength
+- Momentum
+- RSI
+- MACD
+- ADX
+- Volatilità
+
+Output:
+
+Situazione del mercato.
+
+------------------------------------------------------------
+
+FASE 4
+AI
+
+Phoenix Brain
+
+Responsabilità:
+
+- Valutazione
+- Score
+- Confidence
+- Motivazioni
+- Warning
+- BUY / SELL / HOLD
+
+Output:
+
+Decisione AI.
+
+------------------------------------------------------------
+
+FASE 5
+VALIDAZIONE
+
+Decision Engine
+
+↓
+
+Risk Manager
+
+↓
+
+Signal Manager
+
+Responsabilità:
+
+Verificare che il trade sia realmente eseguibile.
+
+Output:
+
+Segnale finale.
+
+------------------------------------------------------------
+
+FASE 6
+TRADE SETUP
+
+Trade Manager
+
+Calcola:
+
+Entry
+
+Stop Loss
+
+Take Profit
+
+Risk Reward
+
+Output:
+
+Trade pronto.
+
+------------------------------------------------------------
+
+FASE 7
+ESECUZIONE
+
+Execution Engine
+
+Versione attuale:
+
+Simulazione.
+
+Versione futura:
+
+Broker reale.
+
+Output:
+
+Ordine eseguito.
+
+------------------------------------------------------------
+
+FASE 8
+GESTIONE POSIZIONE
+
+Position Manager
+
+Memorizza:
+
+- posizione
+- stato
+- dati operazione
+
+------------------------------------------------------------
+
+FASE 9
+MONITORAGGIO
+
+Position Controller
+
+Controlla continuamente:
+
+- Prezzo
+- Profitto
+- Perdita
+
+Output:
+
+Posizione aperta oppure richiesta di chiusura.
+
+------------------------------------------------------------
+
+FASE 10
+USCITA
+
+Exit Manager
+
+Versione futura.
+
+Responsabilità:
+
+- Stop Loss
+- Take Profit
+- Break Even
+- Trailing Stop
+- Chiusura Parziale
+- Chiusura Manuale
+- Chiusura per Cambio Trend
+
+------------------------------------------------------------
+
+FASE 11
+TRADE JOURNAL
+
+Versione futura.
+
+Registra:
+
+- Entry
+- Exit
+- Profit
+- Loss
+- Durata
+- Motivo uscita
+- Confidence
+- Strategia
+- Versione Software
+
+------------------------------------------------------------
+
+FASE 12
+PERFORMANCE
+
+Performance Analyzer
+
+Statistiche:
+
+- Win Rate
+- Profit Factor
+- Drawdown
+- Sharpe Ratio
+- Expectancy
+- Equity Curve
+
+------------------------------------------------------------
+
+FASE 13
+AI EVOLUTION
+
+Machine Learning
+
+Obiettivo:
+
+Migliorare Phoenix AI nel tempo.
+
+------------------------------------------------------------
+
+REGOLA FONDAMENTALE
+
+Ogni modulo deve avere UNA SOLA responsabilità.
+
+Nessun modulo deve duplicare il lavoro di un altro.
+
+Ogni modifica deve migliorare Phoenix AI senza compromettere la stabilità del progetto.
+
+============================================================
+
+
+### 7. FILE PYTHON E DIMENSIONI ###
+AI\__init__.py | 0 righe
+AI\main.py | 125 righe
+audit_dependencies.py | 62 righe
+audit_modules.py | 104 righe
+Config\__init__.py | 0 righe
+Config\mt5_credentials.example.py | 154 righe
+Config\mt5_credentials.py | 43 righe
+Config\settings.py | 132 righe
+Core\analysis_engine.py | 209 righe
+Core\backtest_engine.py | 298 righe
+Core\calmar_ratio.py | 76 righe
+Core\core_system.py | 827 righe
+Core\equity_curve.py | 46 righe
+Core\exit_manager.py | 595 righe
+Core\kelly_criterion.py | 108 righe
+Core\live_trading_engine.py | 904 righe
+Core\market_analyzer.py | 155 righe
+Core\market_scanner.py | 148 righe
+Core\monthly_statistics.py | 52 righe
+Core\omega_ratio.py | 61 righe
+Core\payoff_ratio.py | 100 righe
+Core\performance_analytics.py | 320 righe
+Core\performance_analytics_calculator.py | 195 righe
+Core\performance_analytics_report.py | 147 righe
+Core\performance_report.py | 48 righe
+Core\phoenix_brain.py | 121 righe
+Core\phoenix_brain_logic.py | 379 righe
+Core\portfolio_manager.py | 227 righe
+Core\position_controller.py | 573 righe
+Core\position_manager.py | 137 righe
+Core\position_monitor.py | 99 righe
+Core\profit_to_drawdown.py | 68 righe
+Core\recovery_factor.py | 76 righe
+Core\report_csv.py | 76 righe
+Core\report_exporter.py | 218 righe
+Core\report_factory.py | 122 righe
+Core\report_formats.py | 99 righe
+Core\report_html.py | 240 righe
+Core\report_json.py | 60 righe
+Core\report_pdf.py | 84 righe
+Core\report_service.py | 83 righe
+Core\report_statistics.py | 108 righe
+Core\risk_drawdown.py | 41 righe
+Core\risk_limits.py | 68 righe
+Core\risk_manager.py | 232 righe
+Core\risk_position_size.py | 46 righe
+Core\risk_statistics.py | 64 righe
+Core\sharpe_ratio.py | 78 righe
+Core\signal_manager.py | 354 righe
+Core\smart_money.py | 75 righe
+Core\smart_money_fvg.py | 41 righe
+Core\smart_money_liquidity.py | 58 righe
+Core\smart_money_orderblocks.py | 57 righe
+Core\smart_money_structure.py | 268 righe
+Core\sortino_ratio.py | 100 righe
+Core\symbol_statistics.py | 68 righe
+Core\timeframe_statistics.py | 56 righe
+Core\trade_builder.py | 143 righe
+Core\trade_manager.py | 94 righe
+Core\trade_report.py | 49 righe
+Core\trade_statistics.py | 102 righe
+Core\trading_guard.py | 116 righe
+Core\ulcer_index.py | 98 righe
+Core\win_loss_ratio.py | 66 righe
+create_phoenix_audit.py | 334 righe
+Data\__init__.py | 0 righe
+Data\candle_manager.py | 245 righe
+Data\Indicators\__init__.py | 0 righe
+Data\Indicators\adx.py | 81 righe
+Data\Indicators\atr.py | 37 righe
+Data\Indicators\bollinger.py | 44 righe
+Data\Indicators\ema.py | 25 righe
+Data\Indicators\indicator_manager.py | 120 righe
+Data\Indicators\macd.py | 49 righe
+Data\Indicators\rsi.py | 32 righe
+Data\Indicators\sma.py | 24 righe
+Data\Indicators\stochastic.py | 0 righe
+Data\Indicators\volume.py | 0 righe
+Data\market_data.py | 69 righe
+Data\market_provider.py | 25 righe
+Data\price_manager.py | 19 righe
+Data\symbols.py | 46 righe
+Data\yfinance_provider.py | 205 righe
+Database\__init__.py | 0 righe
+Database\database_manager.py | 315 righe
+Execution\execution_builder.py | 203 righe
+Execution\execution_engine.py | 606 righe
+Execution\execution_report.py | 58 righe
+Execution\execution_validator.py | 56 righe
+Execution\mt5_broker.py | 361 righe
+find_symbol.py | 16 righe
+Logs\logger.py | 51 righe
+MT5_Bridge\mt5_bridge.py | 100 righe
+MT5_Bridge\mt5_execution.py | 1126 righe
+MT5_Bridge\mt5_execution_before_risk_fix.py | 1126 righe
+MT5_Bridge\mt5_execution_recovered.py | 1828 righe
+MT5_Bridge\mt5_execution_recovered_before_protect.py | 1561 righe
+MT5_Bridge\run_mt5_phoenix.py | 49 righe
+Position_Manager\position_manager.py | 2246 righe
+Position_Manager\position_manager_before_protect_bridge.py | 2163 righe
+Position_Manager\position_manager_before_protect_bridge_v2.py | 2163 righe
+run.py | 12 righe
+run_phoenix_live_demo.py | 113 righe
+Tests\find_symbol.py | 14 righe
+Tests\run_all_tests.py | 75 righe
+Tests\test_analysis.py | 102 righe
+Tests\test_backtest.py | 102 righe
+Tests\test_core.py | 78 righe
+Tests\test_end_to_end.py | 33 righe
+Tests\test_execution.py | 183 righe
+Tests\test_exit_manager.py | 276 righe
+Tests\test_indicators.py | 24 righe
+Tests\test_market.py | 89 righe
+Tests\test_mt5_connection.py | 171 righe
+Tests\test_position_controller.py | 200 righe
+Tests\test_position_cycle.py | 90 righe
+Tests\test_position_manager.py | 105 righe
+Tests\test_position_monitor.py | 85 righe
+Tests\test_risk.py | 162 righe
+Tests\test_signal.py | 314 righe
+Tests\test_trade_builder.py | 129 righe
+Tests\test_trade_manager.py | 90 righe
+Tests\test_trading_guard.py | 155 righe
+
+
+### 8. IMPORT TRA MODULI ###
+
+--- AI\main.py ---
+from Core.core_system import CoreSystem
+from Config.settings import APP_NAME, VERSION, MODE
+from Logs.logger import Logger
+
+--- audit_dependencies.py ---
+from pathlib import Path
+import ast
+
+--- audit_modules.py ---
+from pathlib import Path
+import ast
+import importlib.util
+
+--- Config\mt5_credentials.example.py ---
+import sys
+import time
+from pathlib import Path
+from Execution.mt5_broker import MT5Broker
+
+--- Core\analysis_engine.py ---
+from Logs.logger import Logger
+from Data.Indicators.indicator_manager import IndicatorManager
+from Core.market_analyzer import MarketAnalyzer
+from Core.smart_money import SmartMoney
+from Core.phoenix_brain import PhoenixBrain
+from Core.signal_manager import SignalManager
+from Core.risk_manager import RiskManager
+from Core.trade_manager import TradeManager
+
+--- Core\backtest_engine.py ---
+from Logs.logger import Logger
+
+--- Core\calmar_ratio.py ---
+from Logs.logger import Logger
+
+--- Core\core_system.py ---
+from Logs.logger import Logger
+from Data.market_data import MarketData
+from Data.candle_manager import CandleManager
+from Database.database_manager import DatabaseManager
+from Core.analysis_engine import AnalysisEngine
+from Core.backtest_engine import BacktestEngine
+from Core.position_controller import PositionController
+from Core.portfolio_manager import PortfolioManager
+from Core.market_scanner import MarketScanner
+from Core.live_trading_engine import LiveTradingEngine
+from Core.performance_analytics import PerformanceAnalytics
+from Execution.execution_engine import ExecutionEngine
+from Config.settings import MODE
+
+--- Core\equity_curve.py ---
+from Logs.logger import Logger
+
+--- Core\exit_manager.py ---
+from Logs.logger import Logger
+
+--- Core\kelly_criterion.py ---
+from Logs.logger import Logger
+
+--- Core\live_trading_engine.py ---
+import time
+from Logs.logger import Logger
+from Core.trading_guard import TradingGuard
+
+--- Core\market_analyzer.py ---
+from Logs.logger import Logger
+
+--- Core\market_scanner.py ---
+from Logs.logger import Logger
+
+--- Core\monthly_statistics.py ---
+from collections import defaultdict
+from Logs.logger import Logger
+
+--- Core\omega_ratio.py ---
+from Logs.logger import Logger
+
+--- Core\payoff_ratio.py ---
+from Logs.logger import Logger
+
+--- Core\performance_analytics.py ---
+from Logs.logger import Logger
+from Core.equity_curve import EquityCurve
+from Core.risk_statistics import RiskStatistics
+from Core.trade_statistics import TradeStatistics
+from Core.monthly_statistics import MonthlyStatistics
+from Core.symbol_statistics import SymbolStatistics
+from Core.timeframe_statistics import TimeframeStatistics
+from Core.sharpe_ratio import SharpeRatio
+from Core.sortino_ratio import SortinoRatio
+from Core.calmar_ratio import CalmarRatio
+from Core.recovery_factor import RecoveryFactor
+from Core.ulcer_index import UlcerIndex
+from Core.omega_ratio import OmegaRatio
+from Core.profit_to_drawdown import ProfitToDrawdown
+from Core.kelly_criterion import KellyCriterion
+from Core.payoff_ratio import PayoffRatio
+from Core.win_loss_ratio import WinLossRatio
+from Core.performance_report import PerformanceReport
+from Core.report_statistics import ReportStatistics
+from Core.report_service import ReportService
+
+--- Core\performance_analytics_calculator.py ---
+from Logs.logger import Logger
+from Core.equity_curve import EquityCurve
+from Core.risk_statistics import RiskStatistics
+from Core.trade_statistics import TradeStatistics
+from Core.monthly_statistics import MonthlyStatistics
+from Core.symbol_statistics import SymbolStatistics
+from Core.timeframe_statistics import TimeframeStatistics
+from Core.sharpe_ratio import SharpeRatio
+from Core.sortino_ratio import SortinoRatio
+from Core.calmar_ratio import CalmarRatio
+from Core.recovery_factor import RecoveryFactor
+from Core.ulcer_index import UlcerIndex
+from Core.omega_ratio import OmegaRatio
+from Core.profit_to_drawdown import ProfitToDrawdown
+from Core.kelly_criterion import KellyCriterion
+from Core.payoff_ratio import PayoffRatio
+from Core.win_loss_ratio import WinLossRatio
+
+--- Core\performance_analytics_report.py ---
+from Logs.logger import Logger
+
+--- Core\performance_report.py ---
+from Logs.logger import Logger
+
+--- Core\phoenix_brain.py ---
+from Logs.logger import Logger
+from Core.phoenix_brain_logic import PhoenixBrainLogic
+
+--- Core\phoenix_brain_logic.py ---
+from Logs.logger import Logger
+
+--- Core\portfolio_manager.py ---
+from Logs.logger import Logger
+from Config.settings import START_BALANCE
+
+--- Core\position_controller.py ---
+from datetime import datetime
+from Logs.logger import Logger
+from Core.position_monitor import PositionMonitor
+from Core.exit_manager import ExitManager
+
+--- Core\position_manager.py ---
+from Logs.logger import Logger
+
+--- Core\position_monitor.py ---
+from Logs.logger import Logger
+
+--- Core\profit_to_drawdown.py ---
+from Logs.logger import Logger
+
+--- Core\recovery_factor.py ---
+from Logs.logger import Logger
+
+--- Core\report_csv.py ---
+import csv
+from Logs.logger import Logger
+
+--- Core\report_exporter.py ---
+import csv
+import json
+from datetime import datetime
+from Logs.logger import Logger
+from Core.report_csv import ReportCSV
+from Core.report_json import ReportJSON
+from Core.report_html import ReportHTML
+from Core.report_pdf import ReportPDF
+
+--- Core\report_factory.py ---
+from Logs.logger import Logger
+from Core.report_csv import ReportCSV
+from Core.report_html import ReportHTML
+from Core.report_json import ReportJSON
+from Core.report_pdf import ReportPDF
+from Core.report_exporter import ReportExporter
+
+--- Core\report_formats.py ---
+import json
+from Logs.logger import Logger
+
+--- Core\report_html.py ---
+from Logs.logger import Logger
+
+--- Core\report_json.py ---
+import json
+from Logs.logger import Logger
+
+--- Core\report_pdf.py ---
+from datetime import datetime
+from Logs.logger import Logger
+
+--- Core\report_service.py ---
+from Logs.logger import Logger
+from Core.report_factory import ReportFactory
+from Core.report_formats import ReportFormats
+
+--- Core\report_statistics.py ---
+from Logs.logger import Logger
+
+--- Core\risk_drawdown.py ---
+from Logs.logger import Logger
+
+--- Core\risk_limits.py ---
+from Logs.logger import Logger
+
+--- Core\risk_manager.py ---
+from Logs.logger import Logger
+from Config.settings import MAX_RISK
+from Core.risk_limits import RiskLimits
+from Core.risk_position_size import RiskPositionSize
+from Core.risk_drawdown import RiskDrawdown
+
+--- Core\risk_statistics.py ---
+from Logs.logger import Logger
+
+--- Core\sharpe_ratio.py ---
+import math
+from Logs.logger import Logger
+
+--- Core\signal_manager.py ---
+from Config.settings import MIN_CONFIDENCE
+from Logs.logger import Logger
+
+--- Core\smart_money.py ---
+from Logs.logger import Logger
+from Core.smart_money_structure import SmartMoneyStructure
+from Core.smart_money_fvg import SmartMoneyFVG
+from Core.smart_money_orderblocks import SmartMoneyOrderBlocks
+from Core.smart_money_liquidity import SmartMoneyLiquidity
+
+--- Core\smart_money_fvg.py ---
+from Logs.logger import Logger
+
+--- Core\smart_money_liquidity.py ---
+from Logs.logger import Logger
+
+--- Core\smart_money_orderblocks.py ---
+from Logs.logger import Logger
+
+--- Core\smart_money_structure.py ---
+from Logs.logger import Logger
+
+--- Core\sortino_ratio.py ---
+import math
+from Logs.logger import Logger
+
+--- Core\symbol_statistics.py ---
+from collections import defaultdict
+from Logs.logger import Logger
+
+--- Core\timeframe_statistics.py ---
+from collections import defaultdict
+from Logs.logger import Logger
+
+--- Core\trade_builder.py ---
+from Logs.logger import Logger
+
+--- Core\trade_manager.py ---
+from Logs.logger import Logger
+from Core.risk_manager import RiskManager
+from Core.trade_builder import TradeBuilder
+from Core.trade_report import TradeReport
+
+--- Core\trade_report.py ---
+from Logs.logger import Logger
+
+--- Core\trade_statistics.py ---
+from Logs.logger import Logger
+
+--- Core\trading_guard.py ---
+from datetime import date
+from Config.settings import (
+from Logs.logger import Logger
+
+--- Core\ulcer_index.py ---
+import math
+from Logs.logger import Logger
+
+--- Core\win_loss_ratio.py ---
+from Logs.logger import Logger
+
+--- create_phoenix_audit.py ---
+import subprocess
+
+--- Data\candle_manager.py ---
+from Logs.logger import Logger
+from Data.market_provider import MarketProvider
+
+--- Data\Indicators\adx.py ---
+from Logs.logger import Logger
+
+--- Data\Indicators\atr.py ---
+from Config.settings import ATR_PERIOD
+from Logs.logger import Logger
+
+--- Data\Indicators\bollinger.py ---
+from Config.settings import SMA_PERIOD
+
+--- Data\Indicators\ema.py ---
+from Config.settings import EMA_PERIOD
+
+--- Data\Indicators\indicator_manager.py ---
+from Logs.logger import Logger
+from .ema import EMA
+from .sma import SMA
+from .rsi import RSI
+from .macd import MACD
+from .atr import ATR
+from .adx import ADX
+from .bollinger import Bollinger
+
+--- Data\Indicators\macd.py ---
+from Config.settings import (
+
+--- Data\Indicators\rsi.py ---
+from Config.settings import RSI_PERIOD
+
+--- Data\Indicators\sma.py ---
+from Config.settings import SMA_PERIOD
+
+--- Data\market_data.py ---
+from Logs.logger import Logger
+from Data.market_provider import MarketProvider
+
+--- Data\market_provider.py ---
+from Data.yfinance_provider import YFinanceProvider
+
+--- Data\price_manager.py ---
+from Data.market_provider import MarketProvider
+
+--- Data\yfinance_provider.py ---
+import yfinance as yf
+
+--- Database\database_manager.py ---
+import sqlite3
+from Logs.logger import Logger
+
+--- Execution\execution_builder.py ---
+from datetime import datetime
+from Logs.logger import Logger
+
+--- Execution\execution_engine.py ---
+from Logs.logger import Logger
+from Execution.execution_validator import ExecutionValidator
+from Execution.execution_builder import ExecutionBuilder
+from Execution.execution_report import ExecutionReport
+from MT5_Bridge.mt5_execution_recovered import (
+
+--- Execution\execution_report.py ---
+from datetime import datetime
+from Logs.logger import Logger
+
+--- Execution\execution_validator.py ---
+from Logs.logger import Logger
+
+--- Execution\mt5_broker.py ---
+from datetime import datetime
+from Logs.logger import Logger
+
+--- find_symbol.py ---
+from Execution.mt5_broker import MT5Broker
+import MetaTrader5 as mt5
+
+--- Logs\logger.py ---
+from datetime import datetime
+
+--- MT5_Bridge\mt5_bridge.py ---
+from __future__ import annotations
+from typing import Any
+
+--- MT5_Bridge\mt5_execution.py ---
+import math
+import MetaTrader5 as mt5
+
+--- MT5_Bridge\mt5_execution_before_risk_fix.py ---
+import math
+import MetaTrader5 as mt5
+
+--- MT5_Bridge\mt5_execution_recovered.py ---
+import math
+import MetaTrader5 as mt5
+
+--- MT5_Bridge\mt5_execution_recovered_before_protect.py ---
+import math
+import MetaTrader5 as mt5
+
+--- MT5_Bridge\run_mt5_phoenix.py ---
+from mt5_bridge import MT5DataBridge
+
+--- Position_Manager\position_manager.py ---
+from MT5_Bridge.mt5_execution_recovered import (
+
+--- Position_Manager\position_manager_before_protect_bridge.py ---
+from MT5_Bridge.mt5_execution_recovered import (
+
+--- Position_Manager\position_manager_before_protect_bridge_v2.py ---
+from MT5_Bridge.mt5_execution_recovered import (
+
+--- run.py ---
+import sys
+from pathlib import Path
+from AI.main import main
+
+--- run_phoenix_live_demo.py ---
+import pandas as pd
+from MT5_Bridge.mt5_bridge import MT5DataBridge
+from Core.analysis_engine import AnalysisEngine
+from Core.risk_manager import RiskManager
+from Core.trade_manager import TradeManager
+
+--- Tests\find_symbol.py ---
+import sys
+from Execution.mt5_broker import MT5Broker
+import MetaTrader5 as mt5
+
+--- Tests\run_all_tests.py ---
+import subprocess
+import sys
+from pathlib import Path
+
+--- Tests\test_analysis.py ---
+import pandas as pd
+from Core.analysis_engine import AnalysisEngine
+
+--- Tests\test_backtest.py ---
+from Core.backtest_engine import BacktestEngine
+
+--- Tests\test_core.py ---
+from Core.core_system import CoreSystem
+
+--- Tests\test_end_to_end.py ---
+from pathlib import Path
+import sys
+from Core.analysis_engine import AnalysisEngine
+from Core.trade_manager import TradeManager
+from Core.position_controller import PositionController
+from Core.exit_manager import ExitManager
+
+--- Tests\test_execution.py ---
+from Execution.execution_engine import ExecutionEngine
+
+--- Tests\test_exit_manager.py ---
+from Core.exit_manager import ExitManager
+
+--- Tests\test_indicators.py ---
+from Data.Indicators.indicator_manager import IndicatorManager
+
+--- Tests\test_market.py ---
+import os
+import sys
+from Core.market_analyzer import MarketAnalyzer
+
+--- Tests\test_mt5_connection.py ---
+import sys
+import time
+from pathlib import Path
+from Execution.mt5_broker import MT5Broker
+
+--- Tests\test_position_controller.py ---
+from Core.position_controller import PositionController
+
+--- Tests\test_position_cycle.py ---
+from pathlib import Path
+import sys
+from Core.position_controller import PositionController
+
+--- Tests\test_position_manager.py ---
+from Core.position_manager import PositionManager
+
+--- Tests\test_position_monitor.py ---
+from Core.position_monitor import PositionMonitor
+
+--- Tests\test_risk.py ---
+from Core.risk_position_size import RiskPositionSize
+
+--- Tests\test_signal.py ---
+from Core.signal_manager import SignalManager
+from Config.settings import MIN_CONFIDENCE
+
+--- Tests\test_trade_builder.py ---
+from Core.trade_builder import TradeBuilder
+
+--- Tests\test_trade_manager.py ---
+from Core.trade_manager import TradeManager
+
+--- Tests\test_trading_guard.py ---
+from Core.trading_guard import TradingGuard
+
+
+### 9. CLASSI E FUNZIONI PRINCIPALI ###
+
+--- AI\main.py ---
+def main():
+
+--- Config\mt5_credentials.example.py ---
+def main():
+
+--- Core\analysis_engine.py ---
+class AnalysisEngine:
+def __init__(self):
+def analyze(
+
+--- Core\backtest_engine.py ---
+class BacktestEngine:
+def __init__(self):
+def add_trade(self, trade):
+def last_trade(self):
+def set_total_bars(self, total_bars):
+def run(self):
+def reset(self):
+
+--- Core\calmar_ratio.py ---
+class CalmarRatio:
+def __init__(self):
+def calculate(
+
+--- Core\core_system.py ---
+class CoreSystem:
+def __init__(self):
+def start(self):
+def run_live(self):
+def run_live_trading(
+def _run_live_trading_broker(
+def run_performance(self):
+def _reset_backtest_state(self):
+def _register_closed_trade(
+def _close_backtest_position(
+def run_backtest(
+def print_result(
+def print_backtest(self):
+
+--- Core\equity_curve.py ---
+class EquityCurve:
+def __init__(self):
+def calculate(
+
+--- Core\exit_manager.py ---
+class ExitManager:
+def __init__(self):
+def _risk_distance(self, position):
+def _profit_r(
+def apply_break_even(
+def apply_trailing_stop(
+def evaluate(
+
+--- Core\kelly_criterion.py ---
+class KellyCriterion:
+def __init__(self):
+def calculate(
+
+--- Core\live_trading_engine.py ---
+class LiveTradingEngine:
+def __init__(
+def _get_current_price(
+def _build_closed_trade(
+def _process_closed_position(
+def _open_position_from_order(
+def start(
+
+--- Core\market_analyzer.py ---
+class MarketAnalyzer:
+def __init__(self):
+def analyze(self, indicators):
+def export(self):
+
+--- Core\market_scanner.py ---
+class MarketScanner:
+def __init__(self):
+def load_default(self):
+def get_symbols(self):
+def add_result(
+def sort(self):
+def report(self):
+def reset(self):
+
+--- Core\monthly_statistics.py ---
+class MonthlyStatistics:
+def __init__(self):
+def calculate(
+
+--- Core\omega_ratio.py ---
+class OmegaRatio:
+def __init__(self):
+def calculate(self, database):
+
+--- Core\payoff_ratio.py ---
+class PayoffRatio:
+def __init__(self):
+def calculate(
+
+--- Core\performance_analytics.py ---
+class PerformanceAnalytics:
+def __init__(self, database):
+def report(self):
+
+--- Core\performance_analytics_calculator.py ---
+class PerformanceAnalyticsCalculator:
+def __init__(self, database):
+def calculate(self):
+
+--- Core\performance_analytics_report.py ---
+class PerformanceAnalyticsReport:
+def __init__(self):
+def print_summary(self, data):
+def print_monthly(self, data):
+def print_symbols(self, data):
+def print_timeframes(self, data):
+def print_equity_curve(self, data):
+def print_report(self, data):
+
+--- Core\performance_report.py ---
+class PerformanceReport:
+def __init__(self):
+def clear(self):
+def line(self, label, value):
+def print(self):
+
+--- Core\phoenix_brain.py ---
+class PhoenixBrain:
+def __init__(self):
+def think(
+
+--- Core\phoenix_brain_logic.py ---
+class PhoenixBrainLogic:
+def __init__(self):
+def calculate(self, analysis, risk):
+
+--- Core\portfolio_manager.py ---
+class PortfolioManager:
+def __init__(self):
+def get_balance(self):
+def update_balance(self, pnl):
+def get_equity(self):
+def add(self, symbol, position):
+def remove(self, symbol):
+def update(self, symbol, position):
+def get(self, symbol):
+def get_all(self):
+def has_position(self, symbol):
+def count(self):
+def symbols(self):
+def total_profit(self):
+def exposure(self):
+def report(self):
+def reset(self):
+
+--- Core\position_controller.py ---
+class PositionController:
+def __init__(self):
+def open_position(
+def update(
+def close_position(
+def get_position(self):
+def has_position(self):
+def reset(self):
+
+--- Core\position_manager.py ---
+class PositionManager:
+def __init__(self):
+def open_position(
+def update_position(self, **updates):
+def get_position(self):
+def has_position(self):
+def close_position(
+def reset(self):
+
+--- Core\position_monitor.py ---
+class PositionMonitor:
+def __init__(self):
+def update(
+
+--- Core\profit_to_drawdown.py ---
+class ProfitToDrawdown:
+def __init__(self):
+def calculate(self, database):
+
+--- Core\recovery_factor.py ---
+class RecoveryFactor:
+def __init__(self):
+def calculate(
+
+--- Core\report_csv.py ---
+class ReportCSV:
+def __init__(self):
+def export(
+
+--- Core\report_exporter.py ---
+class ReportExporter:
+def __init__(self):
+def export_txt(
+def export_csv(
+def export_json(
+def export_html(
+def export_pdf(
+def export_all(
+
+--- Core\report_factory.py ---
+class ReportFactory:
+def __init__(self):
+def export_txt(
+def export_csv(
+def export_html(
+def export_json(
+def export_pdf(
+
+--- Core\report_formats.py ---
+class ReportFormats:
+def __init__(self):
+def to_text(self, statistics):
+def to_csv(self, statistics):
+def to_json(self, statistics):
+def to_html(self, statistics):
+def performance(self, statistics):
+
+--- Core\report_html.py ---
+class ReportHTML:
+def __init__(self):
+def export(self, filename, statistics):
+
+--- Core\report_json.py ---
+class ReportJSON:
+def __init__(self):
+def export(
+
+--- Core\report_pdf.py ---
+class ReportPDF:
+def __init__(self):
+def export(
+
+--- Core\report_service.py ---
+class ReportService:
+def __init__(self):
+def export_all(
+
+--- Core\report_statistics.py ---
+class ReportStatistics:
+def __init__(self):
+def build(
+
+--- Core\risk_drawdown.py ---
+class RiskDrawdown:
+def __init__(self):
+def calculate(self, equity_curve):
+
+--- Core\risk_limits.py ---
+class RiskLimits:
+def __init__(self):
+def evaluate(self, analysis):
+
+--- Core\risk_manager.py ---
+class RiskManager:
+def __init__(self):
+def evaluate(
+def calculate_position_size(
+def calculate_drawdown(
+def build_trade(
+
+--- Core\risk_position_size.py ---
+def calculate(
+
+--- Core\risk_statistics.py ---
+class RiskStatistics:
+def __init__(self):
+def calculate(
+
+--- Core\sharpe_ratio.py ---
+class SharpeRatio:
+def __init__(self):
+def calculate(
+
+--- Core\signal_manager.py ---
+class SignalManager:
+def __init__(self):
+def validate(self, decision):
+def generate_signal(
+def is_buy(
+def is_sell(
+def is_hold(
+def reset(self):
+
+--- Core\smart_money.py ---
+class SmartMoney:
+def __init__(self):
+def detect_bos(
+def detect_choch(
+def detect_fvg(
+def detect_order_block(
+def detect_liquidity(
+
+--- Core\smart_money_fvg.py ---
+class SmartMoneyFVG:
+def __init__(self):
+def detect(self, data):
+
+--- Core\smart_money_liquidity.py ---
+class SmartMoneyLiquidity:
+def __init__(self):
+def detect(self, data):
+
+--- Core\smart_money_orderblocks.py ---
+class SmartMoneyOrderBlocks:
+def __init__(self):
+def detect(self, data):
+
+--- Core\smart_money_structure.py ---
+class SmartMoneyStructure:
+def __init__(self):
+def _find_swings(self, data, strength=2):
+def detect_bos(
+def detect_choch(
+
+--- Core\sortino_ratio.py ---
+class SortinoRatio:
+def __init__(self):
+def calculate(
+
+--- Core\symbol_statistics.py ---
+class SymbolStatistics:
+def __init__(self):
+def calculate(
+
+--- Core\timeframe_statistics.py ---
+class TimeframeStatistics:
+def __init__(self):
+def calculate(
+
+--- Core\trade_builder.py ---
+class TradeBuilder:
+def __init__(self):
+def build(
+def reset(self):
+
+--- Core\trade_manager.py ---
+class TradeManager:
+def __init__(self):
+def generate_trade(
+def summary(
+def reset(self):
+
+--- Core\trade_report.py ---
+class TradeReport:
+def __init__(self):
+def print(self, trade):
+
+--- Core\trade_statistics.py ---
+class TradeStatistics:
+def __init__(self):
+def calculate(
+
+--- Core\trading_guard.py ---
+class TradingGuard:
+def __init__(self, start_balance):
+def _check_new_day(self, current_balance):
+def register_trade(self, pnl, current_balance):
+def can_trade(self, current_balance):
+
+--- Core\ulcer_index.py ---
+class UlcerIndex:
+def __init__(self):
+def calculate(
+
+--- Core\win_loss_ratio.py ---
+class WinLossRatio:
+def __init__(self):
+def calculate(
+
+--- create_phoenix_audit.py ---
+def run(cmd):
+
+--- Data\candle_manager.py ---
+class CandleManager:
+def __init__(self):
+def get_current_price(
+def _download(
+def get_candles(
+def get_backtest_data(
+def get_custom_data(
+def last_candle(
+def recent_high(
+def recent_low(
+def average_range(
+def price_direction(
+
+--- Data\Indicators\adx.py ---
+class ADX:
+def __init__(self):
+def calculate(self, data, period=14):
+
+--- Data\Indicators\atr.py ---
+class ATR:
+def __init__(self):
+def calculate(self, data, period=ATR_PERIOD):
+
+--- Data\Indicators\bollinger.py ---
+class Bollinger:
+def __init__(self):
+def calculate(self, data, period=SMA_PERIOD, std=2):
+
+--- Data\Indicators\ema.py ---
+class EMA:
+def __init__(self):
+def calculate(self, data, period=EMA_PERIOD):
+
+--- Data\Indicators\indicator_manager.py ---
+class IndicatorManager:
+def __init__(self):
+def get_indicators(self, data):
+
+--- Data\Indicators\macd.py ---
+class MACD:
+def __init__(self):
+def calculate(
+
+--- Data\Indicators\rsi.py ---
+class RSI:
+def __init__(self):
+def calculate(self, data, period=RSI_PERIOD):
+
+--- Data\Indicators\sma.py ---
+class SMA:
+def __init__(self):
+def calculate(self, data, period=SMA_PERIOD):
+
+--- Data\market_data.py ---
+class MarketData:
+def __init__(self):
+def load_markets(self):
+def get_price(self, symbol):
+def get_markets(self):
+
+--- Data\market_provider.py ---
+class MarketProvider:
+def __init__(self):
+def connect(self):
+def disconnect(self):
+def get_price(self, symbol):
+
+--- Data\price_manager.py ---
+class PriceManager:
+def __init__(self):
+def get_last_price(self, symbol):
+
+--- Data\yfinance_provider.py ---
+class YFinanceProvider:
+def __init__(self):
+def get_price(self, symbol):
+def get_historical_data(
+
+--- Database\database_manager.py ---
+class DatabaseManager:
+def __init__(self, database_path="phoenix_ai.db"):
+def create_tables(self):
+def save_trade(self, trade):
+def load_trades(self):
+def count(self):
+def wins(self):
+def losses(self):
+def breakeven(self):
+def total_profit(self):
+def gross_profit(self):
+def gross_loss(self):
+def best_trade(self):
+def worst_trade(self):
+def average_profit(self):
+def profit_factor(self):
+def win_rate(self):
+def reset(self):
+def close(self):
+
+--- Execution\execution_builder.py ---
+class ExecutionBuilder:
+def __init__(self):
+def build(self, trade):
+
+--- Execution\execution_engine.py ---
+class ExecutionEngine:
+def __init__(
+def connect_mt5(self):
+def disconnect_mt5(self):
+def execute(
+def close(
+
+--- Execution\execution_report.py ---
+class ExecutionReport:
+def __init__(self):
+def build(self, position):
+
+--- Execution\execution_validator.py ---
+class ExecutionValidator:
+def __init__(self):
+def validate(self, trade):
+
+--- Execution\mt5_broker.py ---
+class MT5Broker:
+def __init__(self):
+def connect(self):
+def disconnect(self):
+def get_balance(self):
+def _mt5_symbol(self, symbol):
+def _to_volume(self, mt5_symbol, size):
+def execute(self, trade):
+def close(self, closed_position):
+
+--- Logs\logger.py ---
+class Logger:
+def _time():
+def line():
+def section(title):
+def info(message):
+def success(message):
+def warning(message):
+def error(message):
+def value(name, value):
+def debug(message):
+
+--- MT5_Bridge\mt5_bridge.py ---
+class MT5DataBridge:
+def __init__(self, symbol: str = "EURUSD", timeframe: str = "M5"):
+def connect(self) -> bool:
+def disconnect(self) -> None:
+def _timeframe(self):
+def tick(self) -> dict[str, Any]:
+def candles(self, count: int = 200) -> list[dict[str, Any]]:
+def snapshot(self, count: int = 200) -> dict[str, Any]:
+
+--- MT5_Bridge\mt5_execution.py ---
+class MT5ExecutionEngine:
+def __init__(
+def connect(self):
+def disconnect(self):
+def account_info(self):
+def symbol_info(self):
+def tick(self):
+def get_contract_size(self):
+def core_units_to_lots(
+def normalize_volume(
+def get_filling_mode(self):
+def prepare_volume(
+def validate_trade(
+def prepare_order(
+def get_open_positions(self):
+def get_phoenix_positions(self):
+def risk_gate(
+def check_order(
+def execute(
+
+--- MT5_Bridge\mt5_execution_before_risk_fix.py ---
+class MT5ExecutionEngine:
+def __init__(
+def connect(self):
+def disconnect(self):
+def account_info(self):
+def symbol_info(self):
+def tick(self):
+def get_contract_size(self):
+def core_units_to_lots(
+def normalize_volume(
+def get_filling_mode(self):
+def prepare_volume(
+def validate_trade(
+def prepare_order(
+def get_open_positions(self):
+def get_phoenix_positions(self):
+def risk_gate(
+def check_order(
+def execute(
+
+--- MT5_Bridge\mt5_execution_recovered.py ---
+class MT5ExecutionEngine:
+def __init__(
+def connect(self):
+def disconnect(self):
+def account_info(self):
+def symbol_info(self):
+def tick(self):
+def get_contract_size(self):
+def core_units_to_lots(
+def normalize_volume(
+def get_filling_mode(self):
+def prepare_volume(
+def validate_trade(
+def prepare_order(
+def get_open_positions(self):
+def get_phoenix_positions(self):
+def risk_gate(
+def check_order(
+def modify_position(
+def close_position(
+def execute(
+
+--- MT5_Bridge\mt5_execution_recovered_before_protect.py ---
+class MT5ExecutionEngine:
+def __init__(
+def connect(self):
+def disconnect(self):
+def account_info(self):
+def symbol_info(self):
+def tick(self):
+def get_contract_size(self):
+def core_units_to_lots(
+def normalize_volume(
+def get_filling_mode(self):
+def prepare_volume(
+def validate_trade(
+def prepare_order(
+def get_open_positions(self):
+def get_phoenix_positions(self):
+def risk_gate(
+def check_order(
+def close_position(
+def execute(
+
+--- MT5_Bridge\run_mt5_phoenix.py ---
+def main():
+
+--- Position_Manager\position_manager.py ---
+class PhoenixPositionManager:
+def __init__(
+def connect(self):
+def disconnect(self):
+def get_positions(self):
+def get_active_position(self):
+def get_position_status(self):
+def monitor_position(self):
+def get_sl_tp_status(self):
+def check_position_protection(self):
+def get_position_state(self):
+def get_position_metrics(self):
+def check_position_risk(
+def run_position_decision_pipeline(self):
+def evaluate_position_action(self):
+def prepare_position_action(
+def execute_position_action(
+def close_position(
+
+--- Position_Manager\position_manager_before_protect_bridge.py ---
+class PhoenixPositionManager:
+def __init__(
+def connect(self):
+def disconnect(self):
+def get_positions(self):
+def get_active_position(self):
+def get_position_status(self):
+def monitor_position(self):
+def get_sl_tp_status(self):
+def check_position_protection(self):
+def get_position_state(self):
+def get_position_metrics(self):
+def check_position_risk(
+def run_position_decision_pipeline(self):
+def evaluate_position_action(self):
+def prepare_position_action(
+def execute_position_action(
+def close_position(
+
+--- Position_Manager\position_manager_before_protect_bridge_v2.py ---
+class PhoenixPositionManager:
+def __init__(
+def connect(self):
+def disconnect(self):
+def get_positions(self):
+def get_active_position(self):
+def get_position_status(self):
+def monitor_position(self):
+def get_sl_tp_status(self):
+def check_position_protection(self):
+def get_position_state(self):
+def get_position_metrics(self):
+def check_position_risk(
+def run_position_decision_pipeline(self):
+def evaluate_position_action(self):
+def prepare_position_action(
+def execute_position_action(
+def close_position(
+
+--- Tests\run_all_tests.py ---
+def main():
+
+--- Tests\test_analysis.py ---
+def create_test_data():
+def test_analysis_engine_output_structure():
+def test_risk_gate_is_present():
+def test_risk_gate_blocks_trade():
+
+--- Tests\test_backtest.py ---
+def test_backtest_engine():
+
+--- Tests\test_core.py ---
+def test_core_system():
+
+--- Tests\test_execution.py ---
+def test_buy_execution():
+def test_sell_execution():
+def test_strong_buy_execution():
+def test_strong_sell_execution():
+def test_hold_is_rejected():
+def test_invalid_signal_is_rejected():
+def test_close_execution_report():
+
+--- Tests\test_exit_manager.py ---
+def test_buy_stop_loss():
+def test_buy_take_profit():
+def test_sell_stop_loss():
+def test_sell_take_profit():
+def test_break_even_buy():
+def test_break_even_sell():
+def test_break_even_not_activated_in_loss():
+def test_trailing_stop_buy():
+def test_trailing_stop_sell():
+def test_trailing_stop_buy_does_not_move_backward():
+def test_trailing_stop_sell_does_not_move_backward():
+
+--- Tests\test_indicators.py ---
+def test_indicator_manager():
+
+--- Tests\test_market.py ---
+def test_market():
+
+--- Tests\test_mt5_connection.py ---
+def main():
+
+--- Tests\test_position_controller.py ---
+def test_initial_state():
+def test_open_position():
+def test_prevent_multiple_positions():
+def test_update_keeps_position_open():
+def test_update_triggers_stop_loss():
+def test_update_triggers_take_profit():
+def test_manual_close():
+def test_reset():
+
+--- Tests\test_position_manager.py ---
+def test_initial_state():
+def test_open_position():
+def test_prevent_multiple_positions():
+def test_close_position():
+def test_reset():
+
+--- Tests\test_position_monitor.py ---
+def test_buy_position():
+def test_sell_position():
+def test_max_profit_is_preserved():
+
+--- Tests\test_risk.py ---
+def test_position_size_one_percent():
+def test_position_size_zero_stop_distance():
+def test_position_size_smaller_with_wider_stop():
+def test_buy_trade():
+def test_sell_trade():
+def test_strong_buy_is_supported():
+def test_strong_sell_is_supported():
+def test_hold_does_not_create_trade():
+def test_invalid_signal_does_not_create_trade():
+
+--- Tests\test_signal.py ---
+def test_strong_buy_is_valid():
+def test_strong_sell_is_valid():
+def test_buy_requires_minimum_confidence():
+def test_buy_below_minimum_confidence_is_invalid():
+def test_sell_requires_minimum_confidence():
+def test_sell_below_minimum_confidence_is_invalid():
+def test_hold_is_invalid():
+def test_invalid_signal_is_invalid():
+def test_conflicting_buy_is_invalid():
+def test_conflicting_sell_is_invalid():
+def test_generate_signal_blocks_trade_when_risk_is_not_allowed():
+def test_generate_signal_allows_buy_when_risk_is_allowed():
+def test_generate_signal_allows_sell_when_risk_is_allowed():
+
+--- Tests\test_trade_builder.py ---
+class FakeRiskManager:
+def __init__(self, trade=None):
+def build_trade(
+def test_hold_returns_none():
+def test_buy_builds_trade():
+def test_strong_buy_becomes_buy():
+def test_strong_sell_becomes_sell():
+def test_risk_manager_can_reject_trade():
+
+--- Tests\test_trade_manager.py ---
+def test_generate_trade_returns_trade():
+def test_hold_returns_none():
+def test_strong_buy_is_supported():
+def test_strong_sell_is_supported():
+def test_summary_accepts_trade():
+def test_reset_does_not_raise():
+
+--- Tests\test_trading_guard.py ---
+def test_initial_state():
+def test_can_trade_initially():
+def test_register_profit():
+def test_register_loss():
+def test_consecutive_losses():
+def test_profit_resets_consecutive_losses():
+def test_daily_loss_limit():
+def test_consecutive_loss_limit():
+
+
+### 10. TEST DISPONIBILI ###
+Tests\find_symbol.py
+Tests\run_all_tests.py
+Tests\test_analysis.py
+Tests\test_backtest.py
+Tests\test_core.py
+Tests\test_end_to_end.py
+Tests\test_execution.py
+Tests\test_exit_manager.py
+Tests\test_indicators.py
+Tests\test_market.py
+Tests\test_mt5_connection.py
+Tests\test_position_controller.py
+Tests\test_position_cycle.py
+Tests\test_position_manager.py
+Tests\test_position_monitor.py
+Tests\test_risk.py
+Tests\test_signal.py
+Tests\test_trade_builder.py
+Tests\test_trade_manager.py
+Tests\test_trading_guard.py
+
+
+### 11. RISULTATO TEST COMPLETI ###
+........................................................................ [ 87%]
+..........                                                               [100%]
+82 passed in 5.81s
+
+
+
+### 12. TEST SUMMARY ###
+Tests/test_analysis.py::test_analysis_engine_output_structure
+Tests/test_analysis.py::test_risk_gate_is_present
+Tests/test_analysis.py::test_risk_gate_blocks_trade
+Tests/test_backtest.py::test_backtest_engine
+Tests/test_core.py::test_core_system
+Tests/test_execution.py::test_buy_execution
+Tests/test_execution.py::test_sell_execution
+Tests/test_execution.py::test_strong_buy_execution
+Tests/test_execution.py::test_strong_sell_execution
+Tests/test_execution.py::test_hold_is_rejected
+Tests/test_execution.py::test_invalid_signal_is_rejected
+Tests/test_execution.py::test_close_execution_report
+Tests/test_exit_manager.py::test_buy_stop_loss
+Tests/test_exit_manager.py::test_buy_take_profit
+Tests/test_exit_manager.py::test_sell_stop_loss
+Tests/test_exit_manager.py::test_sell_take_profit
+Tests/test_exit_manager.py::test_break_even_buy
+Tests/test_exit_manager.py::test_break_even_sell
+Tests/test_exit_manager.py::test_break_even_not_activated_in_loss
+Tests/test_exit_manager.py::test_trailing_stop_buy
+Tests/test_exit_manager.py::test_trailing_stop_sell
+Tests/test_exit_manager.py::test_trailing_stop_buy_does_not_move_backward
+Tests/test_exit_manager.py::test_trailing_stop_sell_does_not_move_backward
+Tests/test_indicators.py::test_indicator_manager
+Tests/test_market.py::test_market
+Tests/test_position_controller.py::test_initial_state
+Tests/test_position_controller.py::test_open_position
+Tests/test_position_controller.py::test_prevent_multiple_positions
+Tests/test_position_controller.py::test_update_keeps_position_open
+Tests/test_position_controller.py::test_update_triggers_stop_loss
+Tests/test_position_controller.py::test_update_triggers_take_profit
+Tests/test_position_controller.py::test_manual_close
+Tests/test_position_controller.py::test_reset
+Tests/test_position_manager.py::test_initial_state
+Tests/test_position_manager.py::test_open_position
+Tests/test_position_manager.py::test_prevent_multiple_positions
+Tests/test_position_manager.py::test_close_position
+Tests/test_position_manager.py::test_reset
+Tests/test_position_monitor.py::test_buy_position
+Tests/test_position_monitor.py::test_sell_position
+Tests/test_position_monitor.py::test_max_profit_is_preserved
+Tests/test_risk.py::test_position_size_one_percent
+Tests/test_risk.py::test_position_size_zero_stop_distance
+Tests/test_risk.py::test_position_size_smaller_with_wider_stop
+Tests/test_risk.py::test_buy_trade
+Tests/test_risk.py::test_sell_trade
+Tests/test_risk.py::test_strong_buy_is_supported
+Tests/test_risk.py::test_strong_sell_is_supported
+Tests/test_risk.py::test_hold_does_not_create_trade
+Tests/test_risk.py::test_invalid_signal_does_not_create_trade
+Tests/test_signal.py::test_strong_buy_is_valid
+Tests/test_signal.py::test_strong_sell_is_valid
+Tests/test_signal.py::test_buy_requires_minimum_confidence
+Tests/test_signal.py::test_buy_below_minimum_confidence_is_invalid
+Tests/test_signal.py::test_sell_requires_minimum_confidence
+Tests/test_signal.py::test_sell_below_minimum_confidence_is_invalid
+Tests/test_signal.py::test_hold_is_invalid
+Tests/test_signal.py::test_invalid_signal_is_invalid
+Tests/test_signal.py::test_conflicting_buy_is_invalid
+Tests/test_signal.py::test_conflicting_sell_is_invalid
+Tests/test_signal.py::test_generate_signal_blocks_trade_when_risk_is_not_allowed
+Tests/test_signal.py::test_generate_signal_allows_buy_when_risk_is_allowed
+Tests/test_signal.py::test_generate_signal_allows_sell_when_risk_is_allowed
+Tests/test_trade_builder.py::test_hold_returns_none
+Tests/test_trade_builder.py::test_buy_builds_trade
+Tests/test_trade_builder.py::test_strong_buy_becomes_buy
+Tests/test_trade_builder.py::test_strong_sell_becomes_sell
+Tests/test_trade_builder.py::test_risk_manager_can_reject_trade
+Tests/test_trade_manager.py::test_generate_trade_returns_trade
+Tests/test_trade_manager.py::test_hold_returns_none
+Tests/test_trade_manager.py::test_strong_buy_is_supported
+Tests/test_trade_manager.py::test_strong_sell_is_supported
+Tests/test_trade_manager.py::test_summary_accepts_trade
+Tests/test_trade_manager.py::test_reset_does_not_raise
+Tests/test_trading_guard.py::test_initial_state
+Tests/test_trading_guard.py::test_can_trade_initially
+Tests/test_trading_guard.py::test_register_profit
+Tests/test_trading_guard.py::test_register_loss
+Tests/test_trading_guard.py::test_consecutive_losses
+Tests/test_trading_guard.py::test_profit_resets_consecutive_losses
+Tests/test_trading_guard.py::test_daily_loss_limit
+Tests/test_trading_guard.py::test_consecutive_loss_limit
+
+82 tests collected in 1.39s
+
+
+
+### 13. CONFIGURAZIONE ###
+
+--- Config\__init__.py ---
+
+
+--- Config\__pycache__\__init__.cpython-314.pyc ---
++
+    SOnj    �                   �   � R # )N� r   �    �RC:\Users\mario rossi\OneDrive\Documenti\GitHub\ProjectPhoenixAI\Config\__init__.py�<module>r      s   �r   
+
+--- Config\__pycache__\mt5_credentials.cpython-314.pyc ---
++
+    ��wj�  �                   �F   � R t RtRtRtRtRRRRR	R
+RRR
+RRRRRRRRRRR/
+tR# )a2  
+========================================
+PROJECT PHOENIX AI
+MT5 Credentials
+Versione 1.2
+
+File con le credenziali VERE del conto MT5 demo (Pepperstone).
+Non condividere mai questo file, non caricarlo su GitHub
+(e' gia' escluso automaticamente tramite .gitignore).
+========================================
+iU�z
+qx0pmjtG-uzPepperstoneUK-DemoNzEURUSD=X�EURUSDzGBPUSD=X�GBPUSDzUSDJPY=X�USDJPYzUSDCAD=X�USDCADzAUDUSD=X�AUDUSDzEURGBP=X�EURGBPzXAUUSD=X�XAUUSDzXAGUSD=X�XAGUSDzBTC-USD�BTCUSDzETH-USD�ETHUSD)�__doc__�	MT5_LOGIN�MT5_PASSWORD�
+MT5_SERVER�MT5_PATH�
+SYMBOL_MAP� �    �YC:\Users\mario rossi\OneDrive\Documenti\GitHub\ProjectPhoenixAI\Config\mt5_credentials.py�<module>r      sa   ��
+� 
+�	� �� "�
+� �� ����������������
+�x�
+�x��
+r   
+
+--- Config\__pycache__\mt5_credentials.example.cpython-314.pyc ---
++
+    ,wj�
+  �                   ��   � R t ^ RIt^ RIt^ RIHt ]! ]4      P
+                  4       P                  P                  t]P                  P                  ^ ]! ]4      4       ^ RIH
+t
+ R t]R8X  d
+   ]! 4        R# R# )a0  
+========================================
+PROJECT PHOENIX AI
+Test connessione MT5
+Versione 1.0
+
+Script isolato per verificare che il collegamento a MetaTrader 5
+funzioni PRIMA di usarlo nel ciclo di trading automatico.
+
+Uso:
+    python Tests/test_mt5_connection.py
+
+Fase 1: si connette e mostra i dati del conto (nessun rischio).
+Fase 2 (opzionale, richiede conferma esplicita): piazza UN piccolo
+ordine di prova al volume minimo consentito dal simbolo, aspetta
+3 secondi, poi lo richiude. Usalo SOLO su un conto DEMO.
+========================================
+N)�Path)�	MT5Brokerc                  �p  � \        R+4       \        R4       \        R+4       \        4       p \        R4       V P                  4       '       g   \        R4       R# \        RV P                  4        24       \        R4       \        R4       \	        R4      P                  4       pVR	8w  d   \        R
+4       V P
+                  4        R# \        R4       \	        R4      P                  4       pVR
+8X  d   RpV P                  V4      p^ RIpVP                  V4      pVf"   \        RV R24       V P
+                  4        R# VP                  pRVRRRVRVR,          RVR,          RR/p\        RV RV R24       V P                  V4      p\        RV4       VR,          '       g   \        R 4       V P
+                  4        R# \        R!4       \        P                  ! ^4       RVRRRVR,          R"VR#R$R%R&R'RR(V/p	V P                  V	4      p
+\        R)V
+4       V P
+                  4        \        R*4       R# ),�=z TEST CONNESSIONE MT5z
+--- FASE 1: connessione ---
+z�
+Connessione fallita. Controlla Config/mt5_credentials.py (login, password, server) e che il terminale MT5 sia installato e raggiungibile.Nz
+Saldo conto: zW
+Se questo e' un conto DEMO e i dati sopra sono corretti, puoi procedere con la Fase 2.zt
+ATTENZIONE: la Fase 2 piazza un ordine VERO (anche se su conto demo, e' un'esecuzione reale sul server del broker).z;
+Vuoi procedere con un ordine di prova? (scrivi CONFERMO): �CONFERMOz 
+Fase 2 saltata. Disconnessione.z!
+--- FASE 2: ordine di prova ---
+z:Simbolo da testare, formato Yahoo Finance (es. EURUSD=X): � zEURUSD=Xz
+Nessun prezzo disponibile per z�. Controlla il nome del simbolo in Config/mt5_credentials.py (SYMBOL_MAP) confrontandolo con quello nel Market Watch del terminale MT5.�symbol�side�BUY�entry�	stop_lossg�G�z��?�take_profitg)\���(�?�sizeg      �?z!
+Apertura ordine di prova BUY su z @ z...zRisultato apertura:�successz+
+Ordine non eseguito, vedi il motivo sopra.z)
+Attendo 3 secondi prima di richiudere...�
+current_price�current_profitg        �close_reason�TEST�
+close_time�
+mt5_symbolzRisultato chiusura:z
+Test completato.z<============================================================)�printr   �connect�get_balance�input�strip�
+disconnect�_mt5_symbol�MetaTrader5�symbol_info_tick�ask�execute�time�sleep�close)�broker�scelta�simbolor   �mt5�tick�prezzo�trade�order�closed_position�reports              �#.\Config\mt5_credentials.example.py�mainr/      s@  � �	�(�O�	�
+!�"�	�(�O�
+�[�F�	�
++�,��>�>���
+�
+*�	
+� 	�	�O�F�.�.�0�1�
+2�3�	�	(��
+ 
+�	E��
+ �F���e�g� � ���
+�1�2������	�
+/�0��D���e�g� � �"�}����#�#�G�,�J�����
+�+�D��|�
+�.�z�l� ;!� 
+!�	
+� 	�����
+�X�X�F� 	�'������V�d�]��v��}���
+
+�E� 
+�.�z�l�#�f�X�S�
+I�J��N�N�5�!�E�	�
+��'�����
+�<�=������	�
+6�7��J�J�q�M� 	�'�����w�����#����d��j�	�O� �\�\�/�
+*�F�	�
+��(�
+����	�
+��    �__main__)�__doc__�sysr!   �pathlibr   �__file__�resolve�parent�ROOT�path�insert�str�Execution.mt5_brokerr   r/   �__name__� r0   r.   �<module>r?      sg   ���& � � ��H�~����&�&�-�-�� ������3�t�9� � *�w �t �z���F� r0   
+
+--- Config\__pycache__\settings.cpython-314.pyc ---
++
+    c��j�  �                   �   � R t RtRtRtRtRtRtRt. ROt^t	^t
+^2t^t^t
+^t^t^t^t^	t^t^tRtR	tR
+t^<tR	t^tRtRtR
+tRtR# )a�  
+========================================
+PROJECT PHOENIX AI
+Settings
+Versione 8.0
+
+Questa e' l'UNICA fonte di configurazione del progetto. Prima
+esisteva anche Core/config.py con alcuni parametri duplicati
+(es. MAX_RISK con due valori diversi, 1.0 e 2.0) e altri presenti
+solo li' (APP_NAME, MODE, START_BALANCE, CURRENCIES): tutto e'
+stato unificato qui per evitare che due moduli leggano parametri
+diversi per lo stesso concetto.
+========================================
+zPROJECT PHOENIX AIz0.0.1�DEMOzBTC-USD�BTCUSD�5d�1hg      �?g      @g      �?i'  g����MbP?g        �INFON)�EURUSD�GBPUSD�USDJPY�XAUUSD)�__doc__�APP_NAME�VERSION�MODE�SYMBOL�
+MT5_SYMBOL�PERIOD�INTERVAL�
+CURRENCIES�
+EMA_PERIOD�EMA_FAST�EMA_SLOW�
+SMA_PERIOD�
+RSI_PERIOD�
+ATR_PERIOD�
+ADX_PERIOD�	MACD_FAST�	MACD_SLOW�MACD_SIGNAL�BOLLINGER_PERIOD�
+BOLLINGER_STD�
+STOP_LOSS_ATR�TAKE_PROFIT_ATR�MAX_RISK�MIN_CONFIDENCE�MAX_DAILY_LOSS_PERCENT�MAX_CONSECUTIVE_LOSSES�
+START_BALANCE�
+COMMISSION�SLIPPAGE�	LOG_LEVEL� �    �.\Config\settings.py�<module>r-      s�   ��
+�&  ��
+��
+�� 
+�� �
+�	
+�����
+� �
+�
+��
+��
+�
+�
+�
+�
+�
+�
+�
+� 
+�	��	��� � ��
+� �
+��� ���� � �
+ � � �
+�
+�
+��� 
+�	r+   
+
+--- Config\mt5_credentials.example.py ---
+"""
+========================================
+PROJECT PHOENIX AI
+Test connessione MT5
+Versione 1.0
+
+Script isolato per verificare che il collegamento a MetaTrader 5
+funzioni PRIMA di usarlo nel ciclo di trading automatico.
+
+Uso:
+    python Tests/test_mt5_connection.py
+
+Fase 1: si connette e mostra i dati del conto (nessun rischio).
+Fase 2 (opzionale, richiede conferma esplicita): piazza UN piccolo
+ordine di prova al volume minimo consentito dal simbolo, aspetta
+3 secondi, poi lo richiude. Usalo SOLO su un conto DEMO.
+========================================
+"""
+
+import sys
+import time
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+from Execution.mt5_broker import MT5Broker
+
+
+def main():
+
+    print("=" * 60)
+    print(" TEST CONNESSIONE MT5")
+    print("=" * 60)
+
+    broker = MT5Broker()
+
+    print("\n--- FASE 1: connessione ---\n")
+
+    if not broker.connect():
+
+        print(
+            "\nConnessione fallita. Controlla Config/mt5_credentials.py "
+            "(login, password, server) e che il terminale MT5 sia "
+            "installato e raggiungibile."
+        )
+
+        return
+
+    print(f"\nSaldo conto: {broker.get_balance()}")
+
+    print(
+        "\nSe questo e' un conto DEMO e i dati sopra sono corretti, "
+        "puoi procedere con la Fase 2."
+    )
+
+    print(
+        "\nATTENZIONE: la Fase 2 piazza un ordine VERO (anche se su "
+        "conto demo, e' un'esecuzione reale sul server del broker)."
+    )
+
+    scelta = input(
+        "\nVuoi procedere con un ordine di prova? (scrivi CONFERMO): "
+    ).strip()
+
+    if scelta != "CONFERMO":
+
+        print("\nFase 2 saltata. Disconnessione.")
+
+        broker.disconnect()
+
+        return
+
+    print("\n--- FASE 2: ordine di prova ---\n")
+
+    simbolo = input(
+        "Simbolo da testare, formato Yahoo Finance (es. EURUSD=X): "
+    ).strip()
+
+    if simbolo == "":
+
+        simbolo = "EURUSD=X"
+
+    mt5_symbol = broker._mt5_symbol(simbolo)
+
+    import MetaTrader5 as mt5
+
+    tick = mt5.symbol_info_tick(mt5_symbol)
+
+    if tick is None:
+
+        print(
+            f"\nNessun prezzo disponibile per {mt5_symbol}. "
+            "Controlla il nome del simbolo in Config/mt5_credentials.py "
+            "(SYMBOL_MAP) confrontandolo con quello nel Market Watch "
+            "del terminale MT5."
+        )
+
+        broker.disconnect()
+
+        return
+
+    prezzo = tick.ask
+
+    trade = {
+        "symbol": simbolo,
+        "side": "BUY",
+        "entry": prezzo,
+        "stop_loss": prezzo * 0.99,
+        "take_profit": prezzo * 1.01,
+        "size": 1.0
+    }
+
+    print(f"\nApertura ordine di prova BUY su {mt5_symbol} @ {prezzo}...")
+
+    order = broker.execute(trade)
+
+    print("Risultato apertura:", order)
+
+    if not order["success"]:
+
+        print("\nOrdine non eseguito, vedi il motivo sopra.")
+
+        broker.disconnect()
+
+        return
+
+    print("\nAttendo 3 secondi prima di richiudere...")
+
+    time.sleep(3)
+
+    closed_position = {
+        "symbol": simbolo,
+        "side": "BUY",
+        "entry": order["entry"],
+        "current_price": prezzo,
+        "current_profit": 0.0,
+        "close_reason": "TEST",
+        "close_time": None,
+        "mt5_symbol": mt5_symbol
+    }
+
+    report = broker.close(closed_position)
+
+    print("Risultato chiusura:", report)
+
+    broker.disconnect()
+
+    print("\nTest completato.")
+
+
+if __name__ == "__main__":
+
+    main()
+
+--- Config\mt5_credentials.py ---
+"""
+========================================
+PROJECT PHOENIX AI
+MT5 Credentials
+Versione 1.2
+
+File con le credenziali VERE del conto MT5 demo (Pepperstone).
+Non condividere mai questo file, non caricarlo su GitHub
+(e' gia' escluso automaticamente tramite .gitignore).
+========================================
+"""
+
+# Numero di conto MT5
+MT5_LOGIN = 62135893
+
+# Password del conto MT5 (quella "Trader")
+MT5_PASSWORD = "qx0pmjtG-u"
+
+# Nome del server del broker
+MT5_SERVER = "PepperstoneUK-Demo"
+
+# Percorso dell'eseguibile terminal64.exe di MT5, SOLO se hai piu'
+# installazioni MT5 sul PC. Lascia None per usare quella di default.
+MT5_PATH = None
+
+# Mappa simbolo Yahoo Finance -> simbolo broker MT5.
+#
+# Confermato direttamente dall'API di questo account (Pepperstone
+# demo): i simboli reali NON hanno il suffisso ".p" che si vede
+# nell'interfaccia grafica di MT5 (quello e' solo un'etichetta
+# visiva del programma) - il nome vero e' quello semplice.
+SYMBOL_MAP = {
+    "EURUSD=X": "EURUSD",
+    "GBPUSD=X": "GBPUSD",
+    "USDJPY=X": "USDJPY",
+    "USDCAD=X": "USDCAD",
+    "AUDUSD=X": "AUDUSD",
+    "EURGBP=X": "EURGBP",
+    "XAUUSD=X": "XAUUSD",
+    "XAGUSD=X": "XAGUSD",
+    "BTC-USD": "BTCUSD",
+    "ETH-USD": "ETHUSD",
+}
+
+--- Config\settings.py ---
+"""
+========================================
+PROJECT PHOENIX AI
+Settings
+Versione 8.0
+
+Questa e' l'UNICA fonte di configurazione del progetto. Prima
+esisteva anche Core/config.py con alcuni parametri duplicati
+(es. MAX_RISK con due valori diversi, 1.0 e 2.0) e altri presenti
+solo li' (APP_NAME, MODE, START_BALANCE, CURRENCIES): tutto e'
+stato unificato qui per evitare che due moduli leggano parametri
+diversi per lo stesso concetto.
+========================================
+"""
+
+# ======================================
+# PROGETTO
+# ======================================
+
+APP_NAME = "PROJECT PHOENIX AI"
+
+VERSION = "0.0.1"
+
+MODE = "DEMO"          # DEMO oppure LIVE
+
+# ======================================
+# MERCATO
+# ======================================
+
+# Simbolo utilizzato dal sistema dati/analisi
+SYMBOL = "BTC-USD"
+
+# Simbolo reale utilizzato da MetaTrader 5
+MT5_SYMBOL = "BTCUSD"
+
+PERIOD = "5d"
+
+INTERVAL = "1h"
+
+CURRENCIES = [
+    "EURUSD",
+    "GBPUSD",
+    "USDJPY",
+    "XAUUSD"
+]
+
+# ======================================
+# INDICATORI
+# ======================================
+
+EMA_PERIOD = 20
+
+EMA_FAST = 20
+
+EMA_SLOW = 50
+
+SMA_PERIOD = 20
+
+RSI_PERIOD = 14
+
+ATR_PERIOD = 14
+
+ADX_PERIOD = 14
+
+# ======================================
+# MACD
+# ======================================
+
+MACD_FAST = 12
+
+MACD_SLOW = 26
+
+MACD_SIGNAL = 9
+
+# ======================================
+# BOLLINGER
+# ======================================
+
+BOLLINGER_PERIOD = 20
+
+BOLLINGER_STD = 2
+
+# ======================================
+# TRADE
+# ======================================
+
+STOP_LOSS_ATR = 1.5
+
+TAKE_PROFIT_ATR = 3.0
+
+# ======================================
+# RISK MANAGEMENT
+# ======================================
+
+# Prima erano due valori diversi in due file (1.0 in Core/config.py,
+# 2.0 qui): quello realmente in uso per il position sizing era 1.0
+# (Core/config.py), quindi e' quello mantenuto per non alterare il
+# comportamento gia' verificato nei backtest.
+MAX_RISK = 1.0
+
+MIN_CONFIDENCE = 60
+
+# ======================================
+# PROTEZIONI LIVE TRADING
+# ======================================
+
+# Se la perdita del giorno supera questa percentuale del saldo
+# di inizio giornata, il Live Trading si ferma da solo (nessun
+# nuovo trade, quelli aperti restano gestiti fino alla chiusura
+# naturale via SL/TP).
+MAX_DAILY_LOSS_PERCENT = 3.0
+
+# Se si accumulano questi trade in perdita DI FILA, il Live
+# Trading si ferma da solo (protezione contro condizioni di
+# mercato anomale o un bug non ancora scoperto).
+MAX_CONSECUTIVE_LOSSES = 4
+
+# ======================================
+# CAPITALE / BACKTEST
+# ======================================
+
+START_BALANCE = 10000
+
+COMMISSION = 0.001
+
+SLIPPAGE = 0.0
+
+# ======================================
+# LOG
+# ======================================
+
+LOG_LEVEL = "INFO"
+
+--- config\__init__.py ---
+
+
+--- config\__pycache__\__init__.cpython-314.pyc ---
++
+    SOnj    �                   �   � R # )N� r   �    �RC:\Users\mario rossi\OneDrive\Documenti\GitHub\ProjectPhoenixAI\Config\__init__.py�<module>r      s   �r   
+
+--- config\__pycache__\mt5_credentials.cpython-314.pyc ---
++
+    ��wj�  �                   �F   � R t RtRtRtRtRRRRR	R
+RRR
+RRRRRRRRRRR/
+tR# )a2  
+========================================
+PROJECT PHOENIX AI
+MT5 Credentials
+Versione 1.2
+
+File con le credenziali VERE del conto MT5 demo (Pepperstone).
+Non condividere mai questo file, non caricarlo su GitHub
+(e' gia' escluso automaticamente tramite .gitignore).
+========================================
+iU�z
+qx0pmjtG-uzPepperstoneUK-DemoNzEURUSD=X�EURUSDzGBPUSD=X�GBPUSDzUSDJPY=X�USDJPYzUSDCAD=X�USDCADzAUDUSD=X�AUDUSDzEURGBP=X�EURGBPzXAUUSD=X�XAUUSDzXAGUSD=X�XAGUSDzBTC-USD�BTCUSDzETH-USD�ETHUSD)�__doc__�	MT5_LOGIN�MT5_PASSWORD�
+MT5_SERVER�MT5_PATH�
+SYMBOL_MAP� �    �YC:\Users\mario rossi\OneDrive\Documenti\GitHub\ProjectPhoenixAI\Config\mt5_credentials.py�<module>r      sa   ��
+� 
+�	� �� "�
+� �� ����������������
+�x�
+�x��
+r   
+
+--- config\__pycache__\mt5_credentials.example.cpython-314.pyc ---
++
+    ,wj�
+  �                   ��   � R t ^ RIt^ RIt^ RIHt ]! ]4      P
+                  4       P                  P                  t]P                  P                  ^ ]! ]4      4       ^ RIH
+t
+ R t]R8X  d
+   ]! 4        R# R# )a0  
+========================================
+PROJECT PHOENIX AI
+Test connessione MT5
+Versione 1.0
+
+Script isolato per verificare che il collegamento a MetaTrader 5
+funzioni PRIMA di usarlo nel ciclo di trading automatico.
+
+Uso:
+    python Tests/test_mt5_connection.py
+
+Fase 1: si connette e mostra i dati del conto (nessun rischio).
+Fase 2 (opzionale, richiede conferma esplicita): piazza UN piccolo
+ordine di prova al volume minimo consentito dal simbolo, aspetta
+3 secondi, poi lo richiude. Usalo SOLO su un conto DEMO.
+========================================
+N)�Path)�	MT5Brokerc                  �p  � \        R+4       \        R4       \        R+4       \        4       p \        R4       V P                  4       '       g   \        R4       R# \        RV P                  4        24       \        R4       \        R4       \	        R4      P                  4       pVR	8w  d   \        R
+4       V P
+                  4        R# \        R4       \	        R4      P                  4       pVR
+8X  d   RpV P                  V4      p^ RIpVP                  V4      pVf"   \        RV R24       V P
+                  4        R# VP                  pRVRRRVRVR,          RVR,          RR/p\        RV RV R24       V P                  V4      p\        RV4       VR,          '       g   \        R 4       V P
+                  4        R# \        R!4       \        P                  ! ^4       RVRRRVR,          R"VR#R$R%R&R'RR(V/p	V P                  V	4      p
+\        R)V
+4       V P
+                  4        \        R*4       R# ),�=z TEST CONNESSIONE MT5z
+--- FASE 1: connessione ---
+z�
+Connessione fallita. Controlla Config/mt5_credentials.py (login, password, server) e che il terminale MT5 sia installato e raggiungibile.Nz
+Saldo conto: zW
+Se questo e' un conto DEMO e i dati sopra sono corretti, puoi procedere con la Fase 2.zt
+ATTENZIONE: la Fase 2 piazza un ordine VERO (anche se su conto demo, e' un'esecuzione reale sul server del broker).z;
+Vuoi procedere con un ordine di prova? (scrivi CONFERMO): �CONFERMOz 
+Fase 2 saltata. Disconnessione.z!
+--- FASE 2: ordine di prova ---
+z:Simbolo da testare, formato Yahoo Finance (es. EURUSD=X): � zEURUSD=Xz
+Nessun prezzo disponibile per z�. Controlla il nome del simbolo in Config/mt5_credentials.py (SYMBOL_MAP) confrontandolo con quello nel Market Watch del terminale MT5.�symbol�side�BUY�entry�	stop_lossg�G�z��?�take_profitg)\���(�?�sizeg      �?z!
+Apertura ordine di prova BUY su z @ z...zRisultato apertura:�successz+
+Ordine non eseguito, vedi il motivo sopra.z)
+Attendo 3 secondi prima di richiudere...�
+current_price�current_profitg        �close_reason�TEST�
+close_time�
+mt5_symbolzRisultato chiusura:z
+Test completato.z<============================================================)�printr   �connect�get_balance�input�strip�
+disconnect�_mt5_symbol�MetaTrader5�symbol_info_tick�ask�execute�time�sleep�close)�broker�scelta�simbolor   �mt5�tick�prezzo�trade�order�closed_position�reports              �#.\Config\mt5_credentials.example.py�mainr/      s@  � �	�(�O�	�
+!�"�	�(�O�
+�[�F�	�
++�,��>�>���
+�
+*�	
+� 	�	�O�F�.�.�0�1�
+2�3�	�	(��
+ 
+�	E��
+ �F���e�g� � ���
+�1�2������	�
+/�0��D���e�g� � �"�}����#�#�G�,�J�����
+�+�D��|�
+�.�z�l� ;!� 
+!�	
+� 	�����
+�X�X�F� 	�'������V�d�]��v��}���
+
+�E� 
+�.�z�l�#�f�X�S�
+I�J��N�N�5�!�E�	�
+��'�����
+�<�=������	�
+6�7��J�J�q�M� 	�'�����w�����#����d��j�	�O� �\�\�/�
+*�F�	�
+��(�
+����	�
+��    �__main__)�__doc__�sysr!   �pathlibr   �__file__�resolve�parent�ROOT�path�insert�str�Execution.mt5_brokerr   r/   �__name__� r0   r.   �<module>r?      sg   ���& � � ��H�~����&�&�-�-�� ������3�t�9� � *�w �t �z���F� r0   
+
+--- config\__pycache__\settings.cpython-314.pyc ---
++
+    c��j�  �                   �   � R t RtRtRtRtRtRtRt. ROt^t	^t
+^2t^t^t
+^t^t^t^t^	t^t^tRtR	tR
+t^<tR	t^tRtRtR
+tRtR# )a�  
+========================================
+PROJECT PHOENIX AI
+Settings
+Versione 8.0
+
+Questa e' l'UNICA fonte di configurazione del progetto. Prima
+esisteva anche Core/config.py con alcuni parametri duplicati
+(es. MAX_RISK con due valori diversi, 1.0 e 2.0) e altri presenti
+solo li' (APP_NAME, MODE, START_BALANCE, CURRENCIES): tutto e'
+stato unificato qui per evitare che due moduli leggano parametri
+diversi per lo stesso concetto.
+========================================
+zPROJECT PHOENIX AIz0.0.1�DEMOzBTC-USD�BTCUSD�5d�1hg      �?g      @g      �?i'  g����MbP?g        �INFON)�EURUSD�GBPUSD�USDJPY�XAUUSD)�__doc__�APP_NAME�VERSION�MODE�SYMBOL�
+MT5_SYMBOL�PERIOD�INTERVAL�
+CURRENCIES�
+EMA_PERIOD�EMA_FAST�EMA_SLOW�
+SMA_PERIOD�
+RSI_PERIOD�
+ATR_PERIOD�
+ADX_PERIOD�	MACD_FAST�	MACD_SLOW�MACD_SIGNAL�BOLLINGER_PERIOD�
+BOLLINGER_STD�
+STOP_LOSS_ATR�TAKE_PROFIT_ATR�MAX_RISK�MIN_CONFIDENCE�MAX_DAILY_LOSS_PERCENT�MAX_CONSECUTIVE_LOSSES�
+START_BALANCE�
+COMMISSION�SLIPPAGE�	LOG_LEVEL� �    �.\Config\settings.py�<module>r-      s�   ��
+�&  ��
+��
+�� 
+�� �
+�	
+�����
+� �
+�
+��
+��
+�
+�
+�
+�
+�
+�
+�
+� 
+�	��	��� � ��
+� �
+��� ���� � �
+ � � �
+�
+�
+��� 
+�	r+   
+
+--- config\mt5_credentials.example.py ---
+"""
+========================================
+PROJECT PHOENIX AI
+Test connessione MT5
+Versione 1.0
+
+Script isolato per verificare che il collegamento a MetaTrader 5
+funzioni PRIMA di usarlo nel ciclo di trading automatico.
+
+Uso:
+    python Tests/test_mt5_connection.py
+
+Fase 1: si connette e mostra i dati del conto (nessun rischio).
+Fase 2 (opzionale, richiede conferma esplicita): piazza UN piccolo
+ordine di prova al volume minimo consentito dal simbolo, aspetta
+3 secondi, poi lo richiude. Usalo SOLO su un conto DEMO.
+========================================
+"""
+
+import sys
+import time
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+from Execution.mt5_broker import MT5Broker
+
+
+def main():
+
+    print("=" * 60)
+    print(" TEST CONNESSIONE MT5")
+    print("=" * 60)
+
+    broker = MT5Broker()
+
+    print("\n--- FASE 1: connessione ---\n")
+
+    if not broker.connect():
+
+        print(
+            "\nConnessione fallita. Controlla Config/mt5_credentials.py "
+            "(login, password, server) e che il terminale MT5 sia "
+            "installato e raggiungibile."
+        )
+
+        return
+
+    print(f"\nSaldo conto: {broker.get_balance()}")
+
+    print(
+        "\nSe questo e' un conto DEMO e i dati sopra sono corretti, "
+        "puoi procedere con la Fase 2."
+    )
+
+    print(
+        "\nATTENZIONE: la Fase 2 piazza un ordine VERO (anche se su "
+        "conto demo, e' un'esecuzione reale sul server del broker)."
+    )
+
+    scelta = input(
+        "\nVuoi procedere con un ordine di prova? (scrivi CONFERMO): "
+    ).strip()
+
+    if scelta != "CONFERMO":
+
+        print("\nFase 2 saltata. Disconnessione.")
+
+        broker.disconnect()
+
+        return
+
+    print("\n--- FASE 2: ordine di prova ---\n")
+
+    simbolo = input(
+        "Simbolo da testare, formato Yahoo Finance (es. EURUSD=X): "
+    ).strip()
+
+    if simbolo == "":
+
+        simbolo = "EURUSD=X"
+
+    mt5_symbol = broker._mt5_symbol(simbolo)
+
+    import MetaTrader5 as mt5
+
+    tick = mt5.symbol_info_tick(mt5_symbol)
+
+    if tick is None:
+
+        print(
+            f"\nNessun prezzo disponibile per {mt5_symbol}. "
+            "Controlla il nome del simbolo in Config/mt5_credentials.py "
+            "(SYMBOL_MAP) confrontandolo con quello nel Market Watch "
+            "del terminale MT5."
+        )
+
+        broker.disconnect()
+
+        return
+
+    prezzo = tick.ask
+
+    trade = {
+        "symbol": simbolo,
+        "side": "BUY",
+        "entry": prezzo,
+        "stop_loss": prezzo * 0.99,
+        "take_profit": prezzo * 1.01,
+        "size": 1.0
+    }
+
+    print(f"\nApertura ordine di prova BUY su {mt5_symbol} @ {prezzo}...")
+
+    order = broker.execute(trade)
+
+    print("Risultato apertura:", order)
+
+    if not order["success"]:
+
+        print("\nOrdine non eseguito, vedi il motivo sopra.")
+
+        broker.disconnect()
+
+        return
+
+    print("\nAttendo 3 secondi prima di richiudere...")
+
+    time.sleep(3)
+
+    closed_position = {
+        "symbol": simbolo,
+        "side": "BUY",
+        "entry": order["entry"],
+        "current_price": prezzo,
+        "current_profit": 0.0,
+        "close_reason": "TEST",
+        "close_time": None,
+        "mt5_symbol": mt5_symbol
+    }
+
+    report = broker.close(closed_position)
+
+    print("Risultato chiusura:", report)
+
+    broker.disconnect()
+
+    print("\nTest completato.")
+
+
+if __name__ == "__main__":
+
+    main()
+
+--- config\mt5_credentials.py ---
+"""
+========================================
+PROJECT PHOENIX AI
+MT5 Credentials
+Versione 1.2
+
+File con le credenziali VERE del conto MT5 demo (Pepperstone).
+Non condividere mai questo file, non caricarlo su GitHub
+(e' gia' escluso automaticamente tramite .gitignore).
+========================================
+"""
+
+# Numero di conto MT5
+MT5_LOGIN = 62135893
+
+# Password del conto MT5 (quella "Trader")
+MT5_PASSWORD = "qx0pmjtG-u"
+
+# Nome del server del broker
+MT5_SERVER = "PepperstoneUK-Demo"
+
+# Percorso dell'eseguibile terminal64.exe di MT5, SOLO se hai piu'
+# installazioni MT5 sul PC. Lascia None per usare quella di default.
+MT5_PATH = None
+
+# Mappa simbolo Yahoo Finance -> simbolo broker MT5.
+#
+# Confermato direttamente dall'API di questo account (Pepperstone
+# demo): i simboli reali NON hanno il suffisso ".p" che si vede
+# nell'interfaccia grafica di MT5 (quello e' solo un'etichetta
+# visiva del programma) - il nome vero e' quello semplice.
+SYMBOL_MAP = {
+    "EURUSD=X": "EURUSD",
+    "GBPUSD=X": "GBPUSD",
+    "USDJPY=X": "USDJPY",
+    "USDCAD=X": "USDCAD",
+    "AUDUSD=X": "AUDUSD",
+    "EURGBP=X": "EURGBP",
+    "XAUUSD=X": "XAUUSD",
+    "XAGUSD=X": "XAGUSD",
+    "BTC-USD": "BTCUSD",
+    "ETH-USD": "ETHUSD",
+}
+
+--- config\settings.py ---
+"""
+========================================
+PROJECT PHOENIX AI
+Settings
+Versione 8.0
+
+Questa e' l'UNICA fonte di configurazione del progetto. Prima
+esisteva anche Core/config.py con alcuni parametri duplicati
+(es. MAX_RISK con due valori diversi, 1.0 e 2.0) e altri presenti
+solo li' (APP_NAME, MODE, START_BALANCE, CURRENCIES): tutto e'
+stato unificato qui per evitare che due moduli leggano parametri
+diversi per lo stesso concetto.
+========================================
+"""
+
+# ======================================
+# PROGETTO
+# ======================================
+
+APP_NAME = "PROJECT PHOENIX AI"
+
+VERSION = "0.0.1"
+
+MODE = "DEMO"          # DEMO oppure LIVE
+
+# ======================================
+# MERCATO
+# ======================================
+
+# Simbolo utilizzato dal sistema dati/analisi
+SYMBOL = "BTC-USD"
+
+# Simbolo reale utilizzato da MetaTrader 5
+MT5_SYMBOL = "BTCUSD"
+
+PERIOD = "5d"
+
+INTERVAL = "1h"
+
+CURRENCIES = [
+    "EURUSD",
+    "GBPUSD",
+    "USDJPY",
+    "XAUUSD"
+]
+
+# ======================================
+# INDICATORI
+# ======================================
+
+EMA_PERIOD = 20
+
+EMA_FAST = 20
+
+EMA_SLOW = 50
+
+SMA_PERIOD = 20
+
+RSI_PERIOD = 14
+
+ATR_PERIOD = 14
+
+ADX_PERIOD = 14
+
+# ======================================
+# MACD
+# ======================================
+
+MACD_FAST = 12
+
+MACD_SLOW = 26
+
+MACD_SIGNAL = 9
+
+# ======================================
+# BOLLINGER
+# ======================================
+
+BOLLINGER_PERIOD = 20
+
+BOLLINGER_STD = 2
+
+# ======================================
+# TRADE
+# ======================================
+
+STOP_LOSS_ATR = 1.5
+
+TAKE_PROFIT_ATR = 3.0
+
+# ======================================
+# RISK MANAGEMENT
+# ======================================
+
+# Prima erano due valori diversi in due file (1.0 in Core/config.py,
+# 2.0 qui): quello realmente in uso per il position sizing era 1.0
+# (Core/config.py), quindi e' quello mantenuto per non alterare il
+# comportamento gia' verificato nei backtest.
+MAX_RISK = 1.0
+
+MIN_CONFIDENCE = 60
+
+# ======================================
+# PROTEZIONI LIVE TRADING
+# ======================================
+
+# Se la perdita del giorno supera questa percentuale del saldo
+# di inizio giornata, il Live Trading si ferma da solo (nessun
+# nuovo trade, quelli aperti restano gestiti fino alla chiusura
+# naturale via SL/TP).
+MAX_DAILY_LOSS_PERCENT = 3.0
+
+# Se si accumulano questi trade in perdita DI FILA, il Live
+# Trading si ferma da solo (protezione contro condizioni di
+# mercato anomale o un bug non ancora scoperto).
+MAX_CONSECUTIVE_LOSSES = 4
+
+# ======================================
+# CAPITALE / BACKTEST
+# ======================================
+
+START_BALANCE = 10000
+
+COMMISSION = 0.001
+
+SLIPPAGE = 0.0
+
+# ======================================
+# LOG
+# ======================================
+
+LOG_LEVEL = "INFO"
+
+
+### 14. TODO / FIXME / NOT IMPLEMENTED ###
+
+--- Core\live_trading_engine.py ---
+102:         # METODO 1
+133:         # METODO 2
+
+--- create_phoenix_audit.py ---
+247: # 12. TODO / FIXME
+250: out.append("\n\n### 14. TODO / FIXME / NOT IMPLEMENTED ###")
+274:                 "TODO" in upper
+275:                 or "FIXME" in upper
+276:                 or "NOT IMPLEMENTED" in upper
+277:                 or "PASS  # TODO" in upper
+
+
+### 15. BACKUP E FILE NON TRACCIATI ###
+?? Core/exit_manager.py.bak
+?? Execution/execution_engine.py.bak
+?? PHOENIX_FULL_PROJECT_DUMP.txt
+?? create_phoenix_audit.py
+
+
+
+### 16. AMBIENTE PYTHON ###
+Python 3.14.6
+
+
+
+### 17. PACCHETTI PYTHON ###
+Package            Version
+------------------ ------------
+beautifulsoup4     4.15.0
+certifi            2026.7.22
+cffi               2.1.0
+charset-normalizer 3.4.9
+colorama           0.4.6
+curl_cffi          0.15.0
+idna               3.18
+iniconfig          2.3.0
+markdown-it-py     4.2.0
+mdurl              0.1.2
+metatrader5        5.0.6090
+multitasking       0.0.13
+numpy              2.5.1
+packaging          26.3
+pandas             3.0.5
+peewee             4.2.6
+pip                26.1.2
+platformdirs       4.11.0
+pluggy             1.6.0
+protobuf           7.35.1
+pycparser          3.0
+Pygments           2.20.0
+pytest             9.1.1
+python-dateutil    2.9.0.post0
+pytz               2026.3.post1
+requests           2.34.2
+rich               15.0.0
+six                1.17.0
+soupsieve          2.9.1
+typing_extensions  4.16.0
+tzdata             2026.3
+urllib3            2.7.0
+websockets         16.1.1
+yfinance           1.5.2
