@@ -335,34 +335,10 @@ class LiveTradingEngine:
             risk_reward = 0.0
 
         # =================================
-        # TRADE ID
-        # =================================
-
-        trade_id = (
-            closed.get("trade_id")
-            or closed.get("mt5_ticket")
-            or report.get("trade_id")
-            or report.get("mt5_ticket")
-        )
-
-        if trade_id is None:
-
-            trade_id = (
-                f"{symbol}|"
-                f"{side}|"
-                f"{open_time}"
-            )
-
-        trade_id = str(trade_id)
-
-        # =================================
         # TRADE FINALE
         # =================================
 
         return {
-
-            "trade_id":
-                trade_id,
 
             "symbol":
                 symbol,
