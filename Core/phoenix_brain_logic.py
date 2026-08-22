@@ -275,9 +275,9 @@ class PhoenixBrainLogic:
         # =====================================
 
         conflict = (
-            bullish_score > 0
-            and bearish_score > 0
+            abs(bullish_score - bearish_score) < 15
         )
+
 
         # =====================================
         # DIREZIONE DOMINANTE

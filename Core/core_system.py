@@ -23,7 +23,7 @@ from Core.live_trading_engine import LiveTradingEngine
 from Core.performance_analytics import PerformanceAnalytics
 
 from Execution.execution_engine import ExecutionEngine
-from Config.settings import MODE
+from Config.settings import MODE, MT5_SYMBOL
 
 
 class CoreSystem:
@@ -41,7 +41,7 @@ class CoreSystem:
         self.position_controller = PositionController()
         self.portfolio = PortfolioManager()
 
-        self.execution = ExecutionEngine()
+        self.execution = ExecutionEngine(symbol=MT5_SYMBOL, magic=260813, mt5_enabled=(MODE == "DEMO"), mt5_dry_run=False)
 
         self.backtest = BacktestEngine()
 
