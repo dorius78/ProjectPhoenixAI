@@ -1002,37 +1002,6 @@ class LiveTradingEngine:
             return False
 
         # =================================
-        # IDEMPOTENCY CHECK
-        # =================================
-        #
-        # Ogni trade chiuso deve essere
-        # processato una sola volta.
-        #
-        # Prima di qualsiasi execution.close()
-        # verifichiamo se il trade e gia
-        # presente nel Database.
-        #
-
-        trade_id = (
-            closed.get("trade_id")
-            or closed.get("mt5_ticket")
-        )
-
-        if trade_id is not None:
-
-            if self.database.has_trade(
-                trade_id
-            ):
-
-                Logger.info(
-                    "TRADE GIA PROCESSATO: "
-                    f"{trade_id}. "
-                    "Nessuna nuova chiusura."
-                )
-
-                return False
-
-        # =================================
         # CLOSE ROUTING
         # =================================
         #
@@ -1218,17 +1187,6 @@ class LiveTradingEngine:
         self.portfolio.remove(
             trade["symbol"]
         )
-
-        # =================================
-        # RESET POSITION CONTROLLER
-        # =================================
-        #
-        # Normal close confermata:
-        # la posizione Phoenix non deve
-        # rimanere nello stato OPEN.
-        #
-
-        self.position_controller.reset()
 
         # =================================
         # REPORT

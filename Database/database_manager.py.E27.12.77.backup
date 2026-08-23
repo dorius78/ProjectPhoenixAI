@@ -144,36 +144,6 @@ class DatabaseManager:
         self.connection.commit()
 
     # =====================================
-    # VERIFICA TRADE ESISTENTE
-    # =====================================
-
-    def has_trade(self, trade_id):
-
-        if trade_id is None:
-
-            return False
-
-        self.cursor.execute(
-
-            """
-            SELECT 1
-            FROM trades
-            WHERE trade_id = ?
-            LIMIT 1
-            """,
-
-            (
-                str(trade_id),
-            )
-
-        )
-
-        return (
-            self.cursor.fetchone()
-            is not None
-        )
-
-    # =====================================
     # ELENCO
     # =====================================
 
