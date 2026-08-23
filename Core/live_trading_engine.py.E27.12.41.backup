@@ -872,55 +872,6 @@ class LiveTradingEngine:
             "trade_id":
                 trade_id,
 
-            # =================================
-            # METADATI MT5
-            # =================================
-
-            "mt5_ticket":
-                closed.get(
-                    "mt5_ticket",
-                    report.get(
-                        "mt5_ticket",
-                        0
-                    )
-                ),
-
-            "mt5_symbol":
-                closed.get(
-                    "mt5_symbol",
-                    report.get(
-                        "mt5_symbol",
-                        symbol
-                    )
-                ),
-
-            "magic":
-                closed.get(
-                    "magic",
-                    report.get(
-                        "magic",
-                        0
-                    )
-                ),
-
-            "mt5_order_ticket":
-                closed.get(
-                    "mt5_order_ticket",
-                    report.get(
-                        "order_ticket",
-                        0
-                    )
-                ),
-
-            "mt5_deal_ticket":
-                closed.get(
-                    "mt5_deal_ticket",
-                    report.get(
-                        "deal_ticket",
-                        0
-                    )
-                ),
-
             "symbol":
                 symbol,
 
@@ -1002,93 +953,12 @@ class LiveTradingEngine:
             return False
 
         # =================================
-        # CLOSE ROUTING
+        # EXECUTION CLOSE
         # =================================
-        #
-        # Se MT5 ha gia chiuso la posizione
-        # esternamente, NON dobbiamo chiamare
-        # execution.close().
-        #
-        # La chiusura e gia avvenuta sul broker.
-        # Phoenix deve solamente registrare
-        # l'evento.
-        #
 
-        external_mt5_close = (
-            closed.get("close_reason")
-            == "MT5 EXTERNAL CLOSE"
+        report = self.execution.close(
+            closed
         )
-
-        if external_mt5_close:
-
-            report = {
-
-                "success": True,
-
-                "executed": True,
-
-                "dry_run": False,
-
-                "message":
-                    "Chiusura MT5 gia confermata",
-
-                "symbol":
-                    closed.get("symbol"),
-
-                "side":
-                    closed.get("side"),
-
-                "entry":
-                    closed.get("entry", 0.0),
-
-                "exit":
-                    closed.get(
-                        "current_price",
-                        closed.get(
-                            "entry",
-                            0.0
-                        )
-                    ),
-
-                "pnl":
-                    closed.get(
-                        "current_profit",
-                        0.0
-                    ),
-
-                "close_time":
-                    closed.get("close_time"),
-
-                "reason":
-                    "MT5 EXTERNAL CLOSE",
-
-                "mt5_ticket":
-                    closed.get(
-                        "mt5_ticket",
-                        0
-                    ),
-
-                "trade_id":
-                    closed.get(
-                        "trade_id"
-                    )
-
-            }
-
-            Logger.info(
-                "MT5 EXTERNAL CLOSE: "
-                "nessuna nuova esecuzione richiesta."
-            )
-
-        else:
-
-            # =================================
-            # EXECUTION CLOSE
-            # =================================
-
-            report = self.execution.close(
-                closed
-            )
 
         # =================================
         # VERIFICA ESECUZIONE

@@ -872,55 +872,6 @@ class LiveTradingEngine:
             "trade_id":
                 trade_id,
 
-            # =================================
-            # METADATI MT5
-            # =================================
-
-            "mt5_ticket":
-                closed.get(
-                    "mt5_ticket",
-                    report.get(
-                        "mt5_ticket",
-                        0
-                    )
-                ),
-
-            "mt5_symbol":
-                closed.get(
-                    "mt5_symbol",
-                    report.get(
-                        "mt5_symbol",
-                        symbol
-                    )
-                ),
-
-            "magic":
-                closed.get(
-                    "magic",
-                    report.get(
-                        "magic",
-                        0
-                    )
-                ),
-
-            "mt5_order_ticket":
-                closed.get(
-                    "mt5_order_ticket",
-                    report.get(
-                        "order_ticket",
-                        0
-                    )
-                ),
-
-            "mt5_deal_ticket":
-                closed.get(
-                    "mt5_deal_ticket",
-                    report.get(
-                        "deal_ticket",
-                        0
-                    )
-                ),
-
             "symbol":
                 symbol,
 

@@ -1682,49 +1682,11 @@ class MT5ExecutionEngine:
 
             }
 
-        executed = (
-            result.retcode
-            == mt5.TRADE_RETCODE_DONE
-        )
-
-        # =================================
-        # RIFERIMENTI MT5 CHIUSURA
-        # =================================
-
-        order_ticket = int(
-            getattr(
-                result,
-                "order",
-                0
-            )
-            or 0
-        )
-
-        deal_ticket = int(
-            getattr(
-                result,
-                "deal",
-                0
-            )
-            or 0
-        )
-
-        position_ticket = int(
-            getattr(
-                result,
-                "position",
-                0
-            )
-            or 0
-        )
-
         return {
 
             "executed":
-                executed,
-
-            "success":
-                executed,
+                result.retcode
+                == mt5.TRADE_RETCODE_DONE,
 
             "dry_run":
                 False,
@@ -1740,15 +1702,6 @@ class MT5ExecutionEngine:
 
             "retcode":
                 result.retcode,
-
-            "order_ticket":
-                order_ticket,
-
-            "deal_ticket":
-                deal_ticket,
-
-            "position_ticket":
-                position_ticket,
 
             "result":
                 result,
