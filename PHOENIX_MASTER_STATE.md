@@ -1,235 +1,226 @@
+# ============================================================
 # PROJECT PHOENIX AI
 # PHOENIX MASTER STATE
-# Versione 1.0
-# Data: 2026-08-19
+# ============================================================
 
----
+Versione documento: 1.0
+Data: 10/08/2026
 
-# 1. IDENTITÀ DEL PROGETTO
+Questo documento è la memoria principale del progetto.
+Deve essere mantenuto aggiornato durante tutto lo sviluppo.
 
-PROJECT PHOENIX AI non è un semplice Expert Advisor basato su indicatori.
+============================================================
+1. IDENTITÀ DEL PROGETTO
+============================================================
 
-Obiettivo finale:
+Nome:
+PROJECT PHOENIX AI
 
-costruire un vero SISTEMA OPERATIVO DI TRADING BASATO SU IA.
+Obiettivo:
 
-Il sistema deve essere capace di:
+Costruire un sistema di trading autonomo capace di:
 
 - acquisire dati di mercato;
-- analizzare il mercato;
+- analizzare dati attuali e storici;
+- analizzare più strumenti e timeframe;
 - utilizzare indicatori tecnici;
-- analizzare struttura e Smart Money;
-- generare segnali;
+- analizzare Market Structure;
+- analizzare Smart Money;
+- valutare trend, momentum, volatilità e volume;
+- individuare opportunità;
+- prendere decisioni autonomamente;
 - valutare il rischio;
+- decidere se operare oppure non operare;
 - costruire il trade;
-- eseguire ordini;
-- aprire posizioni;
-- monitorare posizioni;
-- modificare la gestione della posizione;
-- applicare Stop Loss e Take Profit;
-- applicare Break Even e Trailing Stop;
-- chiudere posizioni;
-- calcolare PnL;
-- registrare i trade;
-- aggiornare il capitale;
-- effettuare backtest;
-- effettuare Paper Trading;
-- supportare MT5;
-- supportare successivamente Live Trading;
-- produrre statistiche e report.
+- controllare l'operazione prima dell'esecuzione;
+- eseguire tramite simulazione, DEMO e successivamente MT5;
+- monitorare le posizioni;
+- gestire SL, TP, break-even e trailing;
+- chiudere le operazioni;
+- registrare ogni operazione;
+- analizzare le performance;
+- studiare gli storici;
+- ricercare pattern e condizioni di mercato;
+- validare le strategie;
+- migliorare progressivamente il sistema attraverso ricerca,
+  test e validazione.
 
-Il sistema deve essere modulare, estendibile e progressivamente autonomo.
+Phoenix AI deve diventare un sistema autonomo.
 
----
+NON deve essere un semplice generatore di segnali BUY/SELL.
 
-# 2. STATO DEL PROGETTO
+============================================================
+2. FILOSOFIA DEL SISTEMA
+============================================================
 
-STATO GENERALE:
+Regola 1:
 
-INTEGRAZIONE AVANZATA / FASE DI STABILIZZAZIONE FINALE
+MAI prendere una decisione senza dati.
 
-Il progetto possiede già una struttura significativa.
+Regola 2:
 
-NON ripartire da zero.
+MAI eseguire un'operazione senza controllo del rischio.
 
-NON ricostruire i moduli già esistenti senza necessità.
+Regola 3:
 
-Il lavoro futuro deve partire dallo stato GitHub:
+MAI superare i limiti di sicurezza.
 
-COMMIT:
-b47aa39
+Regola 4:
 
-TAG:
-PHOENIX_CHECKPOINT_2026-08-19
+MAI considerare una strategia valida soltanto perché ha
+funzionato sul passato.
 
-BACKUP LOCALE:
+Regola 5:
 
-C:\ProjectPhoenixAI_BACKUP_2026-08-19
+Ogni strategia o modifica importante deve essere testata
+e validata prima dell'utilizzo operativo.
 
----
+Regola 6:
 
-# 3. CONFIGURAZIONE CENTRALE
+Meglio NON operare che eseguire un'operazione non sufficientemente
+valida o non controllata.
 
-File:
+Regola 7:
 
-Config/settings.py
+Non creare moduli duplicati se una funzione equivalente esiste già.
 
-Versione:
+============================================================
+3. CARTELLA PRINCIPALE DEL PROGETTO
+============================================================
 
-8.0
+Cartella principale di lavoro:
 
-Configurazione attuale principale:
+C:\ProjectPhoenixAI
 
-APP_NAME = "PROJECT PHOENIX AI"
+Questa è la cartella principale da utilizzare per lo sviluppo.
 
-VERSION = "0.0.1"
+La vecchia copia OneDrive/GitHub non deve essere utilizzata
+per lo sviluppo quotidiano.
 
-MODE = "DEMO"
+GitHub è il sistema di versionamento e backup del codice.
 
-SYMBOL = "BTC-USD"
+Repository:
 
-MT5_SYMBOL = "BTCUSD"
+ProjectPhoenixAI
 
-PERIOD = "5d"
+Branch principale:
 
-INTERVAL = "1h"
+main
 
-START_BALANCE = 10000
+============================================================
+4. STATO GIT
+============================================================
 
-MAX_RISK = 1.0
+Ultimo commit importante verificato:
 
-MIN_CONFIDENCE = 60
+6ae57df
 
-STOP_LOSS_ATR = 1.5
+Messaggio:
 
-TAKE_PROFIT_ATR = 3.0
+Project Phoenix AI - MT5 and Trading Guard
 
-MAX_DAILY_LOSS_PERCENT = 3.0
+Stato verificato:
 
-MAX_CONSECUTIVE_LOSSES = 4
+Your branch is up to date with 'origin/main'.
 
-COMMISSION = 0.001
+nothing to commit, working tree clean
 
-SLIPPAGE = 0.0
+Il progetto deve essere salvato su GitHub dopo ogni fase
+importante e dopo modifiche verificate.
 
-Config/settings.py è considerato la fonte centrale della configurazione.
+============================================================
+5. SICUREZZA CREDENZIALI
+============================================================
 
----
+ATTENZIONE:
 
-# 4. PIPELINE PRINCIPALE
+Le credenziali reali MT5 NON devono essere inserite nel repository
+GitHub.
 
-Il pipeline logico di Phoenix è:
+File protetto:
+
+Config/mt5_credentials.py
+
+Il file è escluso tramite .gitignore.
+
+Nel repository deve essere presente soltanto:
+
+Config/mt5_credentials.example.py
+
+Le password reali non devono essere inserite in questo documento.
+
+============================================================
+6. ARCHITETTURA ATTUALE
+============================================================
+
+Struttura concettuale:
 
 MARKET DATA
-    ↓
-CANDLES
-    ↓
-INDICATORS
-    ↓
-MARKET ANALYSIS
-    ↓
+    |
+    v
+ANALYSIS
+    |
+    v
 SMART MONEY
-    ↓
+    |
+    v
 PHOENIX BRAIN
-    ↓
+    |
+    v
 SIGNAL MANAGER
-    ↓
+    |
+    v
 RISK MANAGER
-    ↓
-TRADE BUILDER
-    ↓
-EXECUTION
-    ↓
-POSITION CONTROLLER
-    ↓
-POSITION MONITOR
-    ↓
-EXIT MANAGER
-    ↓
-CLOSE
-    ↓
-TRADE REPORT
-    ↓
-DATABASE
-    ↓
-PORTFOLIO
-    ↓
+    |
+    v
 TRADING GUARD
-    ↓
+    |
+    v
+TRADE MANAGER
+    |
+    v
+EXECUTION
+    |
+    v
+POSITION MANAGEMENT
+    |
+    v
+DATABASE
+    |
+    v
 PERFORMANCE ANALYTICS
-    ↓
-REPORTING
+    |
+    v
+LEARNING / RESEARCH
 
----
+============================================================
+7. MODULI GIÀ PRESENTI
+============================================================
 
-# 5. MARKET DATA
+CORE
 
-Componenti presenti:
-
-- Market Provider
-- Yahoo Finance Provider
+- Core System
 - Market Data Manager
 - Candle Manager
-- Symbols Manager
-- Market Scanner
-
-Il sistema è stato verificato con:
-
-ETH-USD
-
-e ha ricevuto:
-
-106 candele
-
-periodo:
-
-5d
-
-intervallo:
-
-1h
-
----
-
-# 6. ANALYSIS ENGINE
-
-Presente:
-
-Core/analysis_engine.py
-
-Versione osservata:
-
-9
-
-Componenti:
-
+- Analysis Engine
 - Indicator Manager
 - Market Analyzer
 - Smart Money
 - Phoenix Brain
+- Phoenix Brain Logic
 - Signal Manager
 - Risk Manager
 - Trade Manager
+- Position Controller
+- Portfolio Manager
+- Backtest Engine
+- Database Manager
+- Performance Analytics
+- Market Scanner
+- Live Trading Engine
+- Trading Guard
 
-Il sistema ha già prodotto un esempio reale di:
-
-STRONG BUY
-
-e ha costruito:
-
-BUY ETH-USD
-
-con size:
-
-15.57
-
----
-
-# 7. INDICATOR ENGINE
-
-Indicator Manager presente.
-
-Indicatori presenti:
+INDICATORI
 
 - EMA
 - SMA
@@ -239,491 +230,36 @@ Indicatori presenti:
 - ADX
 - Bollinger Bands
 
----
+SMART MONEY
 
-# 8. SMART MONEY
+- Smart Money Structure
+- Smart Money FVG
+- Smart Money Order Blocks
+- Smart Money Liquidity
 
-Componenti presenti:
+RISK
 
-Smart Money
+- Risk Manager
+- Risk Limits
+- Risk Position Size
+- Risk Drawdown
+- Trading Guard
 
-Smart Money Structure
+TRADE
 
-Smart Money FVG
+- Trade Builder
+- Trade Report
+- Trade Manager
 
-Smart Money Order Blocks
+EXECUTION
 
-Smart Money Liquidity
+- Execution Engine
+- Execution Validator
+- Execution Builder
+- Execution Report
+- MT5 Broker (preparazione)
 
-Versioni osservate:
-
-Smart Money V13
-
-Structure V4
-
-FVG V2
-
-Order Blocks V2
-
-Liquidity V2
-
----
-
-# 9. PHOENIX BRAIN
-
-Componenti presenti:
-
-Phoenix Brain
-
-Phoenix Brain Logic
-
-Versioni osservate:
-
-Phoenix Brain V10
-
-Phoenix Brain Logic V4
-
----
-
-# 10. SIGNAL MANAGER
-
-Presente.
-
-Versione osservata:
-
-Signal Manager V10
-
-Il sistema ha già validato:
-
-STRONG BUY
-
----
-
-# 11. RISK MANAGEMENT
-
-Presente:
-
-Risk Manager
-
-Risk Limits
-
-Risk Drawdown
-
-Trading Guard
-
-Versioni osservate:
-
-Risk Manager V11
-
-Risk Limits V1
-
-Risk Drawdown V1
-
-Trading Guard V1
-
-Protections:
-
-MAX_DAILY_LOSS_PERCENT = 3.0
-
-MAX_CONSECUTIVE_LOSSES = 4
-
----
-
-# 12. TRADE MANAGER
-
-File:
-
-Core/trade_manager.py
-
-Versione:
-
-12.0
-
-Componenti:
-
-- RiskManager
-- TradeBuilder
-- TradeReport
-
-Funzione principale:
-
-generate_trade()
-
-Responsabilità:
-
-- ricevere signal;
-- utilizzare risk manager;
-- costruire trade;
-- produrre report.
-
----
-
-# 13. POSITION CONTROLLER
-
-File:
-
-Core/position_controller.py
-
-Versione:
-
-12.5
-
-Componenti:
-
-- PositionMonitor
-- ExitManager
-
-Gestisce:
-
-- apertura posizione;
-- aggiornamento;
-- monitoraggio;
-- PnL;
-- Stop Loss;
-- Take Profit;
-- Break Even;
-- Trailing Stop;
-- chiusura;
-- motivo chiusura;
-- timestamp;
-- posizione attiva.
-
-La posizione contiene:
-
-symbol
-side
-entry
-initial_stop_loss
-stop_loss
-take_profit
-size
-status
-open_time
-close_time
-close_reason
-current_price
-current_profit
-max_profit
-break_even
-trailing_stop
-
-È stato verificato il ciclo:
-
-OPEN
-→ UPDATE
-→ CLOSE
-
-Il PnL viene calcolato in base a:
-
-BUY:
-(exit - entry) * size
-
-SELL:
-(entry - exit) * size
-
----
-
-# 14. POSITION MONITOR
-
-Presente:
-
-Core/position_monitor.py
-
-Responsabilità:
-
-aggiornare:
-
-- current_price
-- current_profit
-- max_profit
-
-e supportare la gestione dinamica della posizione.
-
----
-
-# 15. EXIT MANAGER
-
-Presente:
-
-Core/exit_manager.py
-
-Responsabilità:
-
-valutare condizioni di uscita.
-
-Possibili motivi:
-
-- STOP LOSS
-- TAKE PROFIT
-- BREAK EVEN
-- TRAILING STOP
-- MANUALE / altro
-
----
-
-# 16. PORTFOLIO MANAGER
-
-File:
-
-Core/portfolio_manager.py
-
-Versione:
-
-2.0
-
-Gestisce:
-
-- balance;
-- positions;
-- equity;
-- profitto corrente;
-- esposizione;
-- aggiunta posizione;
-- rimozione posizione;
-- aggiornamento posizione.
-
-START_BALANCE:
-
-10000
-
-Il portfolio viene aggiornato quando una posizione viene aperta e quando viene chiusa.
-
----
-
-# 17. BACKTEST ENGINE
-
-File:
-
-Core/backtest_engine.py
-
-Versione:
-
-12.0
-
-Gestisce:
-
-- storico trade;
-- numero trade;
-- BUY;
-- SELL;
-- wins;
-- losses;
-- win rate;
-- gross profit;
-- gross loss;
-- net profit;
-- capital;
-- ROI;
-- profit factor;
-- max drawdown;
-- activity;
-- market bias.
-
-È già presente una correzione importante:
-
-activity non viene più calcolata come:
-
-(BUY + SELL) / total * 100
-
-perché avrebbe prodotto quasi sempre 100%.
-
-Ora viene calcolata in rapporto alle candele realmente analizzate.
-
----
-
-# 18. DATABASE
-
-File:
-
-Database/database_manager.py
-
-Versione:
-
-6.0
-
-Database:
-
-SQLite
-
-Tabella:
-
-trades
-
-Campi:
-
-id
-symbol
-side
-entry
-exit
-stop_loss
-take_profit
-pnl
-status
-reason
-open_time
-close_time
-duration
-result
-risk_reward
-
-Funzioni disponibili:
-
-save_trade()
-load_trades()
-count()
-wins()
-losses()
-breakeven()
-total_profit()
-gross_profit()
-gross_loss()
-best_trade()
-worst_trade()
-average_profit()
-profit_factor()
-win_rate()
-reset()
-close()
-
-IMPORTANTE:
-
-DatabaseManager NON si trova in:
-
-Core/database_manager.py
-
-Si trova in:
-
-Database/database_manager.py
-
-Questo percorso deve essere mantenuto oppure uniformato successivamente senza rompere gli import.
-
----
-
-# 19. EXECUTION ENGINE
-
-File:
-
-Execution/execution_engine.py
-
-Versione:
-
-9.0
-
-Supporta:
-
-- Paper Trading;
-- Execution Validator;
-- Execution Builder;
-- Execution Report;
-- MT5 Bridge;
-- DRY RUN;
-- apertura;
-- chiusura.
-
-Configurazione:
-
-mt5_enabled=False
-
-mt5_dry_run=True
-
-Paper Trading è attualmente il percorso principale verificato.
-
----
-
-# 20. MT5 BRIDGE
-
-File principale:
-
-MT5_Bridge/mt5_execution_recovered.py
-
-Supporta:
-
-- connessione MT5;
-- apertura ordine;
-- modifica SL/TP;
-- chiusura posizione;
-- DRY RUN;
-- order_check;
-- order_send;
-- BUY;
-- SELL.
-
-La logica di chiusura è:
-
-BUY → SELL
-
-SELL → BUY
-
-con prezzo:
-
-BUY close → BID
-
-SELL close → ASK
-
----
-
-# 21. LIVE TRADING ENGINE
-
-File:
-
-Core/live_trading_engine.py
-
-Versione osservata:
-
-5.2
-
-Comportamento attuale:
-
-Se non esiste una posizione:
-
-1. scarica dati;
-2. ottiene prezzo;
-3. controlla Trading Guard;
-4. analizza;
-5. genera signal;
-6. costruisce trade;
-7. esegue;
-8. apre posizione;
-9. registra nel Portfolio.
-
-Se esiste una posizione:
-
-1. recupera prezzo corrente;
-2. aggiorna Position Controller;
-3. aggiorna Portfolio;
-4. verifica chiusura;
-5. registra trade chiuso;
-6. aggiorna database;
-7. aggiorna backtest;
-8. aggiorna balance;
-9. aggiorna Trading Guard.
-
-Questo evita di scaricare inutilmente tutte le candele durante la gestione di una posizione già aperta.
-
----
-
-# 22. TRADE CLOSE PIPELINE
-
-Quando una posizione viene chiusa:
-
-1. viene calcolato il prezzo finale;
-2. viene calcolato il PnL;
-3. viene determinato il motivo;
-4. viene calcolata la durata;
-5. viene calcolato Risk/Reward;
-6. viene creato il record trade;
-7. viene salvato nel Database;
-8. viene aggiunto al Backtest Engine;
-9. viene aggiornato il Portfolio balance;
-10. viene aggiornato Trading Guard;
-11. viene rimossa la posizione dal Portfolio.
-
----
-
-# 23. PERFORMANCE ANALYTICS
-
-Presenti:
+PERFORMANCE
 
 - Equity Curve
 - Risk Statistics
@@ -742,128 +278,976 @@ Presenti:
 - Payoff Ratio
 - Win Loss Ratio
 
----
-
-# 24. REPORTING
-
-Presenti:
+REPORTING
 
 - Performance Report
 - Report Statistics
 - Report Service
 - Report Factory
 - Report Exporter
+- Report CSV
+- Report JSON
+- Report HTML
+- Report PDF
+- Report Formats
+
+TEST / MT5
+
+- Tests/find_symbol.py
+- Tests/test_mt5_connection.py
+- find_symbol.py
+- Execution/mt5_broker.py
+
+============================================================
+8. MARKET DATA
+============================================================
+
+Provider attualmente presente:
+
+Yahoo Finance
+
+Il sistema deve essere progettato per poter integrare
+successivamente altre fonti dati.
+
+Obiettivo finale:
+
+- dati real-time;
+- dati storici;
+- OHLCV;
+- timestamp;
+- simbolo;
+- timeframe;
+- aggiornamento automatico;
+- storico esteso;
+- gestione di più mercati.
+
+============================================================
+9. ANALISI TECNICA
+============================================================
+
+Phoenix utilizza:
+
+- EMA
+- SMA
+- RSI
+- MACD
+- ATR
+- ADX
+- Bollinger Bands
+- trend
+- momentum
+- volume
+- volatilità
+
+L'analisi deve essere combinata.
+
+NON utilizzare un singolo indicatore come decisione autonoma
+di acquisto o vendita.
+
+============================================================
+10. SMART MONEY
+============================================================
+
+Phoenix deve analizzare:
+
+- Break of Structure (BOS)
+- Change of Character (CHoCH)
+- Fair Value Gap (FVG)
+- Order Block
+- Liquidity Sweep
+
+Questi elementi devono contribuire alla valutazione
+complessiva del mercato.
+
+============================================================
+11. PHOENIX BRAIN
+============================================================
+
+Phoenix Brain è il motore decisionale.
+
+Input:
+
+- trend
+- EMA
+- MACD
+- RSI
+- ADX
+- volume
+- Smart Money
+- altri dati disponibili
+- rischio
+
+Output:
+
+- action
+- score
+- confidence
+- strength
+- risk
+- reasons
+- warnings
+
+Azioni:
+
+- STRONG BUY
+- BUY
+- HOLD
+- SELL
+- STRONG SELL
+
+Il Brain attuale è un sistema decisionale deterministico.
+
+NON deve essere considerato ancora un sistema completo
+di Machine Learning.
+
+============================================================
+12. RISK MANAGER
+============================================================
+
+Il Risk Manager deve controllare:
+
+- livello di rischio;
+- rischio per operazione;
+- position size;
+- ATR;
+- Stop Loss;
+- Take Profit;
+- Risk/Reward;
+- drawdown;
+- limiti operativi.
+
+Il rischio deve avere priorità sulla decisione di trading.
+
+============================================================
+13. TRADING GUARD
+============================================================
+
+Trading Guard protegge il sistema.
+
+Controlla almeno:
+
+- perdita giornaliera;
+- perdite consecutive;
+- reset giornaliero;
+- possibilità di continuare a operare.
+
+Se viene raggiunto un limite:
+
+TRADING BLOCCATO.
+
+Il Trading Guard deve essere integrato nel flusso operativo
+prima dell'esecuzione.
+
+============================================================
+14. TRADE MANAGER
+============================================================
+
+Il Trade Manager costruisce il trade.
+
+Informazioni principali:
+
+- symbol
+- signal
+- side
+- entry
+- stop_loss
+- take_profit
+- ATR
+- risk_reward
+
+Il trade deve essere costruito soltanto dopo che la decisione
+è stata verificata.
+
+============================================================
+15. EXECUTION ENGINE
+============================================================
+
+Execution Engine comprende:
+
+- Execution Validator
+- Execution Builder
+- Execution Report
+
+Prima dell'esecuzione deve verificare:
+
+- trade valido;
+- segnale valido;
+- side valido;
+- entry;
+- stop loss;
+- take profit;
+- risk/reward;
+- condizioni di sicurezza.
+
+Un errore deve portare a:
+
+NESSUNA ESECUZIONE.
+
+============================================================
+16. POSITION MANAGEMENT
+============================================================
+
+QUESTA AREA NON È ANCORA COMPLETATA.
+
+Deve essere completata con:
+
+- Position Manager
+- Position Monitor
+- Exit Manager
+
+Il ciclo completo deve diventare:
+
+ENTRY
+  |
+  v
+OPEN
+  |
+  v
+MONITOR
+  |
+  +--> BREAK EVEN
+  |
+  +--> TRAILING STOP
+  |
+  +--> TAKE PROFIT
+  |
+  +--> STOP LOSS
+  |
+  +--> ALTRA USCITA VALIDA
+  |
+  v
+CLOSE
+
+============================================================
+17. TRADE JOURNAL
+============================================================
+
+DA COMPLETARE.
+
+Ogni operazione deve essere registrata con informazioni
+sufficienti per poterla analizzare successivamente.
+
+Dati desiderati:
+
+- timestamp;
+- symbol;
+- timeframe;
+- signal;
+- side;
+- score;
+- confidence;
+- entry;
+- stop loss;
+- take profit;
+- exit;
+- PnL;
+- rischio;
+- durata;
+- motivo ingresso;
+- motivo uscita;
+- condizioni di mercato;
+- risultato.
+
+============================================================
+18. DATABASE
+============================================================
+
+Database Manager già presente.
+
+Il database deve diventare la memoria operativa del sistema.
+
+Deve permettere di conservare:
+
+- operazioni;
+- risultati;
+- performance;
+- condizioni di mercato;
+- segnali;
+- decisioni;
+- statistiche.
+
+============================================================
+19. PERFORMANCE ANALYTICS
+============================================================
+
+Sistema già molto avanzato.
+
+Metriche presenti:
+
+- Equity Curve
+- Win Rate
+- Win/Loss Ratio
+- Profit Factor
+- Sharpe Ratio
+- Sortino Ratio
+- Calmar Ratio
+- Recovery Factor
+- Ulcer Index
+- Omega Ratio
+- Profit/Drawdown
+- Kelly Criterion
+- Payoff Ratio
+- Gross Profit
+- Gross Loss
+- Net Profit
+- Best Trade
+- Worst Trade
+- Average Trade
+- Average Win
+- Average Loss
+- Expectancy
+- ROI
+- Drawdown
+- Win Streak
+- Loss Streak
+- Monthly Performance
+- Symbol Performance
+- Timeframe Performance
+
+Questa area deve essere mantenuta e migliorata senza
+creare duplicati.
+
+============================================================
+20. REPORTING
+============================================================
+
+Formati presenti:
+
 - CSV
 - JSON
 - HTML
 - PDF
-- Report Formats
 
----
+Il reporting deve permettere di analizzare il comportamento
+del sistema in modo chiaro.
 
-# 25. MARKET SCANNER
+============================================================
+21. MARKET SCANNER
+============================================================
 
-Presente:
+Market Scanner presente.
 
-Market Scanner V2
+Watchlist attuale verificata:
 
-Watchlist:
+12 strumenti.
 
-12 strumenti
+Obiettivo finale:
 
----
+Phoenix deve poter:
 
-# 26. CORE SYSTEM
+- analizzare più strumenti;
+- confrontarli;
+- assegnare score;
+- valutare confidence;
+- valutare rischio;
+- classificare opportunità;
+- scegliere autonomamente le migliori opportunità.
 
-Presente:
+============================================================
+22. BACKTEST
+============================================================
 
-Core System V20
+Backtest Engine presente.
 
-Responsabile dell'integrazione dei principali moduli Phoenix.
+Il backtest finale deve riprodurre il più possibile
+l'intero processo operativo:
 
-Il Core è già riuscito ad avviare Live Trading.
+DATI STORICI
+    |
+    v
+ANALISI
+    |
+    v
+SMART MONEY
+    |
+    v
+PHOENIX BRAIN
+    |
+    v
+RISK
+    |
+    v
+TRADING GUARD
+    |
+    v
+TRADE
+    |
+    v
+EXECUTION SIMULATA
+    |
+    v
+POSITION MANAGEMENT
+    |
+    v
+CLOSE
+    |
+    v
+DATABASE
+    |
+    v
+PERFORMANCE
 
-Esempio verificato:
+============================================================
+23. PAPER TRADING
+============================================================
 
-ETH-USD
+DA SVILUPPARE.
 
-Prezzo:
+Phoenix deve poter lavorare su dati di mercato aggiornati
+senza utilizzare denaro reale.
 
-1921.6700439453125
+Obiettivo:
 
-Segnale:
+PAPER TRADING COMPLETAMENTE AUTONOMO.
 
-STRONG BUY
+============================================================
+24. MT5
+============================================================
 
-Trade:
+Preparazione MT5 già presente.
 
-BUY ETH-USD
+File:
 
-Size:
+Execution/mt5_broker.py
 
-15.57
+Configurazione:
 
-Esecuzione:
+Config/mt5_credentials.example.py
 
-Paper Trading
+Le credenziali reali sono escluse da GitHub.
 
-Posizione:
+Obiettivo:
 
-OPEN
+- connessione MT5;
+- controllo simboli;
+- verifica account;
+- esecuzione ordini;
+- gestione posizioni;
+- verifica ordini;
+- gestione errori.
 
-Portfolio:
+Prima del LIVE devono essere completati:
 
-registrato
+- Position Management;
+- Exit Management;
+- Trade Journal;
+- Paper Trading;
+- test DEMO;
+- test di sicurezza;
+- test di errore;
+- validazione completa.
 
----
+============================================================
+25. AUTONOMIA
+============================================================
 
-# 27. TEST GIÀ ESEGUITI
+OBIETTIVO FINALE.
 
-È stato verificato:
+Phoenix deve poter operare autonomamente.
 
-PositionController:
+Flusso:
 
-OPEN
-→ UPDATE
-→ CLOSE
+DATI
+  |
+  v
+ANALISI
+  |
+  v
+RICERCA OPPORTUNITÀ
+  |
+  v
+CLASSIFICAZIONE MERCATO
+  |
+  v
+PHOENIX BRAIN
+  |
+  v
+DECISIONE
+  |
+  v
+RISK MANAGER
+  |
+  v
+TRADING GUARD
+  |
+  v
+TRADE MANAGER
+  |
+  v
+EXECUTION
+  |
+  v
+POSITION MANAGEMENT
+  |
+  v
+CLOSE
+  |
+  v
+DATABASE
+  |
+  v
+PERFORMANCE
+  |
+  v
+RESEARCH / LEARNING
+
+Phoenix deve poter decidere anche:
+
+NON OPERARE.
+
+============================================================
+26. HISTORICAL MARKET RESEARCH
+============================================================
+
+QUESTA È UNA DELLE GRANDI FASI FUTURE.
+
+Phoenix deve utilizzare lo storico Yahoo Finance e,
+successivamente, altre fonti.
+
+Obiettivo:
+
+non utilizzare lo storico soltanto per il backtest.
+
+Phoenix deve STUDIARE lo storico.
+
+Deve analizzare:
+
+- trend;
+- volatilità;
+- volume;
+- indicatori;
+- market structure;
+- Smart Money;
+- pattern;
+- comportamenti ricorrenti;
+- condizioni favorevoli;
+- condizioni sfavorevoli;
+- performance per timeframe;
+- performance per simbolo;
+- performance per regime di mercato;
+- risultati delle strategie.
+
+Pipeline:
+
+HISTORICAL DATA
+    |
+    v
+HISTORICAL DATABASE
+    |
+    v
+MARKET RESEARCH ENGINE
+    |
+    v
+PATTERN ANALYSIS
+    |
+    v
+MARKET REGIME ANALYSIS
+    |
+    v
+STRATEGY TEST
+    |
+    v
+VALIDATION
+    |
+    v
+PAPER TRADING
+
+============================================================
+27. STRATEGY DISCOVERY
+============================================================
+
+DA SVILUPPARE.
+
+Phoenix deve poter studiare quali combinazioni di condizioni
+hanno prodotto risultati storicamente favorevoli.
+
+NON bisogna semplicemente cercare la strategia con il profitto
+più alto sul passato.
+
+Devono essere utilizzati:
+
+- backtest;
+- out-of-sample test;
+- walk-forward test;
+- paper trading;
+- controlli di robustezza.
+
+============================================================
+28. LEARNING ENGINE
+============================================================
+
+DA SVILUPPARE.
+
+Il sistema dovrà poter analizzare i risultati delle operazioni
+e identificare:
+
+- condizioni favorevoli;
+- condizioni sfavorevoli;
+- errori ricorrenti;
+- mercati più adatti;
+- timeframe più adatti;
+- strategie più robuste.
+
+Il Learning Engine NON deve modificare liberamente il sistema
+e mandare immediatamente ordini reali.
+
+Ogni modifica deve essere:
+
+RICERCATA
+  |
+  v
+TESTATA
+  |
+  v
+VALIDATA
+  |
+  v
+APPROVATA
+  |
+  v
+UTILIZZATA
+
+============================================================
+29. MACHINE LEARNING
+============================================================
+
+DA SVILUPPARE PIÙ AVANTI.
+
+Il Machine Learning non è il prossimo passo.
+
+Prima devono essere completati:
+
+- dati;
+- storico;
+- database;
+- backtest;
+- position management;
+- journal;
+- paper trading;
+- validazione.
+
+Solo dopo si valuteranno:
+
+- pattern recognition;
+- regime detection;
+- strategy optimization;
+- machine learning.
+
+============================================================
+30. SUPERVISOR / DEVIL'S ADVOCATE
+============================================================
+
+DA SVILUPPARE.
+
+Prima di un'operazione Phoenix deve poter avere un controllo
+indipendente che cerchi motivi per NON eseguire il trade.
 
 Esempio:
 
-entry = 100
+PHOENIX BRAIN:
+"BUY"
 
-SL = 95
+SUPERVISOR:
+"Quali sono i motivi per NON entrare?"
 
-TP = 110
+Controlli possibili:
 
-size = 1
+- volatilità;
+- spread;
+- liquidità;
+- drawdown;
+- correlazioni;
+- mercato laterale;
+- eventi importanti;
+- rischio portafoglio;
+- qualità del segnale.
 
-update = 102
+Obiettivo:
 
-close = 105
+ridurre le decisioni deboli.
 
-PnL finale:
+============================================================
+31. MULTI-MARKET
+============================================================
 
-+5
+Phoenix deve poter confrontare:
 
-È stato verificato anche:
+- Forex;
+- Crypto;
+- Gold;
+- Silver;
+- altri strumenti disponibili.
 
-Integration Import Test
+Non deve necessariamente operare su tutti.
 
-con:
+Deve scegliere le opportunità migliori in rapporto al rischio
+complessivo.
 
-DatabaseManager OK
+============================================================
+32. MODALITÀ OPERATIVE
+============================================================
 
-BacktestEngine OK
+MODALITÀ 1:
 
-PortfolioManager OK
+Scanner Multi Market
 
-PositionController OK
+MODALITÀ 2:
 
-ExecutionEngine OK
+Live Trading
 
----
+MODALITÀ 3:
 
-# 28. GIT / BACKUP
+Backtest
+
+MODALITÀ 4:
+
+Database Trade
+
+MODALITÀ 5:
+
+Performance Analytics
+
+In futuro aggiungere/modificare le modalità soltanto se
+necessario all'architettura definitiva.
+
+============================================================
+33. LIVELLI OPERATIVI
+============================================================
+
+LIVELLO 1:
+
+DEMO / SIMULAZIONE
+
+LIVELLO 2:
+
+BACKTEST
+
+LIVELLO 3:
+
+PAPER TRADING
+
+LIVELLO 4:
+
+MT5 DEMO
+
+LIVELLO 5:
+
+LIVE
+
+Il LIVE è l'ultimo livello.
+
+============================================================
+34. STATO ATTUALE
+============================================================
+
+CORE                         COMPLETATO BASE
+MARKET DATA                  COMPLETATO BASE
+YAHOO FINANCE                COMPLETATO BASE
+INDICATORS                   COMPLETATO
+MARKET ANALYSIS              COMPLETATO BASE
+SMART MONEY                  COMPLETATO BASE
+PHOENIX BRAIN                COMPLETATO BASE
+SIGNAL MANAGER               COMPLETATO BASE
+RISK MANAGER                 COMPLETATO BASE
+TRADING GUARD                COMPLETATO V1
+TRADE MANAGER                COMPLETATO BASE
+EXECUTION                    COMPLETATO BASE
+PERFORMANCE ANALYTICS        AVANZATO
+REPORTING                    COMPLETATO BASE
+MARKET SCANNER               COMPLETATO BASE
+BACKTEST                     PRESENTE
+POSITION MANAGEMENT          INCOMPLETO
+EXIT MANAGEMENT              DA COMPLETARE
+TRADE JOURNAL                DA COMPLETARE
+PAPER TRADING                DA SVILUPPARE
+HISTORICAL RESEARCH          DA SVILUPPARE
+STRATEGY DISCOVERY           DA SVILUPPARE
+SUPERVISOR                   DA SVILUPPARE
+LEARNING ENGINE              DA SVILUPPARE
+MACHINE LEARNING             FUTURO
+MT5 DEMO                     DA VALIDARE
+MT5 LIVE                     FUTURO
+
+============================================================
+35. PROSSIMO OBIETTIVO UFFICIALE
+============================================================
+
+NON passare subito al Machine Learning.
+
+NON aggiungere moduli casuali.
+
+NON modificare moduli già funzionanti senza necessità.
+
+PROSSIMO OBIETTIVO:
+
+COMPLETARE IL TRADE LIFECYCLE.
+
+Ordine:
+
+1. Position Manager
+2. Position Monitor
+3. Exit Manager
+4. Break Even
+5. Trailing Stop
+6. Stop Loss
+7. Take Profit
+8. Chiusura posizione
+9. Trade Journal
+10. Integrazione Database
+11. Test completo
+
+Flusso da ottenere:
+
+SIGNAL
+  |
+  v
+RISK
+  |
+  v
+GUARD
+  |
+  v
+TRADE
+  |
+  v
+EXECUTION
+  |
+  v
+POSITION OPEN
+  |
+  v
+POSITION MONITOR
+  |
+  v
+EXIT LOGIC
+  |
+  v
+POSITION CLOSED
+  |
+  v
+DATABASE
+  |
+  v
+PERFORMANCE
+
+============================================================
+36. ROADMAP DEFINITIVA
+============================================================
+
+FASE 1
+Trade Lifecycle
+Position + Exit + Journal
+
+FASE 2
+Paper Trading
+
+FASE 3
+Historical Market Research
+
+FASE 4
+Autonomous Market Scanner
+
+FASE 5
+Autonomous Decision Engine
+
+FASE 6
+Supervisor / Devil's Advocate
+
+FASE 7
+Strategy Discovery
+
+FASE 8
+MT5 DEMO
+
+FASE 9
+Learning Engine
+
+FASE 10
+Machine Learning / Optimization
+
+FASE 11
+MT5 LIVE
+
+============================================================
+37. REGOLE DI SVILUPPO
+============================================================
+
+Il proprietario del progetto non è un programmatore.
+
+Le istruzioni devono quindi essere:
+
+- passo passo;
+- semplici;
+- una modifica alla volta;
+- indicare sempre quale file aprire;
+- fornire il codice completo quando necessario;
+- dire chiaramente cosa copiare;
+- dire chiaramente dove incollare;
+- far eseguire il test;
+- controllare l'output;
+- solo dopo procedere al passaggio successivo.
+
+NON dare troppi comandi contemporaneamente.
+
+NON saltare i test.
+
+NON perdere i punti della roadmap.
+
+NON creare duplicati.
+
+NON cambiare architettura senza prima verificarne la necessità.
+
+============================================================
+38. PROCEDURA STANDARD PER OGNI MODIFICA
+============================================================
+
+1. Identificare l'obiettivo.
+2. Identificare il file/modulo coinvolto.
+3. Controllare se esiste già.
+4. Modificare soltanto ciò che serve.
+5. Testare.
+6. Eseguire:
+
+python run.py
+
+7. Controllare eventuali errori.
+8. Eseguire:
+
+git status
+
+9. Se tutto è corretto:
+
+git add .
+
+git commit -m "descrizione modifica"
+
+git push origin main
+
+10. Aggiornare questo Master State se cambia lo stato
+    del progetto o il prossimo obiettivo.
+
+============================================================
+39. PRINCIPIO FONDAMENTALE
+============================================================
+
+NON RIPARTIRE DA ZERO.
+
+NON PERDERE IL LAVORO PRECEDENTE.
+
+NON RISCRIVERE MODULI GIÀ FUNZIONANTI SENZA MOTIVO.
+
+Il progetto deve evolvere progressivamente.
+
+Ogni nuova chat deve utilizzare questo documento come
+riferimento principale.
+
+============================================================
+40. STATO DI RIFERIMENTO
+============================================================
+
+Cartella principale:
+
+C:\ProjectPhoenixAI
 
 Repository:
 
@@ -873,283 +1257,24 @@ Branch:
 
 main
 
-Checkpoint:
+Ultimo commit verificato:
 
-b47aa39
+6ae57df
 
-Tag:
+Ultimo test verificato:
 
-PHOENIX_CHECKPOINT_2026-08-19
+python run.py
 
-Tag precedente:
+Risultato:
 
-v0.1-stable
+Sistema avviato correttamente.
 
-Backup locale:
-
-C:\ProjectPhoenixAI_BACKUP_2026-08-19
-
-Il checkpoint è stato pubblicato su origin/main.
-
-Il tag checkpoint è stato pubblicato su origin.
-
-NON cancellare il backup.
-
-NON modificare il checkpoint.
-
----
-
-# 29. PROBLEMI NOTI / DA RISOLVERE
-
-## PROBLEMA 1 — ExecutionEngine.close()
-
-Nel codice attuale esiste una struttura errata nel dizionario di ritorno della chiusura MT5.
-
-Deve essere verificato/corretto il campo:
-
-dry_run
-
-La struttura corretta deve essere:
-
-"dry_run": result.get(
-    "dry_run",
-    self.mt5_dry_run
-)
-
-e non un valore senza chiave.
-
----
-
-## PROBLEMA 2 — CONTRATTI TRA MODULI
-
-Devono essere uniformati i contratti:
-
-Trade
-Order
-Position
-Closed Trade
-Execution Result
-Report
-
-senza rompere il Core esistente.
-
----
-
-## PROBLEMA 3 — PAPER vs MT5
-
-Deve essere garantito che:
-
-PAPER TRADING
-
-e
-
-MT5
-
-utilizzino lo stesso contratto logico.
-
-Il Core non deve conoscere dettagli specifici del broker.
-
----
-
-## PROBLEMA 4 — CHIUSURA MT5
-
-La chiusura MT5 deve essere integrata correttamente con:
-
-Position Controller
-Portfolio
-Database
-Trading Guard
-Performance Analytics
-
----
-
-## PROBLEMA 5 — GESTIONE POSIZIONI
-
-Occorre completare e stabilizzare:
-
-- Break Even;
-- Trailing Stop;
-- modifica SL;
-- sincronizzazione Portfolio;
-- sincronizzazione MT5;
-- protezione da doppia chiusura.
-
----
-
-## PROBLEMA 6 — BACKTEST
-
-Il Backtest Engine esiste, ma deve essere collegato definitivamente al ciclo storico completo.
-
-Obiettivo:
-
-Candele
-→ Analisi
-→ Signal
-→ Risk
-→ Trade
-→ Position
-→ Exit
-→ PnL
-→ Statistics
-
----
-
-## PROBLEMA 7 — DATABASE
-
-Il Database Manager esiste e deve diventare il registro persistente ufficiale dei trade chiusi.
-
----
-
-## PROBLEMA 8 — LIVE TRADING
-
-Prima del LIVE reale deve essere completato:
-
-Paper Trading
-→ MT5 DRY RUN
-→ MT5 DEMO
-→ MT5 LIVE
-
-senza saltare livelli.
-
----
-
-# 30. ARCHITETTURA FINALE DESIDERATA
-
-PROJECT PHOENIX AI deve arrivare a:
-
-DATA INTELLIGENCE
-+
-MARKET INTELLIGENCE
-+
-NEWS INTELLIGENCE
-+
-SENTIMENT AI
-+
-TECHNICAL AI
-+
-PATTERN RECOGNITION
-+
-SMART MONEY
-+
-RISK AI
-+
-DECISION AI
-+
-EXECUTION
-+
-POSITION MANAGEMENT
-+
-PORTFOLIO
-+
-BACKTEST
-+
-PAPER TRADING
-+
-LIVE TRADING
-+
-PERFORMANCE ANALYTICS
-+
-DATABASE
-+
-REPORTING
-
----
-
-# 31. REGOLA DI SVILUPPO
-
-NON ricominciare da zero.
-
-NON sostituire moduli funzionanti senza motivo.
-
-NON duplicare funzionalità.
-
-NON introdurre configurazioni duplicate.
-
-Ogni modifica deve:
-
-1. preservare il funzionamento esistente;
-2. migliorare l'integrazione;
-3. mantenere compatibilità;
-4. essere salvata in Git;
-5. essere documentata nel MASTER STATE quando cambia l'architettura.
-
----
-
-# 32. ORDINE DELLE PROSSIME FASI
-
-FASE A
-Stabilizzazione Execution Engine.
-
-FASE B
-Stabilizzazione ciclo completo Position → Close.
-
-FASE C
-Integrazione Database + Portfolio + Guard.
-
-FASE D
-Backtest end-to-end.
-
-FASE E
-Paper Trading end-to-end.
-
-FASE F
-MT5 DRY RUN.
-
-FASE G
-MT5 DEMO.
-
-FASE H
-Performance e Reporting finale.
-
-FASE I
-Live Trading controllato.
-
-FASE L
-Espansione AI:
-
-- News Intelligence
-- Sentiment AI
-- Decision AI avanzata
-- Pattern Recognition avanzata
-- Market Regime Detection
-- Adaptive Risk
-- Multi-market intelligence
-
----
-
-# 33. OBIETTIVO RELEASE
-
-La prima release completa deve essere:
-
-PROJECT PHOENIX AI
-
-Trading Operating System
-
-con:
-
-DATA
-→ INTELLIGENCE
-→ DECISION
-→ RISK
-→ EXECUTION
-→ POSITION
-→ PORTFOLIO
-→ PERFORMANCE
-
-completamente integrati.
-
----
-
-# 34. STATO MASTER
-
-Questo file diventa il riferimento ufficiale dello stato del progetto a partire dal:
-
-2026-08-19
-
-Checkpoint precedente:
-
-PHOENIX_CHECKPOINT_2026-08-19
+Trading Guard V1 inizializzato.
 
 Prossimo obiettivo:
 
-FINAL INTEGRATION
+TRADE LIFECYCLE / POSITION MANAGEMENT
+
+============================================================
+FINE PHOENIX MASTER STATE
+============================================================

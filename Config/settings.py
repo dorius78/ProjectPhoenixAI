@@ -27,11 +27,7 @@ MODE = "DEMO"          # DEMO oppure LIVE
 # MERCATO
 # ======================================
 
-# Simbolo utilizzato dal sistema dati/analisi
 SYMBOL = "BTC-USD"
-
-# Simbolo reale utilizzato da MetaTrader 5
-MT5_SYMBOL = "BTCUSD"
 
 PERIOD = "5d"
 
@@ -130,3 +126,9 @@ SLIPPAGE = 0.0
 # ======================================
 
 LOG_LEVEL = "INFO"
+# =====================================
+# DATABASE
+# =====================================
+
+LIVE_DATABASE = "phoenix_live.db"
+BACKTEST_DATABASE = "phoenix_backtest.db"

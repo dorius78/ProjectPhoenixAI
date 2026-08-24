@@ -1,23 +1,34 @@
-"""
-========================================
-PROJECT PHOENIX AI
-Execution Validator
-Versione 1.0
-========================================
-"""
+﻿from pathlib import Path
 
-from Logs.logger import Logger
+path = Path(
+    "Execution/execution_validator.py"
+)
 
+text = path.read_text(
+    encoding="utf-8-sig"
+)
 
-class ExecutionValidator:
+start_marker = "    def validate(self, trade):"
+next_method_marker = "    def "
 
-    def __init__(self):
+start = text.find(start_marker)
 
-        Logger.success(
-            "Execution Validator V1 inizializzato."
-        )
+if start == -1:
+    raise RuntimeError(
+        "STOP: metodo validate non trovato."
+    )
 
-    def validate(self, trade):
+next_method = text.find(
+    next_method_marker,
+    start + len(start_marker)
+)
+
+if next_method == -1:
+    end = len(text)
+else:
+    end = next_method
+
+new_method = '''    def validate(self, trade):
 
         # =====================================
         # TRADE PRESENTE
@@ -198,4 +209,41 @@ class ExecutionValidator:
         # =====================================
 
         return True, ""
+
+'''
+
+text = (
+    text[:start]
+    + new_method
+    + text[end:]
+)
+
+path.write_text(
+    text,
+    encoding="utf-8"
+)
+
+print("=" * 100)
+print("E.27.57C EXECUTION VALIDATOR CONTRACT PATCH")
+print("=" * 100)
+print()
+print("PATCH APPLICATA: OK")
+print()
+print("TRADE PRESENCE: FIX")
+print("REQUIRED FIELDS: FIX")
+print("SIGNAL/SIDE CONSISTENCY: FIX")
+print("NUMERIC VALUES: FIX")
+print("POSITIVE VALUES: FIX")
+print("BUY SL/ENTRY/TP: FIX")
+print("SELL TP/ENTRY/SL: FIX")
+print()
+print("RISK AI: INVARIATO")
+print("TRADE BUILDER: INVARIATO")
+print("EXECUTION ENGINE: INVARIATO")
+print("MT5: INVARIATO")
+print()
+print("NESSUN ORDINE MT5")
+print("NESSUNA APERTURA")
+print("NESSUNA CHIUSURA")
+print("=" * 100)
 

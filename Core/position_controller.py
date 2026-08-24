@@ -2,38 +2,22 @@
 ========================================
 PROJECT PHOENIX AI
 Position Controller
-Versione 12.5
+Versione 12.0
 ========================================
 """
 
 from datetime import datetime
 
 from Logs.logger import Logger
-from Core.position_monitor import PositionMonitor
-from Core.exit_manager import ExitManager
 
 
 class PositionController:
 
     def __init__(self):
 
-        Logger.success(
-            "Position Controller V12.5 inizializzato."
-        )
+        Logger.success("Position Controller V12 inizializzato.")
 
         self.position = None
-
-        # =================================
-        # POSITION MONITOR
-        # =================================
-
-        self.monitor = PositionMonitor()
-
-        # =================================
-        # EXIT MANAGER
-        # =================================
-
-        self.exit_manager = ExitManager()
 
     # =====================================
     # APERTURA POSIZIONE
@@ -61,139 +45,16 @@ class PositionController:
 
         if self.position is not None:
 
-            Logger.warning(
-                "Posizione già aperta."
-            )
+            Logger.warning("Posizione già aperta.")
 
             return False
 
-        # =================================
-        # ORARIO APERTURA
-        # =================================
-
-        open_time = (
-
-            timestamp
-            if timestamp is not None
-            else datetime.now()
-
-        )
-
-        # =================================
-        # VALORI NUMERICI
-        # =================================
-
-        entry = float(entry)
-
-        stop_loss = float(stop_loss)
-
-        take_profit = float(take_profit)
-
-        size = float(size)
-
-        # =================================
-        # VALIDAZIONE BASE
-        # =================================
-
-        if size <= 0:
-
-            Logger.warning(
-                "Size posizione non valida."
-            )
-
-            return False
-
-        if entry <= 0:
-
-            Logger.warning(
-                "Prezzo entry non valido."
-            )
-
-            return False
-
-        if stop_loss <= 0:
-
-            Logger.warning(
-                "Stop Loss non valido."
-            )
-
-            return False
-
-        if take_profit <= 0:
-
-            Logger.warning(
-                "Take Profit non valido."
-            )
-
-            return False
-
-        # =================================
-        # VALIDAZIONE DIREZIONE
-        # =================================
-
-        side = str(
-            side
-        ).upper()
-
-        if side not in (
-            "BUY",
-            "SELL",
-            "STRONG BUY",
-            "STRONG SELL"
-        ):
-
-            Logger.warning(
-                f"Direzione non valida: {side}"
-            )
-
-            return False
-
-        # =================================
-        # VALIDAZIONE SL / TP
-        # =================================
-
-        if side in (
-            "BUY",
-            "STRONG BUY"
-        ):
-
-            if stop_loss >= entry:
-
-                Logger.warning(
-                    "BUY: Stop Loss non valido."
-                )
-
-                return False
-
-            if take_profit <= entry:
-
-                Logger.warning(
-                    "BUY: Take Profit non valido."
-                )
-
-                return False
-
-        else:
-
-            if stop_loss <= entry:
-
-                Logger.warning(
-                    "SELL: Stop Loss non valido."
-                )
-
-                return False
-
-            if take_profit >= entry:
-
-                Logger.warning(
-                    "SELL: Take Profit non valido."
-                )
-
-                return False
-
-        # =================================
-        # CREAZIONE POSIZIONE
-        # =================================
+        # Nel Live Trading non passiamo "timestamp": qui si usa l'ora
+        # reale del PC, corretto per operazioni dal vivo. Nel Backtest
+        # invece si passa la data della candela storica, altrimenti
+        # ogni trade risulterebbe aperto e chiuso nello stesso istante
+        # reale (il backtest gira in pochi secondi).
+        open_time = timestamp if timestamp is not None else datetime.now()
 
         self.position = {
 
@@ -201,23 +62,15 @@ class PositionController:
 
             "side": side,
 
-            "entry": entry,
+            "entry": float(entry),
 
-            # Stop Loss iniziale.
-            # NON viene modificato da
-            # Break Even o Trailing Stop.
+            "stop_loss": float(stop_loss),
 
-            "initial_stop_loss": stop_loss,
+            "initial_stop_loss": float(stop_loss),
 
-            # Stop Loss corrente.
-            # Può essere modificato durante
-            # la gestione della posizione.
+            "take_profit": float(take_profit),
 
-            "stop_loss": stop_loss,
-
-            "take_profit": take_profit,
-
-            "size": size,
+            "size": float(size),
 
             "status": "OPEN",
 
@@ -227,7 +80,7 @@ class PositionController:
 
             "close_reason": None,
 
-            "current_price": entry,
+            "current_price": float(entry),
 
             "current_profit": 0.0,
 
@@ -241,8 +94,7 @@ class PositionController:
 
         Logger.success(
 
-            f"Aperta posizione {side} su {symbol} "
-            f"(size: {size})"
+            f"Aperta posizione {side} su {symbol} (size: {size})"
 
         )
 
@@ -270,57 +122,201 @@ class PositionController:
 
             return None
 
-        current_price = float(
-            current_price
-        )
+        current_price = float(current_price)
 
-        # =================================
-        # 1. POSITION MONITOR
-        # =================================
+        entry = self.position["entry"]
 
-        self.position = self.monitor.update(
+        side = self.position["side"]
 
-            self.position,
+        size = self.position.get("size", 1.0)
 
-            current_price
+        # =====================================
+        # PREZZO CORRENTE
+        # =====================================
 
-        )
+        self.position["current_price"] = current_price
 
-        # =================================
-        # 2. EXIT MANAGER
-        # =================================
+        if side == "BUY":
 
-        exit_reason = self.exit_manager.evaluate(
+            profit = (current_price - entry) * size
 
-            self.position,
+        else:
 
-            current_price,
+            profit = (entry - current_price) * size
 
-            high=high,
+        self.position["current_profit"] = round(
 
-            low=low
+            profit,
+
+            6
 
         )
 
-        # =================================
-        # 3. CHIUSURA
-        # =================================
+        if profit > self.position["max_profit"]:
 
-        if exit_reason is not None:
+            self.position["max_profit"] = round(
 
-            return self.close_position(
+                profit,
 
-                exit_reason,
-
-                timestamp,
-
-                current_price
+                6
 
             )
 
-        # =================================
-        # POSIZIONE ANCORA APERTA
-        # =================================
+        # =====================================
+        # OHLC INTRABAR
+        # =====================================
+
+        candle_high = (
+
+            float(high)
+
+            if high is not None
+
+            else current_price
+
+        )
+
+        candle_low = (
+
+            float(low)
+
+            if low is not None
+
+            else current_price
+
+        )
+
+        # =====================================
+        # SL / TP PRIMA DI BE / TRAILING
+        # =====================================
+
+        if side == "BUY":
+
+            if candle_low <= self.position["stop_loss"]:
+
+                return self.close_position(
+
+                    "STOP LOSS",
+
+                    timestamp,
+
+                    exit_price=self.position["stop_loss"]
+
+                )
+
+            if candle_high >= self.position["take_profit"]:
+
+                return self.close_position(
+
+                    "TAKE PROFIT",
+
+                    timestamp,
+
+                    exit_price=self.position["take_profit"]
+
+                )
+
+        else:
+
+            if candle_high >= self.position["stop_loss"]:
+
+                return self.close_position(
+
+                    "STOP LOSS",
+
+                    timestamp,
+
+                    exit_price=self.position["stop_loss"]
+
+                )
+
+            if candle_low <= self.position["take_profit"]:
+
+                return self.close_position(
+
+                    "TAKE PROFIT",
+
+                    timestamp,
+
+                    exit_price=self.position["take_profit"]
+
+                )
+
+        # =====================================
+        # BREAK EVEN
+        # =====================================
+
+        if (
+
+            not self.position["break_even"]
+
+            and profit > 0
+
+        ):
+
+            self.position["stop_loss"] = entry
+
+            self.position["break_even"] = True
+
+            Logger.info(
+
+                "Break Even attivato."
+
+            )
+
+        # =====================================
+        # TRAILING STOP
+        # =====================================
+
+        if self.position["break_even"]:
+
+            distance = abs(
+
+                self.position["take_profit"]
+
+                - entry
+
+            ) * 0.25
+
+            if side == "BUY":
+
+                new_stop = current_price - distance
+
+                if new_stop > self.position["stop_loss"]:
+
+                    self.position["stop_loss"] = round(
+
+                        new_stop,
+
+                        6
+
+                    )
+
+                    Logger.info(
+
+                        f"Trailing Stop -> {self.position['stop_loss']}"
+
+                    )
+
+            else:
+
+                new_stop = current_price + distance
+
+                if new_stop < self.position["stop_loss"]:
+
+                    self.position["stop_loss"] = round(
+
+                        new_stop,
+
+                        6
+
+                    )
+
+                    Logger.info(
+
+                        f"Trailing Stop -> {self.position['stop_loss']}"
+
+                    )
 
         return self.position
 
@@ -336,7 +332,7 @@ class PositionController:
 
         timestamp=None,
 
-        current_price=None
+        exit_price=None
 
     ):
 
@@ -344,190 +340,35 @@ class PositionController:
 
             return None
 
-        # =================================
-        # PREZZO CORRENTE
-        # =================================
+        if exit_price is not None:
 
-        if current_price is None:
+            exit_price = float(exit_price)
 
-            current_price = self.position[
-                "current_price"
-            ]
+            self.position["current_price"] = exit_price
 
-        current_price = float(
-            current_price
-        )
+            entry = self.position["entry"]
+            size = self.position.get("size", 1.0)
+            side = self.position["side"]
 
-        # =================================
-        # DETERMINAZIONE PREZZO USCITA
-        # =================================
+            if side == "BUY":
 
-        reason_upper = str(
-            reason
-        ).upper()
-
-        # ---------------------------------
-        # TAKE PROFIT
-        # ---------------------------------
-
-        if reason_upper == "TAKE PROFIT":
-
-            exit_price = float(
-                self.position["take_profit"]
-            )
-
-        # ---------------------------------
-        # BREAK EVEN
-        # ---------------------------------
-
-        elif reason_upper == "BREAK EVEN":
-
-            exit_price = float(
-                self.position["entry"]
-            )
-
-        # ---------------------------------
-        # TRAILING STOP
-        # ---------------------------------
-
-        elif reason_upper == "TRAILING STOP":
-
-            trailing_stop = self.position.get(
-                "trailing_stop"
-            )
-
-            if trailing_stop is not None:
-
-                exit_price = float(
-                    trailing_stop
-                )
+                profit = (exit_price - entry) * size
 
             else:
 
-                exit_price = float(
-                    self.position["stop_loss"]
-                )
-
-        # ---------------------------------
-        # STOP LOSS
-        # ---------------------------------
-
-        elif reason_upper == "STOP LOSS":
-
-            exit_price = float(
-                self.position["stop_loss"]
-            )
-
-        # ---------------------------------
-        # USCITA MANUALE / ALTRO
-        # ---------------------------------
-
-        else:
-
-            exit_price = current_price
-
-        # =================================
-        # PREZZO DI USCITA FINALE
-        # =================================
-
-        self.position["current_price"] = (
-            exit_price
-        )
-
-        # =================================
-        # CALCOLO PNL FINALE
-        # =================================
-
-        side = str(
-            self.position["side"]
-        ).upper()
-
-        entry = float(
-            self.position["entry"]
-        )
-
-        size = float(
-            self.position.get(
-                "size",
-                1.0
-            )
-        )
-
-        if side in (
-            "BUY",
-            "STRONG BUY"
-        ):
+                profit = (entry - exit_price) * size
 
             self.position["current_profit"] = round(
-
-                (exit_price - entry) * size,
-
+                profit,
                 6
-
             )
-
-        elif side in (
-            "SELL",
-            "STRONG SELL"
-        ):
-
-            self.position["current_profit"] = round(
-
-                (entry - exit_price) * size,
-
-                6
-
-            )
-
-        # =================================
-        # AGGIORNA MAX PROFIT FINALE
-        # =================================
-
-        previous_max = float(
-            self.position.get(
-                "max_profit",
-                0.0
-            )
-        )
-
-        final_profit = float(
-            self.position["current_profit"]
-        )
-
-        if final_profit > previous_max:
-
-            self.position["max_profit"] = round(
-
-                final_profit,
-
-                6
-
-            )
-
-        else:
-
-            self.position["max_profit"] = round(
-
-                previous_max,
-
-                6
-
-            )
-
-        # =================================
-        # STATO
-        # =================================
 
         self.position["status"] = "CLOSED"
 
         self.position["close_reason"] = reason
 
         self.position["close_time"] = (
-
-            timestamp
-            if timestamp is not None
-            else datetime.now()
-
+            timestamp if timestamp is not None else datetime.now()
         )
 
         Logger.success(
@@ -536,22 +377,14 @@ class PositionController:
 
         )
 
-        # =================================
-        # COPIA POSIZIONE CHIUSA
-        # =================================
-
         closed = self.position.copy()
-
-        # =================================
-        # RESET POSIZIONE ATTIVA
-        # =================================
 
         self.position = None
 
         return closed
 
     # =====================================
-    # POSIZIONE CORRENTE
+    # POSIZIONE
     # =====================================
 
     def get_position(self):
@@ -559,7 +392,7 @@ class PositionController:
         return self.position
 
     # =====================================
-    # VERIFICA POSIZIONE
+    # ESISTE
     # =====================================
 
     def has_position(self):

@@ -1,23 +1,53 @@
-"""
-========================================
-PROJECT PHOENIX AI
-Execution Validator
-Versione 1.0
-========================================
-"""
+﻿from pathlib import Path
 
-from Logs.logger import Logger
+path = Path(
+    "Execution/execution_validator.py"
+)
 
+text = path.read_text(
+    encoding="utf-8-sig"
+)
 
-class ExecutionValidator:
+old = '''    def validate(self, trade):
 
-    def __init__(self):
+        if trade is None:
 
-        Logger.success(
-            "Execution Validator V1 inizializzato."
-        )
+            return False, "Nessun trade"
 
-    def validate(self, trade):
+        signal = str(
+
+            trade.get(
+
+                "signal",
+
+                "HOLD"
+
+            )
+
+        ).upper()
+
+        if signal == "HOLD":
+
+            return False, "Segnale HOLD"
+
+        if signal not in (
+
+            "BUY",
+
+            "SELL",
+
+            "STRONG BUY",
+
+            "STRONG SELL"
+
+        ):
+
+            return False, "Segnale non valido"
+
+        return True, ""
+'''
+
+new = '''    def validate(self, trade):
 
         # =====================================
         # TRADE PRESENTE
@@ -198,4 +228,53 @@ class ExecutionValidator:
         # =====================================
 
         return True, ""
+'''
+
+count = text.count(old)
+
+print("=" * 100)
+print("E.27.57 EXECUTION VALIDATOR CONTRACT PATCH")
+print("=" * 100)
+print(
+    f"TARGET OCCURRENCES = {count}"
+)
+
+if count != 1:
+
+    raise RuntimeError(
+        "STOP: blocco validate non trovato "
+        "in modo univoco."
+    )
+
+text = text.replace(
+    old,
+    new,
+    1
+)
+
+path.write_text(
+    text,
+    encoding="utf-8"
+)
+
+print()
+print("PATCH APPLICATA: OK")
+print()
+print("TRADE PRESENCE: FIX")
+print("REQUIRED FIELDS: FIX")
+print("SIGNAL/SIDE CONSISTENCY: FIX")
+print("NUMERIC VALUES: FIX")
+print("POSITIVE VALUES: FIX")
+print("BUY SL/ENTRY/TP: FIX")
+print("SELL TP/ENTRY/SL: FIX")
+print()
+print("RISK AI: INVARIATO")
+print("TRADE BUILDER: INVARIATO")
+print("EXECUTION ENGINE: INVARIATO")
+print("MT5: INVARIATO")
+print()
+print("NESSUN ORDINE MT5")
+print("NESSUNA APERTURA")
+print("NESSUNA CHIUSURA")
+print("=" * 100)
 

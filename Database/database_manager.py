@@ -1,8 +1,8 @@
-"""
+﻿"""
 ========================================
 PROJECT PHOENIX AI
 Database Manager
-Versione 6.0
+Versione 5.1
 ========================================
 """
 
@@ -15,9 +15,11 @@ class DatabaseManager:
 
     def __init__(self, database_path="phoenix_ai.db"):
 
-        Logger.success("Database Manager V6 inizializzato.")
-
         self.database_path = database_path
+
+        Logger.success(
+            f"Database Manager V5.1 inizializzato: {self.database_path}"
+        )
 
         self.connection = sqlite3.connect(
             self.database_path
@@ -38,8 +40,6 @@ class DatabaseManager:
         CREATE TABLE IF NOT EXISTS trades(
 
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-            trade_id TEXT UNIQUE,
 
             symbol TEXT,
             side TEXT,
@@ -80,9 +80,8 @@ class DatabaseManager:
 
             """
 
-            INSERT OR IGNORE INTO trades(
+            INSERT INTO trades(
 
-                trade_id,
                 symbol,
                 side,
                 entry,
@@ -102,25 +101,13 @@ class DatabaseManager:
 
             VALUES(
 
-                ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
+                ?,?,?,?,?,?,?,?,?,?,?,?,?,?
 
             )
 
             """,
 
             (
-
-                str(
-                    trade.get(
-                        "trade_id",
-                        (
-                            f"{trade.get('symbol')}|"
-                            f"{trade.get('side')}|"
-                            f"{trade.get('open_time')}|"
-                            f"{trade.get('close_time')}"
-                        )
-                    )
-                ),
 
                 trade["symbol"],
                 trade["side"],
@@ -142,36 +129,6 @@ class DatabaseManager:
         )
 
         self.connection.commit()
-
-    # =====================================
-    # VERIFICA TRADE ESISTENTE
-    # =====================================
-
-    def has_trade(self, trade_id):
-
-        if trade_id is None:
-
-            return False
-
-        self.cursor.execute(
-
-            """
-            SELECT 1
-            FROM trades
-            WHERE trade_id = ?
-            LIMIT 1
-            """,
-
-            (
-                str(trade_id),
-            )
-
-        )
-
-        return (
-            self.cursor.fetchone()
-            is not None
-        )
 
     # =====================================
     # ELENCO
@@ -241,7 +198,7 @@ class DatabaseManager:
 
         value = self.cursor.fetchone()[0]
 
-        return 0 if value is None else round(value, 2)
+        return 0 if value is None else round(value,2)
 
     def gross_profit(self):
 
@@ -253,7 +210,7 @@ class DatabaseManager:
 
         value = self.cursor.fetchone()[0]
 
-        return 0 if value is None else round(value, 2)
+        return 0 if value is None else round(value,2)
 
     def gross_loss(self):
 
@@ -265,7 +222,7 @@ class DatabaseManager:
 
         value = self.cursor.fetchone()[0]
 
-        return 0 if value is None else round(abs(value), 2)
+        return 0 if value is None else round(abs(value),2)
 
     def best_trade(self):
 
@@ -277,7 +234,7 @@ class DatabaseManager:
 
         value = self.cursor.fetchone()[0]
 
-        return 0 if value is None else round(value, 2)
+        return 0 if value is None else round(value,2)
 
     def worst_trade(self):
 
@@ -289,7 +246,7 @@ class DatabaseManager:
 
         value = self.cursor.fetchone()[0]
 
-        return 0 if value is None else round(value, 2)
+        return 0 if value is None else round(value,2)
 
     def average_profit(self):
 
@@ -301,7 +258,7 @@ class DatabaseManager:
 
         value = self.cursor.fetchone()[0]
 
-        return 0 if value is None else round(value, 2)
+        return 0 if value is None else round(value,2)
 
     def profit_factor(self):
 
@@ -313,11 +270,11 @@ class DatabaseManager:
 
             return 0
 
-        return round(gp / gl, 2)
+        return round(gp/gl,2)
 
     def win_rate(self):
 
-        total = self.wins() + self.losses()
+        total = self.wins()+self.losses()
 
         if total == 0:
 
@@ -325,7 +282,7 @@ class DatabaseManager:
 
         return round(
 
-            self.wins() * 100 / total,
+            self.wins()*100/total,
 
             2
 
