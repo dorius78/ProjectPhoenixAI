@@ -41,7 +41,7 @@ class PhoenixBrainLogic:
                 "Trend rialzista"
             )
 
-        if analysis.get("trend_bearish"):
+        elif analysis.get("trend_bearish"):
 
             bearish_score += 20
 
@@ -61,7 +61,7 @@ class PhoenixBrainLogic:
                 "EMA allineate al rialzo"
             )
 
-        if analysis.get("ema_alignment_bearish"):
+        elif analysis.get("ema_alignment_bearish"):
 
             bearish_score += 10
 
@@ -81,7 +81,7 @@ class PhoenixBrainLogic:
                 "MACD BUY"
             )
 
-        if analysis.get("macd_sell"):
+        elif analysis.get("macd_sell"):
 
             bearish_score += 10
 
@@ -189,7 +189,7 @@ class PhoenixBrainLogic:
                 "CHoCH Rialzista"
             )
 
-        if analysis.get("choch_bearish"):
+        elif analysis.get("choch_bearish"):
 
             bearish_score += 10
 
@@ -209,7 +209,7 @@ class PhoenixBrainLogic:
                 "Fair Value Gap Rialzista"
             )
 
-        if analysis.get("fvg_bearish"):
+        elif analysis.get("fvg_bearish"):
 
             bearish_score += 8
 
@@ -229,7 +229,7 @@ class PhoenixBrainLogic:
                 "Order Block Rialzista"
             )
 
-        if analysis.get("order_block_bearish"):
+        elif analysis.get("order_block_bearish"):
 
             bearish_score += 10
 
@@ -249,7 +249,7 @@ class PhoenixBrainLogic:
                 "Liquidity Sweep Rialzista"
             )
 
-        if analysis.get("liquidity_bearish"):
+        elif analysis.get("liquidity_bearish"):
 
             bearish_score += 8
 
