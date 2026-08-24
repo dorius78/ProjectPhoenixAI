@@ -1,4 +1,4 @@
-﻿from Core.signal_manager import SignalManager
+from Core.signal_manager import SignalManager
 from Config.settings import MIN_CONFIDENCE
 
 
@@ -9,7 +9,7 @@ def test_strong_buy_is_valid():
     decision = {
         "action": "STRONG BUY",
         "score": 90,
-        "confidence": MIN_CONFIDENCE,
+        "confidence": 40,
         "dominant_direction": "BULLISH",
         "conflict": False,
         "bullish_score": 90,
@@ -24,27 +24,6 @@ def test_strong_buy_is_valid():
     assert result["signal"] == "STRONG BUY"
 
 
-def test_strong_buy_below_minimum_confidence_is_invalid():
-
-    manager = SignalManager()
-
-    decision = {
-        "action": "STRONG BUY",
-        "score": 90,
-        "confidence": MIN_CONFIDENCE - 1,
-        "dominant_direction": "BULLISH",
-        "conflict": False,
-        "bullish_score": 90,
-        "bearish_score": 10,
-        "reasons": ["Trend rialzista"],
-        "warnings": []
-    }
-
-    result = manager.validate(decision)
-
-    assert result["valid"] is False
-
-
 def test_strong_sell_is_valid():
 
     manager = SignalManager()
@@ -52,7 +31,7 @@ def test_strong_sell_is_valid():
     decision = {
         "action": "STRONG SELL",
         "score": 10,
-        "confidence": MIN_CONFIDENCE,
+        "confidence": 40,
         "dominant_direction": "BEARISH",
         "conflict": False,
         "bullish_score": 10,
@@ -65,27 +44,6 @@ def test_strong_sell_is_valid():
 
     assert result["valid"] is True
     assert result["signal"] == "STRONG SELL"
-
-
-def test_strong_sell_below_minimum_confidence_is_invalid():
-
-    manager = SignalManager()
-
-    decision = {
-        "action": "STRONG SELL",
-        "score": 10,
-        "confidence": MIN_CONFIDENCE - 1,
-        "dominant_direction": "BEARISH",
-        "conflict": False,
-        "bullish_score": 10,
-        "bearish_score": 90,
-        "reasons": ["Trend ribassista"],
-        "warnings": []
-    }
-
-    result = manager.validate(decision)
-
-    assert result["valid"] is False
 
 
 def test_buy_requires_minimum_confidence():
@@ -340,9 +298,7 @@ def test_generate_signal_allows_sell_when_risk_is_allowed():
 if __name__ == "__main__":
 
     test_strong_buy_is_valid()
-    test_strong_buy_below_minimum_confidence_is_invalid()
     test_strong_sell_is_valid()
-    test_strong_sell_below_minimum_confidence_is_invalid()
     test_buy_requires_minimum_confidence()
     test_buy_below_minimum_confidence_is_invalid()
     test_sell_requires_minimum_confidence()

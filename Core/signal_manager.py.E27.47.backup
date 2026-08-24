@@ -117,13 +117,7 @@ class SignalManager:
 
             elif signal == "STRONG BUY":
 
-                if confidence < MIN_CONFIDENCE:
-
-                    rejection_reason = (
-                        "Confidence insufficiente."
-                    )
-
-                elif dominant_direction != "BULLISH":
+                if dominant_direction != "BULLISH":
 
                     rejection_reason = (
                         "Direzione dominante "
@@ -140,13 +134,7 @@ class SignalManager:
 
             elif signal == "STRONG SELL":
 
-                if confidence < MIN_CONFIDENCE:
-
-                    rejection_reason = (
-                        "Confidence insufficiente."
-                    )
-
-                elif dominant_direction != "BEARISH":
+                if dominant_direction != "BEARISH":
 
                     rejection_reason = (
                         "Direzione dominante "
