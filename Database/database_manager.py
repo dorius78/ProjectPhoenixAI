@@ -1,8 +1,8 @@
-"""
+﻿"""
 ========================================
 PROJECT PHOENIX AI
 Database Manager
-Versione 5.0
+Versione 5.1
 ========================================
 """
 
@@ -13,12 +13,16 @@ from Logs.logger import Logger
 
 class DatabaseManager:
 
-    def __init__(self):
+    def __init__(self, database_path="phoenix_ai.db"):
 
-        Logger.success("Database Manager V5 inizializzato.")
+        self.database_path = database_path
+
+        Logger.success(
+            f"Database Manager V5.1 inizializzato: {self.database_path}"
+        )
 
         self.connection = sqlite3.connect(
-            "phoenix_ai.db"
+            self.database_path
         )
 
         self.cursor = self.connection.cursor()
@@ -44,7 +48,10 @@ class DatabaseManager:
             exit REAL,
 
             stop_loss REAL,
+            initial_stop_loss REAL,
             take_profit REAL,
+
+            size REAL,
 
             pnl REAL,
 
@@ -66,6 +73,45 @@ class DatabaseManager:
 
         self.connection.commit()
 
+        self.migrate_schema_v6()
+
+    # =====================================
+    # DATABASE SCHEMA V6
+    # =====================================
+
+    def migrate_schema_v6(self):
+
+        self.cursor.execute(
+            "PRAGMA table_info(trades)"
+        )
+
+        columns = {
+            row[1]
+            for row in self.cursor.fetchall()
+        }
+
+        if "initial_stop_loss" not in columns:
+
+            self.cursor.execute(
+                "ALTER TABLE trades ADD COLUMN initial_stop_loss REAL"
+            )
+
+            Logger.info(
+                "Database Schema V6: aggiunta initial_stop_loss."
+            )
+
+        if "size" not in columns:
+
+            self.cursor.execute(
+                "ALTER TABLE trades ADD COLUMN size REAL"
+            )
+
+            Logger.info(
+                "Database Schema V6: aggiunta size."
+            )
+
+        self.connection.commit()
+
     # =====================================
     # SALVA
     # =====================================
@@ -83,7 +129,9 @@ class DatabaseManager:
                 entry,
                 exit,
                 stop_loss,
+                initial_stop_loss,
                 take_profit,
+                size,
                 pnl,
                 status,
                 reason,
@@ -97,7 +145,7 @@ class DatabaseManager:
 
             VALUES(
 
-                ?,?,?,?,?,?,?,?,?,?,?,?,?,?
+                ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
 
             )
 
@@ -110,7 +158,12 @@ class DatabaseManager:
                 trade["entry"],
                 trade["exit"],
                 trade["stop_loss"],
+                trade.get(
+                    "initial_stop_loss",
+                    trade["stop_loss"]
+                ),
                 trade["take_profit"],
+                trade.get("size", 0.0),
                 trade["pnl"],
                 trade["status"],
                 trade["reason"],

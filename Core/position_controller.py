@@ -9,6 +9,7 @@ Versione 12.0
 from datetime import datetime
 
 from Logs.logger import Logger
+from Config.settings import BREAK_EVEN_BUFFER_PERCENT
 
 
 class PositionController:
@@ -66,6 +67,8 @@ class PositionController:
 
             "stop_loss": float(stop_loss),
 
+            "initial_stop_loss": float(stop_loss),
+
             "take_profit": float(take_profit),
 
             "size": float(size),
@@ -108,7 +111,11 @@ class PositionController:
 
         current_price,
 
-        timestamp=None
+        timestamp=None,
+
+        high=None,
+
+        low=None
 
     ):
 
@@ -118,13 +125,17 @@ class PositionController:
 
         current_price = float(current_price)
 
-        self.position["current_price"] = current_price
-
         entry = self.position["entry"]
 
         side = self.position["side"]
 
         size = self.position.get("size", 1.0)
+
+        # =====================================
+        # PREZZO CORRENTE
+        # =====================================
+
+        self.position["current_price"] = current_price
 
         if side == "BUY":
 
@@ -153,14 +164,112 @@ class PositionController:
             )
 
         # =====================================
+        # OHLC INTRABAR
+        # =====================================
+
+        candle_high = (
+
+            float(high)
+
+            if high is not None
+
+            else current_price
+
+        )
+
+        candle_low = (
+
+            float(low)
+
+            if low is not None
+
+            else current_price
+
+        )
+
+        # =====================================
+        # SL / TP PRIMA DI BE / TRAILING
+        # =====================================
+
+        if side == "BUY":
+
+            if candle_low <= self.position["stop_loss"]:
+
+                return self.close_position(
+
+                    "STOP LOSS",
+
+                    timestamp,
+
+                    exit_price=self.position["stop_loss"]
+
+                )
+
+            if candle_high >= self.position["take_profit"]:
+
+                return self.close_position(
+
+                    "TAKE PROFIT",
+
+                    timestamp,
+
+                    exit_price=self.position["take_profit"]
+
+                )
+
+        else:
+
+            if candle_high >= self.position["stop_loss"]:
+
+                return self.close_position(
+
+                    "STOP LOSS",
+
+                    timestamp,
+
+                    exit_price=self.position["stop_loss"]
+
+                )
+
+            if candle_low <= self.position["take_profit"]:
+
+                return self.close_position(
+
+                    "TAKE PROFIT",
+
+                    timestamp,
+
+                    exit_price=self.position["take_profit"]
+
+                )
+
+        # =====================================
         # BREAK EVEN
         # =====================================
+
+        break_even_buffer = (
+            float(BREAK_EVEN_BUFFER_PERCENT) / 100.0
+        )
 
         if (
 
             not self.position["break_even"]
 
-            and profit > 0
+            and (
+                (
+                    side == "BUY"
+                    and current_price >= (
+                        entry * (1 + break_even_buffer)
+                    )
+                )
+                or
+                (
+                    side == "SELL"
+                    and current_price <= (
+                        entry * (1 - break_even_buffer)
+                    )
+                )
+            )
 
         ):
 
@@ -228,54 +337,6 @@ class PositionController:
 
                     )
 
-        # =====================================
-        # STOP LOSS / TAKE PROFIT
-        # =====================================
-
-        if side == "BUY":
-
-            if current_price <= self.position["stop_loss"]:
-
-                return self.close_position(
-
-                    "STOP LOSS",
-
-                    timestamp
-
-                )
-
-            if current_price >= self.position["take_profit"]:
-
-                return self.close_position(
-
-                    "TAKE PROFIT",
-
-                    timestamp
-
-                )
-
-        else:
-
-            if current_price >= self.position["stop_loss"]:
-
-                return self.close_position(
-
-                    "STOP LOSS",
-
-                    timestamp
-
-                )
-
-            if current_price <= self.position["take_profit"]:
-
-                return self.close_position(
-
-                    "TAKE PROFIT",
-
-                    timestamp
-
-                )
-
         return self.position
 
     # =====================================
@@ -288,13 +349,38 @@ class PositionController:
 
         reason="MANUALE",
 
-        timestamp=None
+        timestamp=None,
+
+        exit_price=None
 
     ):
 
         if self.position is None:
 
             return None
+
+        if exit_price is not None:
+
+            exit_price = float(exit_price)
+
+            self.position["current_price"] = exit_price
+
+            entry = self.position["entry"]
+            size = self.position.get("size", 1.0)
+            side = self.position["side"]
+
+            if side == "BUY":
+
+                profit = (exit_price - entry) * size
+
+            else:
+
+                profit = (entry - exit_price) * size
+
+            self.position["current_profit"] = round(
+                profit,
+                6
+            )
 
         self.position["status"] = "CLOSED"
 

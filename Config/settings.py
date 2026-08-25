@@ -126,3 +126,23 @@ SLIPPAGE = 0.0
 # ======================================
 
 LOG_LEVEL = "INFO"
+# =====================================
+# DATABASE
+# =====================================
+
+LIVE_DATABASE = "phoenix_live.db"
+BACKTEST_DATABASE = "phoenix_backtest_h4.db"
+
+# =====================================
+# BREAK EVEN
+# =====================================
+
+# Buffer minimo richiesto prima di attivare
+# il Break Even.
+#
+# 0.05% significa:
+# BUY  -> entry + 0.05%
+# SELL -> entry - 0.05%
+
+BREAK_EVEN_BUFFER_PERCENT = 0.05
+

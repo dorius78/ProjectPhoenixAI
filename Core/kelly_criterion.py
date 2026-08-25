@@ -69,7 +69,11 @@ class KellyCriterion:
 
             wins
 
-        ) / len(trades)
+        ) / (
+
+            len(wins) + len(losses)
+
+        )
 
         avg_win = sum(
 

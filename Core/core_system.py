@@ -22,7 +22,11 @@ from Core.live_trading_engine import LiveTradingEngine
 from Core.performance_analytics import PerformanceAnalytics
 
 from Execution.execution_engine import ExecutionEngine
-from Config.settings import MODE
+from Config.settings import (
+    MODE,
+    LIVE_DATABASE,
+    BACKTEST_DATABASE
+)
 
 
 class CoreSystem:
@@ -45,13 +49,40 @@ class CoreSystem:
 
         self.backtest = BacktestEngine()
 
-        self.database = DatabaseManager()
-
-        self.performance = PerformanceAnalytics(
-
-            self.database
-
+        self.live_database = DatabaseManager(
+            LIVE_DATABASE
         )
+
+        self.backtest_database = DatabaseManager(
+            BACKTEST_DATABASE
+        )
+
+        # =====================================
+        # DATABASE SEPARATI
+        # =====================================
+
+        # Database storico phoenix_ai.db:
+        # NON viene utilizzato dal sistema operativo.
+        #
+        # LIVE:
+        # utilizzato esclusivamente dal Live Trading.
+        #
+        # BACKTEST:
+        # utilizzato esclusivamente dal Backtest.
+
+        self.database = self.live_database
+
+        self.live_performance = PerformanceAnalytics(
+            self.live_database
+        )
+
+        self.backtest_performance = PerformanceAnalytics(
+            self.backtest_database
+        )
+
+        # Compatibilita' con il codice esistente:
+        # Performance Analytics predefinito = LIVE.
+        self.performance = self.live_performance
 
         self.scanner = MarketScanner()
 
@@ -328,22 +359,63 @@ class CoreSystem:
         for i in range(start, total_bars):
 
             window = data.iloc[:i + 1]
-            current_price = float(window["Close"].iloc[-1])
+            current_candle = window.iloc[-1]
+
+            current_price = float(current_candle["Close"])
+            candle_high = float(current_candle["High"])
+            candle_low = float(current_candle["Low"])
             candle_time = window.index[-1]
 
             if self.position_controller.has_position():
 
-                closed = self.position_controller.update(current_price, candle_time)
+                closed = self.position_controller.update(
+                    current_price,
+                    candle_time,
+                    high=candle_high,
+                    low=candle_low
+                )
 
                 if closed is not None and closed["status"] == "CLOSED":
 
                     report = self.execution.close(closed)
 
                     duration = (report["close_time"] - closed["open_time"]).total_seconds()
-                    result = "WIN" if report["pnl"] > 0 else "LOSS"
-                    risk = abs(closed["entry"] - closed["stop_loss"])
-                    reward = abs(report["exit"] - closed["entry"])
-                    rr = round(reward / risk, 2) if risk > 0 else 0
+
+                    # =====================================
+                    # RISULTATO TRADE
+                    # =====================================
+
+                    if report["pnl"] > 0:
+                        result = "WIN"
+                    elif report["pnl"] < 0:
+                        result = "LOSS"
+                    else:
+                        result = "BREAKEVEN"
+
+                    # =====================================
+                    # RISK / REWARD
+                    # =====================================
+                    # Il rischio deve essere quello iniziale
+                    # del trade, non lo Stop Loss eventualmente
+                    # modificato da Break Even / Trailing Stop.
+
+                    initial_stop = closed.get(
+                        "initial_stop_loss",
+                        closed["stop_loss"]
+                    )
+
+                    risk = abs(
+                        closed["entry"] - initial_stop
+                    )
+
+                    reward = abs(
+                        report["exit"] - closed["entry"]
+                    )
+
+                    rr = round(
+                        reward / risk,
+                        2
+                    ) if risk > 0 else 0
 
                     trade = {
                         "symbol": report["symbol"],
@@ -351,7 +423,9 @@ class CoreSystem:
                         "entry": report["entry"],
                         "exit": report["exit"],
                         "stop_loss": closed["stop_loss"],
+                        "initial_stop_loss": closed["initial_stop_loss"],
                         "take_profit": closed["take_profit"],
+                        "size": closed["size"],
                         "pnl": report["pnl"],
                         "status": "CLOSED",
                         "reason": report["reason"],
@@ -362,7 +436,7 @@ class CoreSystem:
                         "risk_reward": rr
                     }
 
-                    self.database.save_trade(trade)
+                    self.backtest_database.save_trade(trade)
                     self.backtest.add_trade(trade)
                     self.portfolio.update_balance(report["pnl"])
                     self.portfolio.remove(report["symbol"])
@@ -407,7 +481,10 @@ class CoreSystem:
 
         Logger.section("DATABASE")
 
-        Logger.info(f"Trade salvati : {self.database.count()}")
+        Logger.info(
+            f"Trade salvati nel Backtest DB : "
+            f"{self.backtest_database.count()}"
+        )
 
     # =====================================
     # RISULTATI
