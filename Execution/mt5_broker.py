@@ -191,7 +191,20 @@ class MT5Broker:
     # APERTURA ORDINE
     # =====================================
 
-    def execute(self, trade):
+    def execute(self, trade, dry_run=False):
+
+        if dry_run:
+
+            Logger.info(
+                "MT5 DRY RUN: nessun ordine inviato."
+            )
+
+            return {
+                "success": False,
+                "executed": False,
+                "dry_run": True,
+                "reason": "DRY RUN attivo"
+            }
 
         if not self.connected:
 

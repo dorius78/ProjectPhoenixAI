@@ -1,0 +1,35 @@
+========================================
+PROJECT PHOENIX AI REPORT
+========================================
+
+Creato: 2026-08-12 14:39:00.481797
+
+========================================
+PROJECT PHOENIX AI
+PERFORMANCE REPORT
+========================================
+
+Trade Totali             : 5268
+Trade Win                : 1947
+Trade Loss               : 3148
+Break Even               : 173
+Win Rate                 : 38.21 %
+Win/Loss Ratio           : 0.618
+Profit Factor            : 1.02
+Sharpe Ratio             : 0.005
+Sortino Ratio            : 0.006
+Calmar Ratio             : 0.252
+Recovery Factor          : 0.252
+Ulcer Index              : 14.379
+Omega Ratio              : 1.016
+Profit/Drawdown          : 0.252
+Kelly Criterion          : -1.43 %
+Payoff Ratio             : 1.642
+Gross Profit             : 577471.31
+Gross Loss               : 568607.43
+Average Win              : 296.6
+Average Loss             : 180.62
+Expectancy               : 1.68
+ROI                      : 88.64 %
+Equity                   : 18863.87
+Max Drawdown             : 35239.39

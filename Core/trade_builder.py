@@ -2,7 +2,7 @@
 ========================================
 PROJECT PHOENIX AI
 Trade Builder
-Versione 1.0
+Versione 2.0
 ========================================
 """
 
@@ -14,8 +14,12 @@ class TradeBuilder:
     def __init__(self):
 
         Logger.success(
-            "Trade Builder V1 inizializzato."
+            "Trade Builder V2 inizializzato."
         )
+
+    # =====================================
+    # COSTRUZIONE TRADE
+    # =====================================
 
     def build(
 
@@ -35,13 +39,21 @@ class TradeBuilder:
 
     ):
 
-        signal = str(signal).upper()
+        signal = str(
+            signal
+        ).upper().strip()
+
+        # =================================
+        # HOLD
+        # =================================
 
         if signal == "HOLD":
 
             return None
 
-        side = signal
+        # =================================
+        # NORMALIZZAZIONE DIREZIONE
+        # =================================
 
         if signal == "STRONG BUY":
 
@@ -50,6 +62,26 @@ class TradeBuilder:
         elif signal == "STRONG SELL":
 
             side = "SELL"
+
+        elif signal == "BUY":
+
+            side = "BUY"
+
+        elif signal == "SELL":
+
+            side = "SELL"
+
+        else:
+
+            Logger.info(
+                f"Trade Builder: segnale non valido: {signal}"
+            )
+
+            return None
+
+        # =================================
+        # COSTRUZIONE TRADE
+        # =================================
 
         trade = risk_manager.build_trade(
 
@@ -65,12 +97,47 @@ class TradeBuilder:
 
         )
 
+        # =================================
+        # FALLIMENTO RISK MANAGER
+        # =================================
+
         if trade is None:
+
+            Logger.info(
+                "Trade Builder: Risk Manager "
+                "ha rifiutato il trade."
+            )
 
             return None
 
+        # =================================
+        # METADATI PHOENIX
+        # =================================
+
         trade["symbol"] = symbol
+
         trade["signal"] = signal
+
         trade["side"] = side
 
+        # =================================
+        # LOG
+        # =================================
+
+        Logger.success(
+            f"Trade costruito: "
+            f"{side} {symbol} "
+            f"size={trade['size']}"
+        )
+
         return trade
+
+    # =====================================
+    # RESET
+    # =====================================
+
+    def reset(self):
+
+        Logger.info(
+            "Trade Builder resettato."
+        )

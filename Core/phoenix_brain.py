@@ -1,11 +1,3 @@
-"""
-========================================
-PROJECT PHOENIX AI
-Phoenix Brain
-Versione 9.0
-========================================
-"""
-
 from Logs.logger import Logger
 
 from Core.phoenix_brain_logic import PhoenixBrainLogic
@@ -16,30 +8,31 @@ class PhoenixBrain:
     def __init__(self):
 
         Logger.success(
-            "Phoenix Brain V9 inizializzato."
+            "Phoenix Brain V10 inizializzato."
         )
 
         self.logic = PhoenixBrainLogic()
 
+    # =====================================
+    # DECISIONE
+    # =====================================
+
     def think(
-
         self,
-
         analysis,
-
         risk
-
     ):
 
         data = self.logic.calculate(
-
             analysis,
-
             risk
-
         )
 
         score = data["score"]
+
+        # =================================
+        # AZIONE
+        # =================================
 
         if score >= 90:
 
@@ -61,6 +54,10 @@ class PhoenixBrain:
 
             action = "HOLD"
 
+        # =================================
+        # OUTPUT COMPLETO
+        # =================================
+
         return {
 
             "action": action,
@@ -73,8 +70,52 @@ class PhoenixBrain:
 
             "risk": risk["risk_level"],
 
-            "reasons": data["reasons"],
+            # =============================
+            # DIREZIONE
+            # =============================
 
-            "warnings": data["warnings"]
+            "bullish_score": data.get(
+                "bullish_score",
+                0
+            ),
+
+            "bearish_score": data.get(
+                "bearish_score",
+                0
+            ),
+
+            "dominant_direction": data.get(
+                "dominant_direction",
+                "NEUTRAL"
+            ),
+
+            "conflict": data.get(
+                "conflict",
+                False
+            ),
+
+            # =============================
+            # SPIEGAZIONE
+            # =============================
+
+            "reasons": data.get(
+                "reasons",
+                []
+            ),
+
+            "warnings": data.get(
+                "warnings",
+                []
+            ),
+
+            "bullish_reasons": data.get(
+                "bullish_reasons",
+                []
+            ),
+
+            "bearish_reasons": data.get(
+                "bearish_reasons",
+                []
+            )
 
         }

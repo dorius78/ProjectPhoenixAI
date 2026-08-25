@@ -145,4 +145,3 @@ BACKTEST_DATABASE = "phoenix_backtest_h4.db"
 # SELL -> entry - 0.05%
 
 BREAK_EVEN_BUFFER_PERCENT = 0.05
-

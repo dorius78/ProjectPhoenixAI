@@ -1,0 +1,5 @@
+﻿ Core/core_system.py         |  12 +++-
+ Core/exit_manager.py        | 138 +++++++++++++++++++++++++++-------------
+ Core/position_controller.py |  12 +++-
+ Tests/test_exit_manager.py  | 152 +++++++++++++++++++++++++++++++++++++++++++-
+ 4 files changed, 265 insertions(+), 49 deletions(-)

@@ -1,0 +1,643 @@
+"""
+========================================
+PROJECT PHOENIX AI
+Exit Manager
+Versione 4.0
+========================================
+
+Gestione professionale delle uscite:
+
+1. Take Profit
+2. Break Even progressivo
+3. Trailing Stop
+4. Stop Loss
+5. Protezione del profitto
+
+Il Break Even NON viene attivato
+semplicemente perché il prezzo supera
+l'entry.
+
+Viene attivato solo dopo il raggiungimento
+di una determinata quota di rischio (R).
+========================================
+"""
+
+from Logs.logger import Logger
+
+
+class ExitManager:
+
+    def __init__(self):
+
+        Logger.success(
+            "Exit Manager V4.0 inizializzato."
+        )
+
+        # =================================
+        # PARAMETRI GESTIONE POSIZIONE
+        # =================================
+
+        # Break Even dopo almeno 0.50R
+        self.break_even_trigger_r = 0.50
+
+        # Trailing Stop dopo almeno 1.00R
+        self.trailing_trigger_r = 1.00
+
+        # Distanza trailing:
+        # 25% della distanza Entry -> Take Profit
+        self.trailing_distance_factor = 0.25
+
+    # =====================================
+    # CALCOLO RISK DISTANCE
+    # =====================================
+
+    def _risk_distance(self, position):
+
+        entry = float(
+            position["entry"]
+        )
+
+        initial_stop_loss = position.get(
+            "initial_stop_loss"
+        )
+
+        if initial_stop_loss is None:
+            initial_stop_loss = position.get(
+                "stop_loss"
+            )
+
+        initial_stop_loss = float(
+            initial_stop_loss
+        )
+
+        return abs(
+            entry - initial_stop_loss
+        )
+
+    # =====================================
+    # CALCOLO PROFITTO IN R
+    # =====================================
+
+    def _profit_r(
+        self,
+        position,
+        current_price
+    ):
+
+        entry = float(
+            position["entry"]
+        )
+
+        current_price = float(
+            current_price
+        )
+
+        risk = self._risk_distance(
+            position
+        )
+
+        if risk <= 0:
+
+            return 0.0
+
+        side = str(
+            position["side"]
+        ).upper()
+
+        # =================================
+        # BUY
+        # =================================
+
+        if side in (
+            "BUY",
+            "STRONG BUY"
+        ):
+
+            profit = (
+                current_price - entry
+            )
+
+        # =================================
+        # SELL
+        # =================================
+
+        elif side in (
+            "SELL",
+            "STRONG SELL"
+        ):
+
+            profit = (
+                entry - current_price
+            )
+
+        else:
+
+            return 0.0
+
+        return profit / risk
+
+    # =====================================
+    # BREAK EVEN
+    # =====================================
+
+    def apply_break_even(
+        self,
+        position,
+        current_price
+    ):
+
+        if position is None:
+
+            return None
+
+        current_price = float(
+            current_price
+        )
+
+        if position.get(
+            "break_even",
+            False
+        ):
+
+            return position
+
+        profit_r = self._profit_r(
+            position,
+            current_price
+        )
+
+        # =================================
+        # BREAK EVEN NON ANCORA ATTIVO
+        # =================================
+
+        if profit_r < self.break_even_trigger_r:
+
+            return position
+
+        entry = float(
+            position["entry"]
+        )
+
+        side = str(
+            position["side"]
+        ).upper()
+
+        current_stop = float(
+            position["stop_loss"]
+        )
+
+        # =================================
+        # BUY
+        # =================================
+
+        if side in (
+            "BUY",
+            "STRONG BUY"
+        ):
+
+            if current_stop < entry:
+
+                position["stop_loss"] = entry
+
+                position["break_even"] = True
+
+                Logger.info(
+                    f"Break Even attivato "
+                    f"a {profit_r:.2f}R."
+                )
+
+        # =================================
+        # SELL
+        # =================================
+
+        elif side in (
+            "SELL",
+            "STRONG SELL"
+        ):
+
+            if current_stop > entry:
+
+                position["stop_loss"] = entry
+
+                position["break_even"] = True
+
+                Logger.info(
+                    f"Break Even attivato "
+                    f"a {profit_r:.2f}R."
+                )
+
+        return position
+
+    # =====================================
+    # TRAILING STOP
+    # =====================================
+
+    def apply_trailing_stop(
+        self,
+        position,
+        current_price
+    ):
+
+        if position is None:
+
+            return None
+
+        current_price = float(
+            current_price
+        )
+
+        # =================================
+        # IL TRAILING RICHIEDE BREAK EVEN
+        # =================================
+
+        if not position.get(
+            "break_even",
+            False
+        ):
+
+            return position
+
+        profit_r = self._profit_r(
+            position,
+            current_price
+        )
+
+        # =================================
+        # POSIZIONE GIA' IN BREAK EVEN
+        # =================================
+        #
+        # Se la posizione arriva già in Break Even
+        # senza initial_stop_loss, il rischio originale
+        # non è più ricostruibile.
+        #
+        # In questo caso il trailing viene valutato
+        # direttamente sul movimento favorevole.
+        # =================================
+
+        risk_distance = self._risk_distance(
+            position
+        )
+
+        if risk_distance <= 0:
+
+            entry = float(
+                position["entry"]
+            )
+
+            favorable_move = 0.0
+
+            side_check = str(
+                position["side"]
+            ).upper()
+
+            if side_check in (
+                "BUY",
+                "STRONG BUY"
+            ):
+
+                favorable_move = (
+                    current_price - entry
+                )
+
+            elif side_check in (
+                "SELL",
+                "STRONG SELL"
+            ):
+
+                favorable_move = (
+                    entry - current_price
+                )
+
+            if favorable_move <= 0:
+
+                return position
+
+        elif profit_r < self.trailing_trigger_r:
+
+            return position
+
+        entry = float(
+            position["entry"]
+        )
+
+        take_profit = float(
+            position["take_profit"]
+        )
+
+        stop_loss = float(
+            position["stop_loss"]
+        )
+
+        side = str(
+            position["side"]
+        ).upper()
+
+        # =================================
+        # DISTANZA TRAILING
+        # =================================
+
+        distance = (
+
+            abs(
+                take_profit - entry
+            )
+
+            *
+
+            self.trailing_distance_factor
+
+        )
+
+        if distance <= 0:
+
+            return position
+
+        # =================================
+        # BUY
+        # =================================
+
+        if side in (
+            "BUY",
+            "STRONG BUY"
+        ):
+
+            new_stop = (
+
+                current_price
+                - distance
+
+            )
+
+            # Il trailing NON può scendere
+            # sotto il Break Even.
+
+            new_stop = max(
+                new_stop,
+                entry
+            )
+
+            if new_stop > stop_loss:
+
+                new_stop = round(
+                    new_stop,
+                    6
+                )
+
+                position["stop_loss"] = (
+                    new_stop
+                )
+
+                position["trailing_stop"] = (
+                    new_stop
+                )
+
+                Logger.info(
+                    f"Trailing Stop -> "
+                    f"{new_stop:.6f} "
+                    f"({profit_r:.2f}R)"
+                )
+
+        # =================================
+        # SELL
+        # =================================
+
+        elif side in (
+            "SELL",
+            "STRONG SELL"
+        ):
+
+            new_stop = (
+
+                current_price
+                + distance
+
+            )
+
+            # Il trailing NON può salire
+            # sopra il Break Even.
+
+            new_stop = min(
+                new_stop,
+                entry
+            )
+
+            if new_stop < stop_loss:
+
+                new_stop = round(
+                    new_stop,
+                    6
+                )
+
+                position["stop_loss"] = (
+                    new_stop
+                )
+
+                position["trailing_stop"] = (
+                    new_stop
+                )
+
+                Logger.info(
+                    f"Trailing Stop -> "
+                    f"{new_stop:.6f} "
+                    f"({profit_r:.2f}R)"
+                )
+
+        return position
+
+    # =====================================
+    # VALUTA USCITA
+    # =====================================
+
+    def evaluate(
+        self,
+        position,
+        current_price,
+        high=None,
+        low=None
+    ):
+
+        if position is None:
+
+            return None
+
+        current_price = float(
+            current_price
+        )
+
+        # =================================
+        # INTRABAR OHLC
+        # =================================
+        #
+        # Se High/Low sono disponibili,
+        # vengono usati per determinare se
+        # SL/TP sono stati raggiunti durante
+        # la candela.
+        #
+        # Se non disponibili, viene mantenuta
+        # la logica precedente basata sul prezzo
+        # corrente.
+        # =================================
+
+        if high is None:
+            high = current_price
+        else:
+            high = float(high)
+
+        if low is None:
+            low = current_price
+        else:
+            low = float(low)
+
+        # =================================
+        # 1. SNAPSHOT LIVELLI DI USCITA
+        # =================================
+        #
+        # Gli SL/Trailing esistenti all'inizio
+        # della candela sono quelli validi per
+        # valutare l'OHLC della candela stessa.
+        #
+        # Un nuovo Break Even o Trailing Stop
+        # creato durante questa valutazione diventa
+        # effettivo dalla candela successiva.
+        # =================================
+
+        evaluated_stop_loss = float(
+            position["stop_loss"]
+        )
+
+        evaluated_trailing_stop = position.get(
+            "trailing_stop"
+        )
+
+        if evaluated_trailing_stop is not None:
+            evaluated_trailing_stop = float(
+                evaluated_trailing_stop
+            )
+
+        # =================================
+        # 2. BREAK EVEN
+        # =================================
+
+        position = self.apply_break_even(
+            position,
+            current_price
+        )
+
+        # =================================
+        # 3. TRAILING STOP
+        # =================================
+
+        position = self.apply_trailing_stop(
+            position,
+            current_price
+        )
+
+        side = str(
+            position["side"]
+        ).upper()
+
+        stop_loss = evaluated_stop_loss
+
+        take_profit = float(
+            position["take_profit"]
+        )
+
+        trailing_stop = evaluated_trailing_stop
+
+        # =================================
+        # BUY
+        # =================================
+
+        if side in (
+            "BUY",
+            "STRONG BUY"
+        ):
+
+            # -----------------------------
+            # STOP LOSS
+            # -----------------------------
+
+            if low <= stop_loss:
+
+                if position.get(
+                    "break_even",
+                    False
+                ):
+
+                    if stop_loss >= float(
+                        position["entry"]
+                    ):
+
+                        return "BREAK EVEN"
+
+                return "STOP LOSS"
+
+            # -----------------------------
+            # TRAILING STOP
+            # -----------------------------
+
+            if trailing_stop is not None:
+
+                if low <= float(
+                    trailing_stop
+                ):
+
+                    return "TRAILING STOP"
+
+            # -----------------------------
+            # TAKE PROFIT
+            # -----------------------------
+
+            if high >= take_profit:
+
+                return "TAKE PROFIT"
+
+        # =================================
+        # SELL
+        # =================================
+
+        elif side in (
+            "SELL",
+            "STRONG SELL"
+        ):
+
+            # -----------------------------
+            # STOP LOSS
+            # -----------------------------
+
+            if high >= stop_loss:
+
+                if position.get(
+                    "break_even",
+                    False
+                ):
+
+                    if stop_loss <= float(
+                        position["entry"]
+                    ):
+
+                        return "BREAK EVEN"
+
+                return "STOP LOSS"
+
+            # -----------------------------
+            # TRAILING STOP
+            # -----------------------------
+
+            if trailing_stop is not None:
+
+                if high >= float(
+                    trailing_stop
+                ):
+
+                    return "TRAILING STOP"
+
+            # -----------------------------
+            # TAKE PROFIT
+            # -----------------------------
+
+            if low <= take_profit:
+
+                return "TAKE PROFIT"
+
+        return None
