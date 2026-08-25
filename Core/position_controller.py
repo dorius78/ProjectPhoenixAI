@@ -351,13 +351,27 @@ class PositionController:
 
         timestamp=None,
 
-        exit_price=None
+        exit_price=None,
+
+        current_price=None
 
     ):
 
         if self.position is None:
 
             return None
+
+        if current_price is not None:
+
+            if exit_price is not None:
+                print(
+                    "ERRORE: usare exit_price oppure current_price, non entrambi."
+                )
+                raise ValueError(
+                    "exit_price e current_price non possono essere usati insieme."
+                )
+
+            exit_price = current_price
 
         if exit_price is not None:
 

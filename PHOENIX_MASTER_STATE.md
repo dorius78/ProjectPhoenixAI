@@ -1278,3 +1278,86 @@ TRADE LIFECYCLE / POSITION MANAGEMENT
 ============================================================
 FINE PHOENIX MASTER STATE
 ============================================================
+============================================================
+40. TRADE LIFECYCLE - CHECKPOINT 2026-08-25
+============================================================
+
+FASE 1 — TRADE LIFECYCLE
+
+STATO:
+VALIDATA IN AMBIENTE TEST / PAPER TRADING
+
+VALIDAZIONE COMPLETA:
+
+- Position Manager ............ PASS 5/5
+- Position Monitor ............ PASS 3/3
+- Position Controller ......... PASS 8/8
+- Exit Manager ................ PASS 17/17
+- Trade Builder ............... PASS 5/5
+- Trade Manager ............... PASS 6/6
+- Analysis Engine ............. PASS 3/3
+- End-to-End Lifecycle ........ PASS 1/1
+
+TOTALE CHECKPOINT:
+48 TEST PASS
+0 FAIL
+
+CICLO POSIZIONE VALIDATO:
+
+OPEN
+  ↓
+UPDATE
+  ↓
+BREAK EVEN 0.05%
+  ↓
+TAKE PROFIT
+  ↓
+CLOSE
+  ↓
+EXECUTION CLOSE REPORT
+
+END-TO-END VALIDATO:
+
+AnalysisEngine
+  ↓
+TradeManager
+  ↓
+TradeBuilder / Risk
+  ↓
+ExecutionEngine
+  ↓
+Paper Trading
+  ↓
+PositionController
+  ↓
+Break Even
+  ↓
+Take Profit
+  ↓
+Close
+  ↓
+Execution Report
+
+CORREZIONE VALIDATA:
+
+PositionController.close_position()
+supporta ora current_price come parametro compatibile,
+mantenendo exit_price e il comportamento esistente.
+
+SICUREZZA:
+
+- Nessun ordine MT5
+- Nessun trading LIVE
+- Test eseguiti in ambiente locale/Paper
+- Nessuna modifica all'architettura principale
+
+PROSSIMO OBIETTIVO:
+
+Salvare il checkpoint nel repository Git,
+sincronizzarlo con GitHub e proseguire con il prossimo
+punto ufficiale della roadmap.
+
+============================================================
+FINE CHECKPOINT TRADE LIFECYCLE
+============================================================
+
