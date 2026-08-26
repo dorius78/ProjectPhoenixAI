@@ -39,7 +39,7 @@ except ImportError:
 
 class MT5Broker:
 
-    def __init__(self):
+    def __init__(self, magic=260813):
 
         if not MT5_DISPONIBILE:
 
@@ -61,6 +61,8 @@ class MT5Broker:
         self.server = MT5_SERVER
         self.path = MT5_PATH
         self.symbol_map = SYMBOL_MAP
+
+        self.magic = int(magic)
 
         self.connected = False
 
@@ -187,6 +189,56 @@ class MT5Broker:
 
         return round(volume, 2)
 
+
+    # =====================================
+    # POSIZIONI PHOENIX
+    # =====================================
+
+    def get_phoenix_positions(self, symbol=None):
+        """
+        Restituisce esclusivamente le posizioni MT5
+        appartenenti a PROJECT PHOENIX AI tramite magic number.
+        """
+
+        if not self.connected:
+            return []
+
+        positions = mt5.positions_get()
+
+        if not positions:
+            return []
+
+        mt5_symbol = (
+            self._mt5_symbol(symbol)
+            if symbol
+            else None
+        )
+
+        result = []
+
+        for position in positions:
+
+            position_magic = int(
+                getattr(
+                    position,
+                    "magic",
+                    0
+                )
+            )
+
+            if position_magic != self.magic:
+                continue
+
+            if (
+                mt5_symbol is not None
+                and position.symbol != mt5_symbol
+            ):
+                continue
+
+            result.append(position)
+
+        return result
+
     # =====================================
     # APERTURA ORDINE
     # =====================================
@@ -243,7 +295,7 @@ class MT5Broker:
             "sl": float(trade["stop_loss"]),
             "tp": float(trade["take_profit"]),
             "deviation": 20,
-            "magic": 234000,
+            "magic": self.magic,
             "comment": "Phoenix AI",
             "type_time": mt5.ORDER_TIME_GTC,
             "type_filling": mt5.ORDER_FILLING_IOC,
@@ -288,7 +340,32 @@ class MT5Broker:
     # CHIUSURA ORDINE
     # =====================================
 
-    def close(self, closed_position):
+    def close(self, closed_position, dry_run=False):
+
+        if dry_run:
+
+            Logger.info(
+                "MT5 DRY RUN: nessuna chiusura inviata."
+            )
+
+            return {
+                "success": False,
+                "executed": False,
+                "dry_run": True,
+                "message": "DRY RUN attivo",
+                "symbol": closed_position.get("symbol"),
+                "side": closed_position.get("side"),
+                "entry": closed_position.get("entry"),
+                "exit": closed_position.get("current_price"),
+                "pnl": closed_position.get(
+                    "current_profit",
+                    0.0
+                ),
+                "reason": closed_position.get(
+                    "close_reason",
+                    "DRY_RUN"
+                )
+            }
 
         if not self.connected:
 
@@ -337,7 +414,7 @@ class MT5Broker:
             "position": position.ticket,
             "price": price,
             "deviation": 20,
-            "magic": 234000,
+            "magic": self.magic,
             "comment": "Phoenix AI Close",
             "type_time": mt5.ORDER_TIME_GTC,
             "type_filling": mt5.ORDER_FILLING_IOC,
