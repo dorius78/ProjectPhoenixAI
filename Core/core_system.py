@@ -45,6 +45,12 @@ class CoreSystem:
 
         self.portfolio = PortfolioManager()
 
+        # =================================================
+        # EXECUTION ROUTING
+        # =================================================
+        # Paper Trading rimane il default.
+        # Il broker MT5 viene attivato esclusivamente
+        # dal percorso Live Trading.
         self.execution = ExecutionEngine()
 
         self.backtest = BacktestEngine()
