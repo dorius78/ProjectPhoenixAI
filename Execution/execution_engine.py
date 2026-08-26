@@ -13,9 +13,7 @@ from Execution.execution_validator import ExecutionValidator
 from Execution.execution_builder import ExecutionBuilder
 from Execution.execution_report import ExecutionReport
 
-from MT5_Bridge.mt5_execution import (
-    MT5ExecutionEngine
-)
+from Execution.mt5_broker import MT5Broker
 
 
 class ExecutionEngine:
@@ -83,13 +81,7 @@ class ExecutionEngine:
 
         if self.mt5_enabled:
 
-            self.mt5 = MT5ExecutionEngine(
-
-                symbol=self.symbol,
-
-                magic=self.magic
-
-            )
+            self.mt5 = MT5Broker()
 
             Logger.success(
                 "Execution Engine V10: "
@@ -598,7 +590,7 @@ class ExecutionEngine:
         # CHIUSURA MT5
         # =================================
 
-        result = self.mt5.close_position(
+        result = self.mt5.close(
 
             closed_position,
 
