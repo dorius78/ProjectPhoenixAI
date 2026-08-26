@@ -112,6 +112,27 @@ class CoreSystem:
 
         )
 
+
+
+    # =====================================
+    # FACTORY EXECUTION LIVE / DEMO
+    # =====================================
+
+    def create_live_execution(self):
+        """
+        Crea un ExecutionEngine configurato per il
+        percorso MT5. Il conto Demo/Live viene
+        determinato dalle credenziali e dalla
+        configurazione MT5.
+        """
+
+        return ExecutionEngine(
+            symbol="BTCUSD",
+            magic=260813,
+            mt5_enabled=True,
+            mt5_dry_run=False
+        )
+
     # =====================================
     # AVVIO
     # =====================================
@@ -269,6 +290,8 @@ class CoreSystem:
 
     def _run_live_trading_broker(self, symbol):
 
+        live_execution = self.create_live_execution()
+        self.live_engine.execution = live_execution
         # MODE == "LIVE" in Config/settings.py: usa un broker vero
         # (MT5) invece della simulazione. Import qui, non in cima al
         # file, cosi' chi usa solo la simulazione non ha bisogno del
