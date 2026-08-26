@@ -400,14 +400,116 @@ class PositionController:
 
         self.position["close_reason"] = reason
 
+        # =====================================
+        # CLOSED TRADE MASTER CONTRACT
+        # =====================================
+
+        self.position["reason"] = reason
+
+        self.position["exit"] = self.position.get(
+            "current_price"
+        )
+
+        self.position["profit"] = self.position.get(
+            "current_profit",
+            0.0
+        )
+
+        self.position["pnl"] = self.position.get(
+            "current_profit",
+            0.0
+        )
+
+        open_time = self.position.get(
+            "open_time"
+        )
+
         self.position["close_time"] = (
             timestamp if timestamp is not None else datetime.now()
         )
+
+        close_time = self.position.get(
+            "close_time"
+        )
+
+        if (
+            open_time is not None
+            and close_time is not None
+        ):
+
+            self.position["duration"] = (
+                close_time - open_time
+            ).total_seconds()
+
+        else:
+
+            self.position["duration"] = 0.0
+
+        entry_price = float(
+            self.position.get(
+                "entry",
+                0.0
+            )
+        )
+
+        stop_price = float(
+            self.position.get(
+                "initial_stop_loss",
+                self.position.get(
+                    "stop_loss",
+                    entry_price
+                )
+            )
+        )
+
+        exit_price = float(
+            self.position.get(
+                "current_price",
+                entry_price
+            )
+        )
+
+        risk = abs(
+            entry_price - stop_price
+        )
+
+        reward = abs(
+            exit_price - entry_price
+        )
+
+        if risk > 0:
+
+            self.position["risk_reward"] = round(
+                reward / risk,
+                6
+            )
+
+        else:
+
+            self.position["risk_reward"] = 0.0
 
         Logger.success(
 
             f"Posizione chiusa ({reason})"
 
+        )
+
+        # =====================================
+        # CLOSED TRADE CONTRACT
+        # =====================================
+
+        self.position["exit"] = self.position.get(
+            "current_price"
+        )
+
+        self.position["profit"] = self.position.get(
+            "current_profit",
+            0.0
+        )
+
+        self.position["pnl"] = self.position.get(
+            "current_profit",
+            0.0
         )
 
         closed = self.position.copy()
