@@ -21,7 +21,7 @@ APP_NAME = "PROJECT PHOENIX AI"
 
 VERSION = "0.0.1"
 
-MODE = "DEMO"          # DEMO oppure LIVE
+MODE = "DEMO"          # DEMO / LIVE
 
 # ======================================
 # MERCATO

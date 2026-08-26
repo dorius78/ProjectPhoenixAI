@@ -1,4 +1,4 @@
-﻿from Core.live_trading_engine import LiveTradingEngine
+from Core.live_trading_engine import LiveTradingEngine
 
 print("=" * 100)
 print("PROJECT PHOENIX AI - E.27.12.46 EXTERNAL CLOSE MT5 METADATA FULL TEST")

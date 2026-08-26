@@ -1,4 +1,4 @@
-﻿from Core.phoenix_brain import PhoenixBrain
+from Core.phoenix_brain import PhoenixBrain
 
 print("=" * 100)
 print("PROJECT PHOENIX AI - E.27.21 DECISION SCORE STRESS AUDIT")

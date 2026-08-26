@@ -1,4 +1,4 @@
-﻿import inspect
+import inspect
 
 from Data.Indicators.indicator_manager import IndicatorManager
 

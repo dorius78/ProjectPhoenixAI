@@ -1,4 +1,4 @@
-﻿import inspect
+import inspect
 
 from Core.risk_position_size import RiskPositionSize
 from Core.risk_drawdown import RiskDrawdown

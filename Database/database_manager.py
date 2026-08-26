@@ -1,4 +1,4 @@
-﻿"""
+"""
 ========================================
 PROJECT PHOENIX AI
 Database Manager

@@ -1,4 +1,4 @@
-﻿import pandas as pd
+import pandas as pd
 
 from Core.analysis_engine import AnalysisEngine
 

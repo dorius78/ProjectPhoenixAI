@@ -1,4 +1,4 @@
-﻿import inspect
+import inspect
 
 from Core.risk_limits import RiskLimits
 

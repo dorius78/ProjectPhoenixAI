@@ -1,4 +1,4 @@
-﻿from Core.live_trading_engine import LiveTradingEngine
+from Core.live_trading_engine import LiveTradingEngine
 import inspect
 
 print("=" * 100)

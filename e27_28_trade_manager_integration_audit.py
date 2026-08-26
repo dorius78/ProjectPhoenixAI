@@ -1,4 +1,4 @@
-﻿import inspect
+import inspect
 
 from Core.trade_manager import TradeManager
 

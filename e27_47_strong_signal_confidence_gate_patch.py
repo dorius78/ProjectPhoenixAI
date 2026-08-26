@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 path = Path(
     "Core/signal_manager.py"

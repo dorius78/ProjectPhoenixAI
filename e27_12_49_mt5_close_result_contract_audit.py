@@ -1,4 +1,4 @@
-﻿from MT5_Bridge.mt5_execution_recovered import MT5ExecutionEngine
+from MT5_Bridge.mt5_execution_recovered import MT5ExecutionEngine
 import inspect
 
 print("=" * 100)

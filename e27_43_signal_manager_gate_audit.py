@@ -1,4 +1,4 @@
-﻿import inspect
+import inspect
 
 from Core.signal_manager import SignalManager
 

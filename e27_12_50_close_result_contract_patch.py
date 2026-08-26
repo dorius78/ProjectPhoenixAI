@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 path = Path(
     "MT5_Bridge/mt5_execution_recovered.py"

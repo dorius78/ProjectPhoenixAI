@@ -1,4 +1,4 @@
-﻿from Core.signal_manager import SignalManager
+from Core.signal_manager import SignalManager
 
 print("=" * 100)
 print("PROJECT PHOENIX AI - E.27.44 SIGNAL THRESHOLD BEHAVIORAL TEST")

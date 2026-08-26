@@ -1,4 +1,4 @@
-﻿import inspect
+import inspect
 
 from Core.live_trading_engine import LiveTradingEngine
 from Core.position_controller import PositionController

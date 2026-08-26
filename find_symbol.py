@@ -1,4 +1,4 @@
-﻿import sys
+import sys
 sys.path.insert(0, '.')
 from Execution.mt5_broker import MT5Broker
 import MetaTrader5 as mt5

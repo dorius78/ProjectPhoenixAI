@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 path = Path(
     "e27_12_64_mt5_open_recovery_no_duplicate_test.py"

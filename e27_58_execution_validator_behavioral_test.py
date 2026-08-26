@@ -1,4 +1,4 @@
-﻿from Execution.execution_validator import ExecutionValidator
+from Execution.execution_validator import ExecutionValidator
 
 print("=" * 100)
 print("PROJECT PHOENIX AI - E.27.58 EXECUTION VALIDATOR BEHAVIORAL TEST")

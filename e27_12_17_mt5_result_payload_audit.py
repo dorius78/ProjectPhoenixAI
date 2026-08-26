@@ -1,4 +1,4 @@
-﻿from Core.core_system import CoreSystem
+from Core.core_system import CoreSystem
 
 print("=" * 100)
 print("PROJECT PHOENIX AI - E.27.12.17 MT5 RESULT PAYLOAD AUDIT")

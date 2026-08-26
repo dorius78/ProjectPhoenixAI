@@ -1,4 +1,4 @@
-﻿import math
+import math
 import pandas as pd
 
 from Data.Indicators.indicator_manager import IndicatorManager

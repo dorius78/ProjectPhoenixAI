@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 import inspect
 
 from Database.database_manager import DatabaseManager

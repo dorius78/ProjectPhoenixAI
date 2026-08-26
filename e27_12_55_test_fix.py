@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 path = Path(
     "e27_12_55_close_ticket_propagation_test.py"

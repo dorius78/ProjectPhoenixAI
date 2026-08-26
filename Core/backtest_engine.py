@@ -21,6 +21,12 @@ class BacktestEngine:
 
         self.closed_trades = 0
 
+        # Posizione eventualmente ancora aperta
+        # alla fine del dataset di backtest.
+        # NON viene conteggiata nelle statistiche
+        # dei trade chiusi.
+        self.open_trade = None
+
         self.total_bars = 0
 
     # =====================================
@@ -41,6 +47,23 @@ class BacktestEngine:
 
             f"Trade chiuso #{self.closed_trades}"
 
+        )
+
+    # =====================================
+    # OPEN TRADE AT END
+    # =====================================
+
+    def set_open_trade(self, trade):
+
+        if trade is None:
+            self.open_trade = None
+            return
+
+        self.open_trade = trade.copy()
+
+        Logger.info(
+            "Backtest: posizione aperta "
+            "rilevata alla fine del dataset."
         )
 
     # =====================================
@@ -72,6 +95,12 @@ class BacktestEngine:
         Logger.section("BACKTEST ENGINE")
 
         total = len(self.history)
+
+        open_trades = (
+            1
+            if self.open_trade is not None
+            else 0
+        )
 
         buy = 0
         sell = 0
@@ -219,6 +248,8 @@ class BacktestEngine:
 
             "closed_trades": self.closed_trades,
 
+            "open_trades": open_trades,
+
             "buy": buy,
 
             "sell": sell,
@@ -288,6 +319,8 @@ class BacktestEngine:
         self.history.clear()
 
         self.closed_trades = 0
+
+        self.open_trade = None
 
         self.total_bars = 0
 

@@ -1,4 +1,4 @@
-﻿import inspect
+import inspect
 from Execution.execution_engine import MT5ExecutionEngine
 
 print("=" * 100)

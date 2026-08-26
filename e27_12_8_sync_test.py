@@ -1,4 +1,4 @@
-﻿from Core.core_system import CoreSystem
+from Core.core_system import CoreSystem
 import Config.settings as s
 
 print("=" * 100)

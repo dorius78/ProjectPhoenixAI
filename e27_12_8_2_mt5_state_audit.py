@@ -1,4 +1,4 @@
-﻿import MetaTrader5 as mt5
+import MetaTrader5 as mt5
 import Config.settings as s
 
 print("=" * 100)

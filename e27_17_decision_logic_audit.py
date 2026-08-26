@@ -1,4 +1,4 @@
-﻿import inspect
+import inspect
 
 from Core.phoenix_brain import PhoenixBrain
 

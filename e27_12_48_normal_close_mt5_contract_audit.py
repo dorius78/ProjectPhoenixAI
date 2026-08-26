@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 path = Path("Execution/execution_engine.py")
 text = path.read_text(encoding="utf-8")

@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 files = [
     Path("Core/live_trading_engine.py"),

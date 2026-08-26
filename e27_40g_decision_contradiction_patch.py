@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 path = Path(
     "Core/phoenix_brain_logic.py"

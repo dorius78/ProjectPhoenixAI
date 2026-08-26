@@ -311,14 +311,33 @@ class PhoenixBrainLogic:
         # CONFIDENCE
         # =====================================
 
-        confidence = abs(
-            score - 50
-        ) * 2
-
-        confidence = max(
-            0,
-            min(confidence, 100)
+        net_advantage = abs(
+            bullish_score - bearish_score
         )
+
+        total_score = (
+            bullish_score
+            + bearish_score
+        )
+
+        if total_score <= 0:
+            confidence = 0
+        else:
+            dominance = (
+                net_advantage
+                / total_score
+            ) * 100
+
+            confidence = (
+                50
+                + (dominance * 0.75)
+            )
+
+        if not conflict:
+            confidence += 10
+
+        if conflict:
+            confidence -= 10
 
         # =====================================
         # PENALITÀ CONFLITTO

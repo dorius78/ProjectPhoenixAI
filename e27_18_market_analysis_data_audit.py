@@ -1,4 +1,4 @@
-﻿import inspect
+import inspect
 
 from Core.market_analyzer import MarketAnalyzer
 from Core.smart_money import SmartMoney

@@ -1,4 +1,4 @@
-﻿class RiskPositionSize:
+class RiskPositionSize:
 
     def calculate(
         self,

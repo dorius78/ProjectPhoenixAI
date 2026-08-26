@@ -1,0 +1,575 @@
+==============================================================================================================
+PROJECT PHOENIX AI - MASTER FINAL AUDIT
+==============================================================================================================
+ROOT   = C:\ProjectPhoenixAI
+DATE   = 2026-08-26 13:20:20.189998
+
+==============================================================================================================
+1. PYTHON / AST / COMPILE
+==============================================================================================================
+[FAIL] C:\ProjectPhoenixAI\audit_dependencies.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\audit_modules.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_10_10_single_demo_order.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_10_2_symbol_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_10_5_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_10_6_dry_run_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_10_7_full_dry_run.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_10_9_phoenix_mt5_pre_live.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_11_2_close_dry_run.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_11_3_real_demo_close.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_11_position_lifecycle_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_10_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_11_live_sync_integration_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_12_live_loop_flow_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_13_open_position_lifecycle_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_14_full_integration_connection_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_14_open_position_builder_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_15_execution_result_contract_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_16_execution_return_contract.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_17_mt5_result_payload_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_18_mt5_result_field_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_19_mt5_result_contract_deep_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_1_lifecycle_orchestration_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_20_position_id_propagation_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_21_mt5_bridge_result_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_22_mt5_position_ticket_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_23_mt5_result_object_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_24_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_25_execution_position_contract_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_26_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_28_simulated_mt5_contract_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_29_failed_execution_safety_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_2_mt5_phoenix_sync_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_30_simulated_mt5_sync_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_31_mt5_close_disappearance_sync_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_32_position_close_lifecycle_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_33_mt5_close_sync_design_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_34_execution_close_contract_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_35_closed_position_flow_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_36_external_mt5_close_contract_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_37_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_38_external_mt5_close_full_simulation.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_39_closed_position_process_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_40_close_routing_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_41_close_routing_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_42_external_close_full_pipeline_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_43_external_close_complete_services_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_44_closed_trade_builder_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_45_closed_trade_mt5_metadata_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_46_external_close_mt5_metadata_full_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_47_normal_close_result_contract_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_48_normal_close_mt5_contract_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_49_mt5_close_result_contract_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_50b_close_contract_state.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_50c_close_result_tail.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_50_close_result_contract_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_52_normal_close_full_pipeline_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_53_normal_close_failure_safety_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_54_close_contract_integration_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_55_close_ticket_propagation_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_55_test_fix.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_56_mt5_lifecycle_final_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_57_execution_engine_contract_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_58_mt5_open_result_propagation_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_59_execution_open_return_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_60_mt5_open_execute_contract_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_61_open_result_propagation_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_62a_open_position_method_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_62b_open_position_mt5_metadata_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_62_open_position_controller_propagation_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_63_position_controller_failure_safety_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_64a_magic_recovery_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_64b_test_fix.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_64_mt5_open_recovery_no_duplicate_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_65_double_sync_safety_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_66a_test_fix.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_66_external_close_no_reopen_safety_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_67_position_lifecycle_integration_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_68a_test_fix.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_68_normal_close_result_lifecycle_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_69a_normal_close_position_reset_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_69b_reset_location_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_69c_normal_close_position_reset_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_69_normal_close_position_reset_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_70_duplicate_close_idempotency_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_71_duplicate_trade_database_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_72_database_implementation_search.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_73_database_trade_schema_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_74_closed_position_idempotency_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_75_trade_idempotency_key_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_76_database_idempotency_api_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_77_database_has_trade_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_78_idempotency_insertion_point_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_79_trade_idempotency_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_7_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_80a_test_fix.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_8_2_mt5_state_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_8_3_historical_ticket_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_8_sync_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_9_live_loop_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_12_position_lifecycle_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_13_full_system_roadmap_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_15_analysis_engine_pipeline_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_16_decision_layer_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_17_decision_logic_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_18_market_analysis_data_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_19_indicator_data_source_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_20_indicator_data_quality_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_21_decision_score_stress_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_22_brain_logic_weight_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_23_decision_weight_matrix_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_24_risk_ai_decision_interface_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_25_risk_limits_logic_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_26_risk_architecture_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_27_risk_trade_integration_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_28_trade_manager_integration_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_29_trade_builder_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_30_execution_trade_contract_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_31a_mt5_bridge_class_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_31_mt5_bridge_execution_contract_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_32_mt5_ticket_propagation_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_33_sync_mt5_duplicate_code_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_34_remove_duplicate_sync_block.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_35_sync_structure_verification.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_37_decision_core_deep_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_38_decision_engine_behavioral_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_39_contradictory_signals_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_40b_decision_contradiction_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_40c_exact_patch_target_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_40d_decision_contradiction_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_40e_exact_decision_contradiction_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_40f_exact_decision_core_source_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_40g_decision_contradiction_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_40_decision_contradiction_fix_precheck.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_41_decision_risk_trade_end_to_end_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_42_end_to_end_behavioral_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_43_signal_manager_gate_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_44_signal_threshold_behavioral_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_45_min_confidence_source_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_46_strong_signal_gate_target_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_47_strong_signal_confidence_gate_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_50_decision_signal_trade_builder_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_51_trade_manager_trade_builder_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_52_risk_ai_trade_builder_contract_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_53_risk_gate_trade_contract_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_54_execution_engine_audit.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_57b_execution_validator_contract_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_57c_execution_validator_contract_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_57_execution_validator_contract_patch.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_58_execution_validator_behavioral_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_59_position_controller_execution_report_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_8_5_end_to_end_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\e27_8_7_risk_gate_test.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\find_symbol.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\phoenix_c110_duplicates.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\phoenix_c111_idempotency.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\run.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\run_phoenix_live_demo.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\AI\main.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\AI\__init__.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Config\mt5_credentials.example.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Config\mt5_credentials.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Config\settings.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Config\__init__.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\analysis_engine.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\backtest_engine.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\calmar_ratio.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\core_system.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\equity_curve.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\exit_manager.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\kelly_criterion.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\live_trading_engine.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\market_analyzer.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\market_scanner.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\monthly_statistics.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\omega_ratio.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\paper_decision_bridge.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\paper_trading_engine.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\payoff_ratio.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\performance_analytics.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\performance_analytics_calculator.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\performance_analytics_report.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\performance_report.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\phoenix_brain.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\phoenix_brain_logic.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\portfolio_manager.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\position_controller.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\position_manager.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\position_monitor.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\profit_to_drawdown.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\recovery_factor.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\report_csv.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\report_exporter.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\report_factory.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\report_formats.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\report_html.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\report_json.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\report_pdf.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\report_service.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\report_statistics.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\risk_drawdown.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\risk_limits.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\risk_manager.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\risk_position_size.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\risk_statistics.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\sharpe_ratio.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\signal_manager.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\smart_money.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\smart_money_fvg.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\smart_money_liquidity.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\smart_money_orderblocks.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\smart_money_structure.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\sortino_ratio.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\symbol_statistics.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\timeframe_statistics.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\trade_builder.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\trade_manager.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\trade_report.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\trade_statistics.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\trading_guard.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\ulcer_index.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Core\win_loss_ratio.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\candle_manager.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\market_data.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\market_provider.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\mt5_provider.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\price_manager.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\symbols.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\yfinance_provider.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\__init__.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Database\database_manager.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Database\__init__.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Execution\execution_builder.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Execution\execution_engine.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Execution\execution_report.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Execution\execution_validator.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Execution\mt5_broker.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Logs\logger.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\MT5_Bridge\mt5_bridge.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\MT5_Bridge\mt5_execution.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\MT5_Bridge\mt5_execution_before_risk_fix.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\MT5_Bridge\mt5_execution_recovered.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\MT5_Bridge\mt5_execution_recovered_before_protect.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\MT5_Bridge\run_mt5_phoenix.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Position_Manager\position_manager.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Position_Manager\position_manager_before_protect_bridge.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Position_Manager\position_manager_before_protect_bridge_v2.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\find_symbol.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\run_all_tests.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_analysis.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_backtest.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_core.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_end_to_end.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_execution.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_exit_manager.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_indicators.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_market.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_mt5_connection.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_position_controller.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_position_cycle.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_position_manager.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_position_monitor.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_risk.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_signal.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_trade_builder.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_trade_manager.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Tests\test_trading_guard.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\Indicators\adx.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\Indicators\atr.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\Indicators\bollinger.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\Indicators\ema.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\Indicators\indicator_manager.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\Indicators\macd.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\Indicators\rsi.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\Indicators\sma.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\Indicators\stochastic.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\Indicators\volume.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+[FAIL] C:\ProjectPhoenixAI\Data\Indicators\__init__.py -> TypeError: compile() arg 1 must be a string, bytes or AST object
+PYTHON FILES = 278
+AST/COMPILE PASS = 0
+AST/COMPILE FAIL = 278
+
+==============================================================================================================
+2. GIT / PYCACHE
+==============================================================================================================
+[WARNING] File __pycache__/.pyc tracciati da Git:
+  Data/Indicators/__pycache__/__init__.cpython-314.pyc
+  Data/Indicators/__pycache__/adx.cpython-314.pyc
+  Data/Indicators/__pycache__/atr.cpython-314.pyc
+  Data/Indicators/__pycache__/bollinger.cpython-314.pyc
+  Data/Indicators/__pycache__/ema.cpython-314.pyc
+  Data/Indicators/__pycache__/indicator_manager.cpython-314.pyc
+  Data/Indicators/__pycache__/macd.cpython-314.pyc
+  Data/Indicators/__pycache__/rsi.cpython-314.pyc
+  Data/Indicators/__pycache__/sma.cpython-314.pyc
+  Logs/__pycache__/logger.cpython-314.pyc
+
+==============================================================================================================
+3. TRADING MODES / SAFETY
+==============================================================================================================
+[OK] SETTINGS = C:\ProjectPhoenixAI\Config\settings.py
+[OK] SETTINGS = C:\ProjectPhoenixAI\config\settings.py
+settings.py: MODE = "DEMO"
+settings.py: MODE = "DEMO"
+
+==============================================================================================================
+4. MT5 ORDER_SEND INVENTORY
+==============================================================================================================
+[INFO] order_send trovato in 73 file:
+  C:\ProjectPhoenixAI\e27_10_10_single_demo_order.py
+      117: print("NESSUN order_send ESEGUITO.")
+      125: result_mt5 = mt5.order_send(order)
+  C:\ProjectPhoenixAI\e27_10_2_symbol_audit.py
+      69: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_10_6_dry_run_test.py
+      63: print("NESSUN order_send ESEGUITO")
+  C:\ProjectPhoenixAI\e27_10_7_full_dry_run.py
+      82: print("NESSUN order_send ESEGUITO")
+  C:\ProjectPhoenixAI\e27_10_9_phoenix_mt5_pre_live.py
+      81: print("NESSUN order_send ESEGUITO.")
+  C:\ProjectPhoenixAI\e27_11_2_close_dry_run.py
+      64: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_11_3_real_demo_close.py
+      111: print("INVIO order_send...")
+      112: result = mt5.order_send(request)
+  C:\ProjectPhoenixAI\e27_12_11_live_sync_integration_audit.py
+      104: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_14_open_position_builder_audit.py
+      65: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_15_execution_result_contract_audit.py
+      63: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_16_execution_return_contract.py
+      72: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_17_mt5_result_payload_audit.py
+      35: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_18_mt5_result_field_audit.py
+      71: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_19_mt5_result_contract_deep_audit.py
+      59: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_20_position_id_propagation_audit.py
+      61: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_21_mt5_bridge_result_audit.py
+      37: "order_send",
+      87: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_22_mt5_position_ticket_audit.py
+      87: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_23_mt5_result_object_audit.py
+      46: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_25_execution_position_contract_audit.py
+      67: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_26_patch.py
+      148: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_28_simulated_mt5_contract_test.py
+      162: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_29_failed_execution_safety_test.py
+      152: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_30_simulated_mt5_sync_test.py
+      184: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_31_mt5_close_disappearance_sync_test.py
+      221: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_32_position_close_lifecycle_audit.py
+      146: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_33_mt5_close_sync_design_audit.py
+      122: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_34_execution_close_contract_audit.py
+      112: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_35_closed_position_flow_audit.py
+      126: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_36_external_mt5_close_contract_audit.py
+      128: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_37_patch.py
+      22: # senza inviare un nuovo order_send().
+      359: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_38_external_mt5_close_full_simulation.py
+      352: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_39_closed_position_process_audit.py
+      63: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_40_close_routing_audit.py
+      77: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_41_close_routing_patch.py
+      163: print("NESSUN order_send DURANTE LA PATCH")
+  C:\ProjectPhoenixAI\e27_12_42_external_close_full_pipeline_test.py
+      223: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_43_external_close_complete_services_test.py
+      453: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_44_closed_trade_builder_audit.py
+      56: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_45_closed_trade_mt5_metadata_patch.py
+      107: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_46_external_close_mt5_metadata_full_test.py
+      530: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_47_normal_close_result_contract_audit.py
+      113: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_48_normal_close_mt5_contract_audit.py
+      75: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_49_mt5_close_result_contract_audit.py
+      58: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_50b_close_contract_state.py
+      74: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_50c_close_result_tail.py
+      44: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_52_normal_close_full_pipeline_test.py
+      532: print("NESSUN order_send REALE")
+  C:\ProjectPhoenixAI\e27_12_53_normal_close_failure_safety_test.py
+      355: print("NESSUN order_send REALE")
+  C:\ProjectPhoenixAI\e27_12_54_close_contract_integration_audit.py
+      97: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_55_close_ticket_propagation_test.py
+      374: print("NESSUN order_send REALE")
+  C:\ProjectPhoenixAI\e27_12_55_test_fix.py
+      74: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_56_mt5_lifecycle_final_audit.py
+      116: if "order_send" in line:
+  C:\ProjectPhoenixAI\e27_12_57_execution_engine_contract_audit.py
+      117: if "order_send" in line:
+  C:\ProjectPhoenixAI\e27_12_61_open_result_propagation_test.py
+      371: print("NESSUN order_send REALE")
+  C:\ProjectPhoenixAI\e27_12_62b_open_position_mt5_metadata_test.py
+      282: print("NESSUN order_send REALE")
+  C:\ProjectPhoenixAI\e27_12_62_open_position_controller_propagation_test.py
+      226: print("NESSUN order_send REALE")
+  C:\ProjectPhoenixAI\e27_12_63_position_controller_failure_safety_test.py
+      180: print("NESSUN order_send REALE")
+  C:\ProjectPhoenixAI\e27_12_64a_magic_recovery_audit.py
+      123: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_64b_test_fix.py
+      50: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_64_mt5_open_recovery_no_duplicate_test.py
+      336: print("NESSUN order_send REALE")
+  C:\ProjectPhoenixAI\e27_12_65_double_sync_safety_test.py
+      279: print("NESSUN order_send REALE")
+  C:\ProjectPhoenixAI\e27_12_66a_test_fix.py
+      58: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_66_external_close_no_reopen_safety_test.py
+      544: print("NESSUN order_send REALE")
+  C:\ProjectPhoenixAI\e27_12_67_position_lifecycle_integration_test.py
+      625: print("NESSUN order_send REALE")
+  C:\ProjectPhoenixAI\e27_12_68_normal_close_result_lifecycle_test.py
+      673: print("NESSUN order_send REALE")
+  C:\ProjectPhoenixAI\e27_12_8_2_mt5_state_audit.py
+      98: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_8_3_historical_ticket_audit.py
+      105: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_12_8_sync_test.py
+      92: print("NESSUN order_send")
+  C:\ProjectPhoenixAI\e27_8_5_end_to_end_test.py
+      99: print("NESSUN order_send ESEGUITO")
+  C:\ProjectPhoenixAI\Core\live_trading_engine.py
+      106: # senza inviare un nuovo order_send().
+  C:\ProjectPhoenixAI\Execution\mt5_broker.py
+      252: result = mt5.order_send(request)
+      346: result = mt5.order_send(request)
+  C:\ProjectPhoenixAI\MT5_Bridge\mt5_execution.py
+      1091: result = mt5.order_send(
+      1107: "order_send fallito: "
+  C:\ProjectPhoenixAI\MT5_Bridge\mt5_execution_before_risk_fix.py
+      1080: result = mt5.order_send(
+      1096: "order_send fallito: "
+  C:\ProjectPhoenixAI\MT5_Bridge\mt5_execution_recovered.py
+      1362: result = mt5.order_send(
+      1378: "Modify order_send "
+      1653: result = mt5.order_send(
+      1669: "Close order_send "
+      1825: result = mt5.order_send(
+      1841: "order_send fallito: "
+  C:\ProjectPhoenixAI\MT5_Bridge\mt5_execution_recovered_before_protect.py
+      1387: result = mt5.order_send(
+      1403: "Close order_send "
+      1512: result = mt5.order_send(
+      1528: "order_send fallito: "
+
+[NOTA] La presenza di order_send NON significa che sia stato eseguito.
+
+==============================================================================================================
+5. MT5 BRIDGE
+==============================================================================================================
+[OK] MT5 execution bridge presente.
+[OK] self.mt5_symbol
+[OK] SYMBOL_MAP
+[OK] prepare_order
+[OK] check_order
+[OK] risk_gate
+[OK] execute
+[OK] order_send
+
+==============================================================================================================
+6. PAPER TRADING PIPELINE
+==============================================================================================================
+[OK] Core/paper_trading_engine.py
+    [OK] PositionController
+    [OK] PortfolioManager
+    [OK] open_trade
+    [OK] update_price
+[OK] Core/paper_decision_bridge.py
+    [OK] AnalysisEngine
+    [OK] PaperTradingEngine
+    [OK] run_once
+[OK] Core/position_controller.py
+    [OK] open_position
+    [OK] update
+    [OK] close_position
+[OK] Core/exit_manager.py
+    [OK] STOP LOSS
+    [OK] TAKE PROFIT
+    [OK] BREAK EVEN
+    [OK] Trailing Stop
+
+==============================================================================================================
+7. BACKTEST CONTRACT
+==============================================================================================================
+[OK] Backtest: set_open_trade
+[OK] Backtest: open_trade
+[OK] Backtest: open_trades
+[OK] Backtest: closed_trades
+[OK] Backtest: reset
+[OK] Core: def run_backtest
+[OK] Core: def print_backtest
+[OK] Core: self.backtest.set_open_trade
+[OK] Core: return stats
+
+==============================================================================================================
+8. EXECUTION CLOSE CONTRACT
+==============================================================================================================
+[OK] "close_time"
+[OK] report.get(
+[OK] closed_position.get(
+[OK] DRY RUN
+
+==============================================================================================================
+9. GIT STATUS
+==============================================================================================================
+## main...origin/main
+ M Core/backtest_engine.py
+ M Core/core_system.py
+ M Core/phoenix_brain.py
+ M Core/phoenix_brain_logic.py
+ M Data/Indicators/__pycache__/__init__.cpython-314.pyc
+ M Data/Indicators/__pycache__/adx.cpython-314.pyc
+ M Data/Indicators/__pycache__/atr.cpython-314.pyc
+ M Data/Indicators/__pycache__/bollinger.cpython-314.pyc
+ M Data/Indicators/__pycache__/ema.cpython-314.pyc
+ M Data/Indicators/__pycache__/indicator_manager.cpython-314.pyc
+ M Data/Indicators/__pycache__/macd.cpython-314.pyc
+ M Data/Indicators/__pycache__/rsi.cpython-314.pyc
+ M Data/Indicators/__pycache__/sma.cpython-314.pyc
+ M Execution/execution_engine.py
+ M Logs/__pycache__/logger.cpython-314.pyc
+ M MT5_Bridge/mt5_execution.py
+?? Core/paper_decision_bridge.py
+?? Core/paper_trading_engine.py
+?? Data/mt5_provider.py
+?? Execution/execution_report.py.E27.66.backup
+?? PHOENIX_AUTO_AUDIT_REPORT.txt
+
+
+==============================================================================================================
+10. FINAL STATUS
+==============================================================================================================
+STATUS = REVIEW REQUIRED
+[CRITICAL] Python/AST compile failure
+
+IMPORTANT:
+Questo audit NON abilita il LIVE.
+NON esegue order_send().
+NON invia ordini.
+NON modifica il conto MT5.

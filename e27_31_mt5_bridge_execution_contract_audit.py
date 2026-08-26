@@ -1,4 +1,4 @@
-﻿import inspect
+import inspect
 
 from MT5_Bridge.mt5_execution_recovered import MT5ExecutionRecovered
 

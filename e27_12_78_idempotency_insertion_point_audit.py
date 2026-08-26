@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 import inspect
 
 from Core.live_trading_engine import LiveTradingEngine

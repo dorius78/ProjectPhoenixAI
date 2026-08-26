@@ -1,4 +1,4 @@
-﻿"""
+"""
 ========================================
 PROJECT PHOENIX AI
 MT5 Execution Bridge

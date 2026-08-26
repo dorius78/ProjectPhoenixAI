@@ -1,4 +1,4 @@
-﻿from Core.phoenix_brain_logic import PhoenixBrainLogic
+from Core.phoenix_brain_logic import PhoenixBrainLogic
 
 print("=" * 100)
 print("PROJECT PHOENIX AI - E.27.38 DECISION ENGINE BEHAVIORAL TEST")

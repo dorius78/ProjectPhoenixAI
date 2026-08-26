@@ -1,4 +1,4 @@
-﻿from Core.position_controller import PositionController
+from Core.position_controller import PositionController
 from Execution.execution_report import ExecutionReport
 
 print("=" * 100)

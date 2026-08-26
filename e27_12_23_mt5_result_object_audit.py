@@ -1,4 +1,4 @@
-﻿import MetaTrader5 as mt5
+import MetaTrader5 as mt5
 
 print("=" * 100)
 print("PROJECT PHOENIX AI - E.27.12.23 MT5 RESULT OBJECT CONTRACT")

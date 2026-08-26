@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 path = Path("Core/live_trading_engine.py")
 lines = path.read_text(encoding="utf-8").splitlines()

@@ -1,4 +1,4 @@
-﻿from Core.risk_manager import RiskManager
+from Core.risk_manager import RiskManager
 from Core.trade_builder import TradeBuilder
 
 print("=" * 100)

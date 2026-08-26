@@ -475,9 +475,23 @@ class CoreSystem:
                                 self.position_controller.get_position()
                             )
 
-        self.backtest.set_total_bars(total_bars - start)
+        # =====================================
+        # POSIZIONE APERTA ALLA FINE DEL DATASET
+        # =====================================
 
-        self.print_backtest()
+        final_position = (
+            self.position_controller.get_position()
+        )
+
+        self.backtest.set_open_trade(
+            final_position
+        )
+
+        self.backtest.set_total_bars(
+            total_bars - start
+        )
+
+        stats = self.print_backtest()
 
         Logger.section("DATABASE")
 
@@ -485,6 +499,7 @@ class CoreSystem:
             f"Trade salvati nel Backtest DB : "
             f"{self.backtest_database.count()}"
         )
+        return stats
 
     # =====================================
     # RISULTATI
@@ -567,3 +582,5 @@ class CoreSystem:
         for key, value in stats.items():
 
             print(f"{key:15}: {value}")
+
+        return stats

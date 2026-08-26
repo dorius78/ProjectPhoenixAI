@@ -1,4 +1,4 @@
-﻿import inspect
+import inspect
 
 from Core.analysis_engine import AnalysisEngine
 

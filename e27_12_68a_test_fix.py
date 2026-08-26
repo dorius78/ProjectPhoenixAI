@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 path = Path(
     "e27_12_68_normal_close_result_lifecycle_test.py"

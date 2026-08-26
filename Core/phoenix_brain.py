@@ -8,7 +8,7 @@ class PhoenixBrain:
     def __init__(self):
 
         Logger.success(
-            "Phoenix Brain V10 inizializzato."
+            "Phoenix Brain V11 inizializzato."
         )
 
         self.logic = PhoenixBrainLogic()
@@ -28,34 +28,147 @@ class PhoenixBrain:
             risk
         )
 
-        score = data["score"]
+        score = float(
+            data.get(
+                "score",
+                50
+            )
+        )
+
+        confidence = float(
+            data.get(
+                "confidence",
+                0
+            )
+        )
+
+        bullish_score = float(
+            data.get(
+                "bullish_score",
+                0
+            )
+        )
+
+        bearish_score = float(
+            data.get(
+                "bearish_score",
+                0
+            )
+        )
+
+        dominant_direction = data.get(
+            "dominant_direction",
+            "NEUTRAL"
+        )
+
+        conflict = data.get(
+            "conflict",
+            False
+        )
 
         # =================================
-        # AZIONE
+        # DECISION V2
         # =================================
 
-        if score >= 90:
+        net_advantage = abs(
+            bullish_score - bearish_score
+        )
 
-            action = "STRONG BUY"
+        action = "HOLD"
 
-        elif score >= 70:
+        # ---------------------------------
+        # BUY
+        # ---------------------------------
+
+        if (
+            dominant_direction == "BULLISH"
+            and
+            not conflict
+            and
+            net_advantage >= 15
+            and
+            confidence >= 30
+        ):
 
             action = "BUY"
 
-        elif score <= 10:
+        # ---------------------------------
+        # SELL
+        # ---------------------------------
 
-            action = "STRONG SELL"
-
-        elif score <= 30:
+        elif (
+            dominant_direction == "BEARISH"
+            and
+            not conflict
+            and
+            net_advantage >= 15
+            and
+            confidence >= 30
+        ):
 
             action = "SELL"
 
-        else:
+        # ---------------------------------
+        # STRONG BUY
+        # ---------------------------------
+
+        if (
+            dominant_direction == "BULLISH"
+            and
+            not conflict
+            and
+            net_advantage >= 35
+            and
+            confidence >= 65
+        ):
+
+            action = "STRONG BUY"
+
+        # ---------------------------------
+        # STRONG SELL
+        # ---------------------------------
+
+        elif (
+            dominant_direction == "BEARISH"
+            and
+            not conflict
+            and
+            net_advantage >= 35
+            and
+            confidence >= 65
+        ):
+
+            action = "STRONG SELL"
+
+        # ---------------------------------
+        # CONFLITTO
+        # ---------------------------------
+
+        if conflict:
+
+            action = "HOLD"
+
+        # ---------------------------------
+        # CONFIDENCE MOLTO BASSA
+        # ---------------------------------
+
+        if confidence < 30:
+
+            action = "HOLD"
+
+        # ---------------------------------
+        # RISK GATE
+        # ---------------------------------
+
+        if not risk.get(
+            "allow_trade",
+            False
+        ):
 
             action = "HOLD"
 
         # =================================
-        # OUTPUT COMPLETO
+        # OUTPUT
         # =================================
 
         return {
@@ -64,39 +177,25 @@ class PhoenixBrain:
 
             "score": score,
 
-            "confidence": data["confidence"],
+            "confidence": confidence,
 
             "strength": score,
 
-            "risk": risk["risk_level"],
-
-            # =============================
-            # DIREZIONE
-            # =============================
-
-            "bullish_score": data.get(
-                "bullish_score",
-                0
+            "risk": risk.get(
+                "risk_level",
+                "BASSO"
             ),
 
-            "bearish_score": data.get(
-                "bearish_score",
-                0
-            ),
+            "bullish_score": bullish_score,
 
-            "dominant_direction": data.get(
-                "dominant_direction",
-                "NEUTRAL"
-            ),
+            "bearish_score": bearish_score,
 
-            "conflict": data.get(
-                "conflict",
-                False
-            ),
+            "net_advantage": net_advantage,
 
-            # =============================
-            # SPIEGAZIONE
-            # =============================
+            "dominant_direction":
+                dominant_direction,
+
+            "conflict": conflict,
 
             "reasons": data.get(
                 "reasons",

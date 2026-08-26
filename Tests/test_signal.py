@@ -1,4 +1,4 @@
-﻿from Core.signal_manager import SignalManager
+from Core.signal_manager import SignalManager
 from Config.settings import MIN_CONFIDENCE
 
 

@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 path = Path(
     "e27_12_66_external_close_no_reopen_safety_test.py"

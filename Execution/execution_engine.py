@@ -1,3 +1,4 @@
+from Config.settings import MODE
 """
 ========================================
 PROJECT PHOENIX AI
@@ -12,7 +13,7 @@ from Execution.execution_validator import ExecutionValidator
 from Execution.execution_builder import ExecutionBuilder
 from Execution.execution_report import ExecutionReport
 
-from MT5_Bridge.mt5_execution_recovered import (
+from MT5_Bridge.mt5_execution import (
     MT5ExecutionEngine
 )
 
@@ -50,6 +51,25 @@ class ExecutionEngine:
         self.symbol = symbol
 
         self.magic = magic
+
+        # PHOENIX MT5 ROUTING
+        #
+        # mt5_enabled e mt5_dry_run sono parametri
+        # espliciti del costruttore.
+        #
+        # Questo permette:
+        #
+        # DEMO + mt5_enabled=True
+        #     -> MT5 DEMO reale
+        #
+        # DEMO + mt5_enabled=False
+        #     -> Paper Trading
+        #
+        # LIVE
+        #     -> MT5 LIVE solo quando richiesto
+        #
+        # Il controllo del conto DEMO/LIVE viene
+        # effettuato dal livello MT5 prima dell'ordine.
 
         self.mt5_enabled = bool(
             mt5_enabled
@@ -335,8 +355,72 @@ class ExecutionEngine:
             "message":
                 message,
 
+            # =================================
+            # MT5 RESULT PROPAGATION
+            # =================================
+
             "mt5":
-                result
+                result,
+
+            "ticket":
+                result.get("ticket")
+                or (
+                    getattr(
+                        result.get("result"),
+                        "order",
+                        None
+                    )
+                    if result.get("result") is not None
+                    else None
+                ),
+
+            "deal":
+                result.get("deal")
+                or (
+                    getattr(
+                        result.get("result"),
+                        "deal",
+                        None
+                    )
+                    if result.get("result") is not None
+                    else None
+                ),
+
+            "order_ticket":
+                result.get("order")
+                or (
+                    getattr(
+                        result.get("result"),
+                        "order",
+                        None
+                    )
+                    if result.get("result") is not None
+                    else None
+                ),
+
+            "execution_price":
+                result.get("price")
+                or (
+                    getattr(
+                        result.get("result"),
+                        "price",
+                        None
+                    )
+                    if result.get("result") is not None
+                    else None
+                ),
+
+            "retcode":
+                result.get("retcode")
+                or (
+                    getattr(
+                        result.get("result"),
+                        "retcode",
+                        None
+                    )
+                    if result.get("result") is not None
+                    else None
+                ),
 
         }
 
@@ -468,6 +552,13 @@ class ExecutionEngine:
                     report.get(
                         "pnl",
                         0.0
+                    ),
+
+                "close_time":
+                    report.get(
+                        "close_time"
+                    ) or closed_position.get(
+                        "close_time"
                     ),
 
                 "mt5":

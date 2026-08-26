@@ -1,4 +1,4 @@
-﻿import inspect
+import inspect
 
 from Core.live_trading_engine import LiveTradingEngine
 from Execution.execution_engine import MT5ExecutionEngine
