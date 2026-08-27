@@ -16,6 +16,7 @@ from Core.phoenix_brain import PhoenixBrain
 from Core.signal_manager import SignalManager
 from Core.risk_manager import RiskManager
 from Core.trade_manager import TradeManager
+from Core.market_regime_detector import MarketRegimeDetector
 
 
 class AnalysisEngine:
@@ -39,6 +40,7 @@ class AnalysisEngine:
         self.risk_manager = RiskManager()
 
         self.trade_manager = TradeManager()
+        self.regime_detector = MarketRegimeDetector()
 
     # =====================================
     # ANALISI COMPLETA
@@ -189,6 +191,15 @@ class AnalysisEngine:
             )
 
         # =====================================
+        # MARKET REGIME
+        # =====================================
+
+        regime = self.regime_detector.detect(
+            indicators,
+            analysis
+        )
+
+        # =====================================
         # OUTPUT
         # =====================================
 
@@ -204,6 +215,7 @@ class AnalysisEngine:
 
             "signal": signal,
 
-            "trade": trade
+            "trade": trade,
+            "regime": regime
 
         }
