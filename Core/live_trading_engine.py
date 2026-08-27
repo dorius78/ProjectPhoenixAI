@@ -1429,8 +1429,6 @@ class LiveTradingEngine:
                     trade is not None
                     and
                     signal.get("valid", False)
-                    and
-                    result.get("status") == "TRADE_OPENED"
                 ):
 
                     order = (

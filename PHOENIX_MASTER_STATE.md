@@ -1536,3 +1536,69 @@ Non sostituire l'architettura senza una verifica preventiva.
 
 Conservare backup, test, versioni e storico Git.
 
+# PHOENIX E58 FINAL CONSOLIDATION
+
+Data: 2026-08-27
+
+## RISULTATO TEST MT5 DEMO
+
+MODE=DEMO verificato.
+
+Broker:
+PepperstoneUK-Demo
+
+Conto Demo:
+62135893
+
+Pipeline verificata:
+
+Market Data
+-> Analysis Engine
+-> Signal Manager
+-> Risk Manager
+-> Trade Builder
+-> MT5 Execution
+-> Position Controller
+-> Portfolio
+
+Risultato:
+- STRONG BUY generato
+- Trade BUY BTC-USD costruito
+- Ordine MT5 eseguito
+- Posizione BUY aperta
+- Posizione registrata nel Portfolio
+- Gestione posizione avviata
+
+## CORREZIONI E58
+
+1. CoreSystem:
+   DEMO -> _run_demo_trading_broker()
+
+2. MT5Broker:
+   aggiunto get_account_info()
+
+3. CoreSystem:
+   utilizzo del contratto pubblico get_account_info()
+
+4. LiveTradingEngine:
+   rimosso controllo errato:
+   result.get("status") == "TRADE_OPENED"
+
+   Un trade valido viene ora inoltrato all'Execution Engine.
+
+## SICUREZZA
+
+Il test è stato eseguito esclusivamente su:
+PepperstoneUK-Demo
+
+Nessun conto reale utilizzato.
+
+## STATO
+
+MT5 Demo autonomous execution:
+VERIFICATO
+
+Checkpoint:
+E58 FINAL CONSOLIDATION
+
+NESSUN LIVE ACCOUNT TESTATO.

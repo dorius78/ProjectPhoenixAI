@@ -191,6 +191,22 @@ class MT5Broker:
 
 
     # =====================================
+    # INFORMAZIONI CONTO
+    # =====================================
+
+    def get_account_info(self):
+        """
+        Restituisce le informazioni del conto MT5
+        attraverso il contratto pubblico del broker.
+        """
+
+        if not self.connected:
+            return None
+
+        return mt5.account_info()
+
+
+    # =====================================
     # POSIZIONI PHOENIX
     # =====================================
 

@@ -276,7 +276,11 @@ class CoreSystem:
 
         self.market.load_markets()
 
-        if MODE == "LIVE":
+        if MODE == "DEMO":
+
+            self._run_demo_trading_broker(symbol)
+
+        elif MODE == "LIVE":
 
             self._run_live_trading_broker(symbol)
 
@@ -287,6 +291,76 @@ class CoreSystem:
                 interval="1h",
                 delay=30
             )
+
+    def _run_demo_trading_broker(self, symbol):
+
+        from Execution.mt5_broker import MT5Broker
+
+        Logger.warning(
+            "MODE = DEMO: avvio MT5 DEMO. "
+            "Nessun conto reale autorizzato."
+        )
+
+        broker = MT5Broker()
+
+        if not broker.connect():
+
+            Logger.warning(
+                "Connessione MT5 Demo fallita. Trading annullato."
+            )
+
+            return
+
+        try:
+
+            account = broker.get_account_info()
+
+            if account is None:
+
+                Logger.warning(
+                    "Impossibile verificare il conto MT5. "
+                    "Trading DEMO BLOCCATO."
+                )
+
+                return
+
+            server = str(
+                getattr(account, "server", "")
+            )
+
+            if "demo" not in server.lower():
+
+                Logger.warning(
+                    f"SERVER MT5 NON DEMO: {server}. "
+                    "TRADING BLOCCATO PER SICUREZZA."
+                )
+
+                return
+
+            Logger.success(
+                f"MT5 DEMO verificato: {server}"
+            )
+
+            demo_engine = LiveTradingEngine(
+                self.candles,
+                self.analysis,
+                broker,
+                self.position_controller,
+                self.portfolio,
+                self.backtest,
+                self.database
+            )
+
+            demo_engine.start(
+                symbol=symbol,
+                interval="1h",
+                delay=30
+            )
+
+        finally:
+
+            broker.disconnect()
+
 
     def _run_live_trading_broker(self, symbol):
 
