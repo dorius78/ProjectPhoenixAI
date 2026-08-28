@@ -20,12 +20,14 @@ class PhoenixBrain:
     def think(
         self,
         analysis,
-        risk
+        risk,
+        regime=None
     ):
 
         data = self.logic.calculate(
             analysis,
-            risk
+            risk,
+            regime
         )
 
         score = float(

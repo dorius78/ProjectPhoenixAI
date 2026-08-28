@@ -131,6 +131,15 @@ class AnalysisEngine:
         )
 
         # =====================================
+        # MARKET REGIME
+        # =====================================
+
+        regime = self.regime_detector.detect(
+            indicators,
+            analysis
+        )
+
+        # =====================================
         # AI BRAIN
         # =====================================
 
@@ -138,7 +147,9 @@ class AnalysisEngine:
 
             analysis,
 
-            risk
+            risk,
+
+            regime
 
         )
 
@@ -189,15 +200,6 @@ class AnalysisEngine:
                 account_balance=account_balance
 
             )
-
-        # =====================================
-        # MARKET REGIME
-        # =====================================
-
-        regime = self.regime_detector.detect(
-            indicators,
-            analysis
-        )
 
         # =====================================
         # OUTPUT

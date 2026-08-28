@@ -21,7 +21,7 @@ class PhoenixBrainLogic:
     # CALCOLO DECISIONALE
     # =====================================
 
-    def calculate(self, analysis, risk):
+    def calculate(self, analysis, risk, regime=None):
 
         bullish_score = 0
         bearish_score = 0
