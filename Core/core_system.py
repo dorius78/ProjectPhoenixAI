@@ -278,7 +278,22 @@ class CoreSystem:
 
         symbols = self.scanner.get_symbols()
 
-        for symbol in symbols:
+        # E70: per il percorso autonomo verso MT5 DEMO
+        # consideriamo solo gli strumenti presenti nella
+        # mappa ufficiale Yahoo Finance -> MT5.
+        from Config.mt5_credentials import SYMBOL_MAP
+
+        mt5_symbols = [
+            symbol
+            for symbol in symbols
+            if symbol in SYMBOL_MAP
+        ]
+
+        Logger.info(
+            f"Mercati compatibili MT5: {len(mt5_symbols)}"
+        )
+
+        for symbol in mt5_symbols:
 
             try:
 

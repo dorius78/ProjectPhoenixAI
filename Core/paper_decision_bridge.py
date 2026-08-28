@@ -1,4 +1,4 @@
-from Core.analysis_engine import AnalysisEngine
+﻿from Core.analysis_engine import AnalysisEngine
 from Core.paper_trading_engine import PaperTradingEngine
 from Data.mt5_provider import MT5Provider
 
@@ -18,7 +18,7 @@ class PaperDecisionBridge:
 
     def run_once(
         self,
-        symbol="BTC-USD",
+        symbol=None,
         period="5d",
         interval="1h"
     ):
