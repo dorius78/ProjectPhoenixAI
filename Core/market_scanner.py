@@ -112,6 +112,34 @@ class MarketScanner:
         )
 
     # =====================================
+    # MIGLIORE OPPORTUNITÀ
+    # =====================================
+
+    def get_best_opportunity(self):
+
+        if not self.results:
+            return None
+
+        self.sort()
+
+        for result in self.results:
+
+            decision = str(
+                result.get("decision", "")
+            ).upper()
+
+            if decision in (
+                "BUY",
+                "STRONG BUY",
+                "SELL",
+                "STRONG SELL"
+            ):
+
+                return result
+
+        return None
+
+    # =====================================
     # REPORT
     # =====================================
 

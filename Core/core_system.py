@@ -267,6 +267,32 @@ class CoreSystem:
         )
 
     # =====================================
+    # AUTO MARKET SELECTION
+    # =====================================
+
+    def select_best_market(self):
+
+        best = self.scanner.get_best_opportunity()
+
+        if best is None:
+            Logger.warning(
+                "Nessuna opportunità valida trovata."
+            )
+            return None
+
+        symbol = best.get("symbol")
+
+        Logger.success(
+            f"Mercato selezionato automaticamente: "
+            f"{symbol} | "
+            f"Decision: {best.get('decision')} | "
+            f"Score: {best.get('score')} | "
+            f"Confidence: {best.get('confidence')}"
+        )
+
+        return symbol
+
+    # =====================================
     # LIVE TRADING
     # =====================================
 
