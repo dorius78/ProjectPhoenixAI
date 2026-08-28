@@ -17,6 +17,7 @@ from Core.signal_manager import SignalManager
 from Core.risk_manager import RiskManager
 from Core.trade_manager import TradeManager
 from Core.market_regime_detector import MarketRegimeDetector
+from Core.supervisor import Supervisor
 
 
 class AnalysisEngine:
@@ -41,6 +42,7 @@ class AnalysisEngine:
 
         self.trade_manager = TradeManager()
         self.regime_detector = MarketRegimeDetector()
+        self.supervisor = Supervisor()
 
     # =====================================
     # ANALISI COMPLETA
@@ -155,12 +157,33 @@ class AnalysisEngine:
         )
 
         # =====================================
+        # SUPERVISOR / DEVIL'S ADVOCATE
+        # =====================================
+
+        supervision = self.supervisor.evaluate(
+            brain,
+            risk,
+            regime,
+            analysis
+        )
+
+        # =====================================
         # SIGNAL
         # =====================================
 
         signal = self.signal_manager.validate(
             brain
         )
+
+        # =====================================
+        # SUPERVISOR VETO
+        # =====================================
+
+        if not supervision.get(
+            "allowed",
+            False
+        ):
+            signal["valid"] = False
 
         # =====================================
         # RISK GATE
@@ -219,6 +242,7 @@ class AnalysisEngine:
             "signal": signal,
 
             "trade": trade,
-            "regime": regime
+            "regime": regime,
+            "supervision": supervision
 
         }
