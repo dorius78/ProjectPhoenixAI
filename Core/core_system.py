@@ -272,22 +272,69 @@ class CoreSystem:
 
     def select_best_market(self):
 
+        # E69: esegue la scansione autonoma dei mercati
+        # utilizzando la pipeline di analisi già esistente.
+        self.scanner.reset()
+
+        symbols = self.scanner.get_symbols()
+
+        for symbol in symbols:
+
+            try:
+
+                data = self.candles.get_candles(
+                    symbol,
+                    period="5d",
+                    interval="1h"
+                )
+
+                if data is None or len(data) == 0:
+                    continue
+
+                current_price = float(
+                    data["Close"].iloc[-1]
+                )
+
+                result = self.analysis.analyze(
+                    data,
+                    current_price,
+                    symbol,
+                    account_balance=self.portfolio.get_balance()
+                )
+
+                decision = result.get("decision", {})
+
+                action = decision.get("action")
+                score = decision.get("score", 0)
+                confidence = decision.get("confidence", 0)
+
+                self.scanner.add_result(
+                    symbol,
+                    action,
+                    score,
+                    confidence
+                )
+
+            except Exception as error:
+
+                Logger.warning(
+                    f"Analisi autonoma fallita per {symbol}: {error}"
+                )
+
         best = self.scanner.get_best_opportunity()
 
         if best is None:
+
             Logger.warning(
-                "Nessuna opportunità valida trovata."
+                "Nessuna opportunita' valida trovata."
             )
+
             return None
 
         symbol = best.get("symbol")
 
         Logger.success(
-            f"Mercato selezionato automaticamente: "
-            f"{symbol} | "
-            f"Decision: {best.get('decision')} | "
-            f"Score: {best.get('score')} | "
-            f"Confidence: {best.get('confidence')}"
+            f"Mercato selezionato automaticamente: {symbol}"
         )
 
         return symbol
@@ -296,9 +343,26 @@ class CoreSystem:
     # LIVE TRADING
     # =====================================
 
-    def run_live_trading(self, symbol="BTC-USD"):
+    def run_live_trading(self, symbol=None):
 
         Logger.section("LIVE TRADING")
+
+        # E69: selezione autonoma del miglior mercato.
+        # Se il simbolo non viene fornito, Phoenix lo seleziona
+        # automaticamente tramite Market Scanner.
+        if not symbol:
+            symbol = self.select_best_market()
+
+            if not symbol:
+                Logger.warning(
+                    "Nessuna opportunita' valida trovata. "
+                    "Live Trading annullato."
+                )
+                return
+
+            Logger.success(
+                f"Mercato selezionato autonomamente: {symbol}"
+            )
 
         self.market.load_markets()
 
