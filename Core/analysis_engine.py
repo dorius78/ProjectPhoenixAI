@@ -123,20 +123,21 @@ class AnalysisEngine:
         )
 
         # =====================================
-        # RISK
-        # =====================================
-
-        risk = self.risk_manager.evaluate(
-            analysis
-        )
-
-        # =====================================
         # MARKET REGIME
         # =====================================
 
         regime = self.regime_detector.detect(
             indicators,
             analysis
+        )
+
+        # =====================================
+        # RISK
+        # =====================================
+
+        risk = self.risk_manager.evaluate(
+            analysis,
+            regime
         )
 
         # =====================================

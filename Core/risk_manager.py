@@ -35,8 +35,13 @@ class RiskManager:
 
     def evaluate(
         self,
-        analysis
+        analysis,
+        regime=None
     ):
+
+        if regime is not None:
+            analysis = dict(analysis)
+            analysis["market_regime"] = regime
 
         return self.limits.evaluate(
             analysis
