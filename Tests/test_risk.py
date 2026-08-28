@@ -1,3 +1,9 @@
+import sys
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from Core.risk_manager import RiskManager
 from Core.risk_position_size import RiskPositionSize
 
