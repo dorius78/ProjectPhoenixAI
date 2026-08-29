@@ -25,6 +25,7 @@ IMPORTANTE:
 from datetime import datetime
 
 from Logs.logger import Logger
+from Config.settings import MODE
 
 try:
 
@@ -261,6 +262,25 @@ class MT5Broker:
 
     def execute(self, trade, dry_run=False):
 
+        # =================================================
+        # PHOENIX HARD SAFETY GATE
+        # DEMO = MAI ORDER_SEND
+        # =================================================
+
+        if str(MODE).upper() == "DEMO":
+            Logger.warning(
+                "PHOENIX SAFETY GATE: DEMO attivo. "
+                "Ordine MT5 BLOCCATO."
+            )
+
+            return {
+                "success": False,
+                "executed": False,
+                "dry_run": True,
+                "reason": "PHOENIX DEMO SAFETY GATE",
+                "message": "Ordine bloccato: MODE=DEMO"
+            }
+
         # E76 SAFETY:
         # nessun ordine puo' essere inviato durante un dry-run.
         if dry_run:
@@ -490,6 +510,25 @@ class MT5Broker:
     # =====================================
 
     def close(self, closed_position, dry_run=False):
+
+        # =================================================
+        # PHOENIX HARD SAFETY GATE
+        # DEMO = MAI CHIUSURA MT5 VIA ORDER_SEND
+        # =================================================
+
+        if str(MODE).upper() == "DEMO":
+            Logger.warning(
+                "PHOENIX SAFETY GATE: DEMO attivo. "
+                "Chiusura MT5 BLOCCATA."
+            )
+
+            return {
+                "success": False,
+                "executed": False,
+                "dry_run": True,
+                "message": "Chiusura bloccata: MODE=DEMO",
+                "reason": "PHOENIX DEMO SAFETY GATE"
+            }
 
         if dry_run:
 

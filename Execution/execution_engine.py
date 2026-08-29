@@ -73,9 +73,17 @@ class ExecutionEngine:
             mt5_enabled
         )
 
-        self.mt5_dry_run = bool(
-            mt5_dry_run
-        )
+        # =================================================
+        # PHOENIX SAFETY GATE
+        # DEMO NON PUO' MAI INVIARE ORDINI REALI
+        # =================================================
+
+        if str(MODE).upper() == "DEMO":
+            self.mt5_dry_run = True
+        else:
+            self.mt5_dry_run = bool(
+                mt5_dry_run
+            )
 
         self.mt5 = None
 
