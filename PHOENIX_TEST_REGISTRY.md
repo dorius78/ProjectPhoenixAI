@@ -116,3 +116,13 @@ Ogni nuova modifica deve essere verificata contro i test già certificati.
 - Risk/Reward: PASS (2.0)
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
+
+## E76.51 - Paper Multi-Candle Continuity
+- Candle State: PASS
+- Same Candle Block: PASS
+- New Candle Allowed: PASS
+- Multi-Candle Continuity: PASS
+- Paper Engine: PASS
+- Position Controller: PASS
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO

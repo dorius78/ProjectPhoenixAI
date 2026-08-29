@@ -148,3 +148,15 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - Nessun ordine MT5.
 - Nessun LIVE.
 - E76.50 SUPERATO.
+
+## E76.51 - Paper Multi-Candle Continuity
+- Verificato Candle Duplicate Guard.
+- Stessa candela: correttamente bloccata.
+- Nuova candela: correttamente consentita.
+- Multi-Candle Continuity: PASS.
+- Paper Engine: PASS.
+- Position Controller: PASS.
+- Nessun order_send.
+- Nessun ordine MT5.
+- Nessun LIVE.
+- E76.51 SUPERATO.
