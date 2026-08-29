@@ -185,3 +185,15 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - Nessun ordine MT5.
 - Nessun LIVE.
 - E76.55 SUPERATO.
+
+## E76.59 - Paper Loop Live Price Management
+- Paper Loop collegato al prezzo corrente MT5 tramite MT5Provider.get_price().
+- update_price() collegato alla gestione della posizione PAPER.
+- Prezzo corrente Bid/Ask midpoint utilizzato dal provider.
+- E76.59.8: prezzo MT5 -> Paper Position: PASS.
+- E76.59.8: STOP LOSS automatico: PASS.
+- E76.59.9: TAKE PROFIT automatico: PASS.
+- Paper balance/equity aggiornati correttamente.
+- MT5 order_send: NON UTILIZZATO.
+- LIVE: NON UTILIZZATO.
+

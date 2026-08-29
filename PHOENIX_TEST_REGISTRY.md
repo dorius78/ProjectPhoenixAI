@@ -147,3 +147,15 @@ Ogni nuova modifica deve essere verificata contro i test già certificati.
 - Portfolio Removal: PASS
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
+
+## E76.59 - Paper Loop Live Price Management
+- MT5 current price source: PASS
+- Paper update_price: PASS
+- BUY STOP LOSS: PASS
+- SELL TAKE PROFIT: PASS
+- Position auto-close: PASS
+- Balance update: PASS
+- Equity update: PASS
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO
+

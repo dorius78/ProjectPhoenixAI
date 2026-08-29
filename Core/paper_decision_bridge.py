@@ -425,6 +425,22 @@ class PaperDecisionBridge:
 
             try:
 
+                if self.paper_engine.has_position():
+
+                    position = self.paper_engine.get_position()
+
+                    if position is not None:
+
+                        current_price = self.provider.get_price(symbol)
+
+                        if current_price is None:
+                            print("[PAPER LOOP] Prezzo corrente non disponibile")
+                        else:
+                            self.paper_engine.update_price(
+                                current_price
+                            )
+
+
                 result = self.run_once(
                     symbol=symbol,
                     period=period,
