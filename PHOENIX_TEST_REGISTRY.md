@@ -1,4 +1,4 @@
-# PROJECT PHOENIX AI — TEST REGISTRY
+﻿# PROJECT PHOENIX AI â€” TEST REGISTRY
 
 ## TEST SUPERATI
 
@@ -23,4 +23,17 @@
 ## REGOLA
 
 Un test precedente non viene considerato perso.
-Ogni nuova modifica deve essere verificata contro i test già certificati.
+Ogni nuova modifica deve essere verificata contro i test giÃ  certificati.
+
+## E76.44 - PAPER TRADING END-TO-END
+- Tests.test_end_to_end: PASS
+- Analysis Engine: PASS
+- Risk Manager: PASS
+- Trade Builder: PASS
+- Execution Engine Paper Trading: PASS
+- Position Controller: PASS
+- Break Even: PASS
+- Take Profit: PASS
+- Close/PnL: PASS (+200.00)
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO

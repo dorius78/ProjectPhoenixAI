@@ -42,3 +42,13 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - Nessun order_send durante i test.
 - E76.41 CHIUSO: nessuna correzione necessaria.
 
+
+## E76.44 - Paper Trading End-to-End VERIFIED
+- Test Tests.test_end_to_end superato.
+- Pipeline verificata: Analysis -> Signal -> Risk -> Trade Builder -> Execution -> Paper Trading -> Position Controller -> Break Even -> Take Profit -> Close.
+- PnL test verificato: +200.00.
+- Nessun order_send.
+- Nessun ordine MT5.
+- Nessun LIVE.
+- Nessuna modifica ai moduli necessaria.
+
