@@ -37,3 +37,17 @@ Ogni nuova modifica deve essere verificata contro i test giÃ  certificati.
 - Close/PnL: PASS (+200.00)
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
+
+## E76.45 - Paper Trading Lifecycle
+- Paper Engine: PASS
+- Position Open: PASS
+- Price Update: PASS
+- Break Even: PASS
+- Trailing Stop: PASS
+- Take Profit: PASS
+- Position Close: PASS
+- PnL: PASS (+200.00)
+- Balance: PASS (10200.00)
+- Portfolio Removal: PASS
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO

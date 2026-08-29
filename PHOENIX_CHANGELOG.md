@@ -52,3 +52,19 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - Nessun LIVE.
 - Nessuna modifica ai moduli necessaria.
 
+
+## E76.45 - Paper Trading Lifecycle VERIFIED
+- PaperTradingEngine inizializzato correttamente.
+- Balance iniziale: 10000.00.
+- Apertura BUY BTC-USD: entry 100000.00, size 0.10.
+- Break Even attivato.
+- Trailing Stop aggiornato a 100500.00.
+- Take Profit raggiunto a 102000.00.
+- Posizione chiusa correttamente.
+- PnL finale: +200.00.
+- Balance finale: 10200.00.
+- Posizione rimossa dal Portfolio.
+- Nessun order_send.
+- Nessun ordine MT5.
+- Nessun LIVE.
+- E76.45 PAPER TRADING LIFECYCLE SUPERATO.
