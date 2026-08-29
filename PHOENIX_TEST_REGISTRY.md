@@ -159,3 +159,15 @@ Ogni nuova modifica deve essere verificata contro i test già certificati.
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
 
+
+## E76.60 - Paper Market Price vs Decision Price
+- Closed candle decision source: PASS
+- Current MT5 price source: PASS
+- Decision/position price separation: PASS
+- Paper position management: PASS
+- Bid/Ask midpoint: PASS
+- SL/TP price management: PASS
+- Break Even / Trailing compatibility: PASS
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO
+

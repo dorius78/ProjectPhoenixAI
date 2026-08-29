@@ -197,3 +197,14 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - MT5 order_send: NON UTILIZZATO.
 - LIVE: NON UTILIZZATO.
 
+
+## E76.60 - Paper Market Price vs Decision Price
+- Decision engine mantiene la valutazione sulla candela chiusa.
+- Paper Loop utilizza MT5Provider.get_price() per il prezzo corrente.
+- Gestione posizione PAPER separata dalla decisione di mercato.
+- Prezzo corrente MT5 ottenuto tramite Bid/Ask midpoint.
+- SL/TP/Break Even/Trailing ricevono il prezzo corrente.
+- E76.60 audit: PASS.
+- MT5 order_send: NON UTILIZZATO.
+- LIVE: NON UTILIZZATO.
+
