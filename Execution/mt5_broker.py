@@ -290,13 +290,102 @@ class MT5Broker:
 
             return {"success": False, "reason": "Volume non valido"}
 
+        # E76.1 - MARKET SESSION GUARD
+        # Controlliamo che il simbolo sia effettivamente
+        # negoziabile prima di costruire/inviare l'ordine.
+
+        symbol_info = mt5.symbol_info(symbol)
+
+        if symbol_info is None:
+
+            Logger.warning(
+                f"Simbolo MT5 non disponibile: {symbol}"
+            )
+
+            return {
+                "success": False,
+                "executed": False,
+                "market_closed": True,
+                "reason": "Simbolo MT5 non disponibile"
+            }
+
+        trade_mode = getattr(
+            symbol_info,
+            "trade_mode",
+            None
+        )
+
+        if trade_mode == mt5.SYMBOL_TRADE_MODE_DISABLED:
+
+            Logger.warning(
+                f"Mercato non negoziabile: {symbol}"
+            )
+
+            return {
+                "success": False,
+                "executed": False,
+                "market_closed": True,
+                "reason": "Mercato non negoziabile"
+            }
+
+        # E76.1 - SESSIONE MT5
+        # Se MT5 non fornisce Bid/Ask validi, non tentiamo
+        # alcun order_send. Questo evita retry inutili quando
+        # la sessione del mercato e' chiusa.
+
         tick = mt5.symbol_info_tick(symbol)
 
         if tick is None:
 
-            Logger.warning(f"Nessun prezzo disponibile per {symbol}.")
+            Logger.warning(
+                f"Sessione MT5 non disponibile per {symbol}."
+            )
 
-            return {"success": False, "reason": "Nessun prezzo"}
+            return {
+                "success": False,
+                "executed": False,
+                "market_closed": True,
+                "reason": "Sessione MT5 non disponibile"
+            }
+
+        if tick.bid <= 0 or tick.ask <= 0:
+
+            Logger.warning(
+                f"Mercato non quotato per {symbol}."
+            )
+
+            return {
+                "success": False,
+                "executed": False,
+                "market_closed": True,
+                "reason": "Mercato non quotato"
+            }
+
+        # E76.2 - TICK FRESHNESS GUARD
+        # Un Bid/Ask vecchio non significa che il mercato
+        # sia realmente aperto. Prima di order_send()
+        # richiediamo un tick recente.
+
+        import time
+
+        tick_age = time.time() - tick.time
+
+        MAX_TICK_AGE = 120
+
+        if tick_age > MAX_TICK_AGE:
+
+            Logger.warning(
+                f"Tick MT5 troppo vecchio per {symbol}: "
+                f"{tick_age:.0f}s"
+            )
+
+            return {
+                "success": False,
+                "executed": False,
+                "market_closed": True,
+                "reason": "Tick MT5 non recente",
+                "tick_age": round(tick_age, 2)
+            }
 
         side = trade["side"]
 
