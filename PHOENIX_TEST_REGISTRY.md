@@ -78,3 +78,14 @@ Ogni nuova modifica deve essere verificata contro i test già certificati.
 - Portfolio Removal: PASS
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
+
+## E76.48 - Paper Autonomous Candle Guard
+- Candle State: PASS
+- Duplicate Candle Detection: PASS
+- First run: PASS (TRADE_OPENED)
+- Second run same candle: PASS (WAIT)
+- Reason: PASS (Candle already processed)
+- MT5 historical data: PASS
+- Paper Trading: PASS
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO

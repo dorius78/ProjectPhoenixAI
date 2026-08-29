@@ -103,3 +103,17 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - Nessun LIVE.
 - Git verificato pulito.
 - E76.47 SUPERATO.
+
+## E76.48 - Paper Autonomous Candle Guard
+- Aggiunto last_processed_candle al PaperDecisionBridge.
+- Implementato Candle Duplicate Guard.
+- La stessa candela chiusa non viene rielaborata.
+- Prima run reale BTC-USD: TRADE_OPENED.
+- Seconda run sulla stessa candela: WAIT.
+- Reason: Candle already processed.
+- MT5 historical data: PASS.
+- Paper Trading: PASS.
+- Nessun order_send.
+- Nessun ordine MT5.
+- Nessun LIVE.
+- E76.48 SUPERATO.

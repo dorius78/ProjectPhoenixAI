@@ -1,4 +1,4 @@
-﻿from Core.analysis_engine import AnalysisEngine
+from Core.analysis_engine import AnalysisEngine
 from Core.paper_trading_engine import PaperTradingEngine
 from Data.mt5_provider import MT5Provider
 from Config.settings import SYMBOL
@@ -9,6 +9,7 @@ class PaperDecisionBridge:
     def __init__(self):
 
         self.provider = MT5Provider()
+        self.last_processed_candle = None
         self.analysis_engine = AnalysisEngine()
 
         self.paper_engine = PaperTradingEngine()
@@ -82,6 +83,20 @@ class PaperDecisionBridge:
                 "status": "ERROR",
                 "reason": "No closed candle"
             }
+
+        closed_candle = closed_data.index[-1]
+
+        if self.last_processed_candle == closed_candle:
+
+            self.provider.disconnect()
+
+            return {
+                "status": "WAIT",
+                "reason": "Candle already processed",
+                "candle": closed_candle
+            }
+
+        self.last_processed_candle = closed_candle
 
         price = float(
             closed_data["Close"].iloc[-1]
