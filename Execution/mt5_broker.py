@@ -366,25 +366,50 @@ class MT5Broker:
         # sia realmente aperto. Prima di order_send()
         # richiediamo un tick recente.
 
-        import time
+        # E76.4 - MT5 CLOCK SAFE GUARD
+        # Il timestamp del tick MT5 puo' non essere sincronizzato
+        # con l'orologio Python del PC. Usiamo quindi il tempo
+        # dell'ultimo tick e verifichiamo anche lo stato del terminale.
 
-        tick_age = time.time() - tick.time
+        terminal = mt5.terminal_info()
 
-        MAX_TICK_AGE = 120
-
-        if tick_age > MAX_TICK_AGE:
+        if terminal is None:
 
             Logger.warning(
-                f"Tick MT5 troppo vecchio per {symbol}: "
-                f"{tick_age:.0f}s"
+                "Terminale MT5 non disponibile."
             )
 
             return {
                 "success": False,
                 "executed": False,
                 "market_closed": True,
-                "reason": "Tick MT5 non recente",
-                "tick_age": round(tick_age, 2)
+                "reason": "Terminale MT5 non disponibile"
+            }
+
+        if not getattr(terminal, "connected", False):
+
+            Logger.warning(
+                "Terminale MT5 non connesso."
+            )
+
+            return {
+                "success": False,
+                "executed": False,
+                "market_closed": True,
+                "reason": "MT5 non connesso"
+            }
+
+        if not getattr(terminal, "trade_allowed", False):
+
+            Logger.warning(
+                f"Trading non consentito dal terminale MT5: {symbol}"
+            )
+
+            return {
+                "success": False,
+                "executed": False,
+                "market_closed": True,
+                "reason": "Trading MT5 non consentito"
             }
 
         side = trade["side"]
@@ -420,9 +445,26 @@ class MT5Broker:
                 f"Ordine MT5 rifiutato: [{code}] {comment}"
             )
 
+            # E76.5 - MARKET CLOSED
+            # MT5 retcode 10018 = Market closed.
+            # Non e' un errore di strategia: l'ordine non deve
+            # essere ritentato immediatamente.
+
+            if code == 10018:
+
+                return {
+                    "success": False,
+                    "executed": False,
+                    "market_closed": True,
+                    "reason": "Market closed",
+                    "retcode": code
+                }
+
             return {
                 "success": False,
-                "reason": f"[{code}] {comment}"
+                "executed": False,
+                "reason": f"[{code}] {comment}",
+                "retcode": code
             }
 
         Logger.success(
