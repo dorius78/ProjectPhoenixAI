@@ -68,3 +68,20 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - Nessun ordine MT5.
 - Nessun LIVE.
 - E76.45 PAPER TRADING LIFECYCLE SUPERATO.
+
+## E76.46 - Paper Decision Bridge Symbol Fix
+- Individuato errore: run_once() utilizzava symbol=None come default.
+- Correzione applicata: PaperDecisionBridge usa Config.settings.SYMBOL come default.
+- SYMBOL configurato: BTC-USD.
+- py_compile superato.
+- Paper Decision Bridge run_once() verificato con dati reali BTC-USD.
+- Analysis Engine: PASS.
+- Signal Manager: PASS.
+- Risk Gate: PASS.
+- Trade Builder: PASS.
+- Paper Position: PASS.
+- Status: TRADE_OPENED.
+- Nessun order_send.
+- Nessun ordine MT5.
+- Nessun LIVE.
+- E76.46 SUPERATO.

@@ -1,6 +1,7 @@
 ﻿from Core.analysis_engine import AnalysisEngine
 from Core.paper_trading_engine import PaperTradingEngine
 from Data.mt5_provider import MT5Provider
+from Config.settings import SYMBOL
 
 
 class PaperDecisionBridge:
@@ -18,7 +19,7 @@ class PaperDecisionBridge:
 
     def run_once(
         self,
-        symbol=None,
+        symbol=SYMBOL,
         period="5d",
         interval="1h"
     ):

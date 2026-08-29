@@ -51,3 +51,16 @@ Ogni nuova modifica deve essere verificata contro i test giÃ  certificati.
 - Portfolio Removal: PASS
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
+
+## E76.46 - Paper Decision Bridge Integration
+- Default Symbol: PASS (BTC-USD)
+- MT5 Historical Data: PASS
+- Analysis Engine: PASS
+- Signal Manager: PASS
+- Risk Gate: PASS
+- Trade Builder: PASS
+- Paper Position: PASS
+- run_once(): PASS
+- Status: TRADE_OPENED
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO
