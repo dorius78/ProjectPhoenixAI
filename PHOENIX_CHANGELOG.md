@@ -21,3 +21,24 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 
 `MODE=DEMO` deve sempre impedire qualsiasi `mt5.order_send()`.
 
+
+## E76.41 - Position Sizing Mathematical Audit
+- Confermata formula corretta basata su MT5 tick_size e tick_value.
+- Rischio target: account_balance * MAX_RISK / 100.
+- Il Core RiskPositionSize attuale usa solo stop_distance e non conosce le specifiche dello strumento.
+- MT5 Broker possiede gia' le specifiche necessarie: tick_size, tick_value, contract_size, volume_min, volume_max, volume_step.
+- Decisione: mantenere il Core broker-agnostic e implementare il calcolo volume reale nel layer MT5.
+- Test E76.41 completato senza order_send, senza ordini e senza modifiche MT5.
+
+
+## E76.41 - Position Sizing CLOSED
+- Audit completato.
+- Nessuna modifica al sizing applicata.
+- Confermato che RiskPositionSize produce UNITS, non lotti MT5.
+- Confermato che MT5Broker._to_volume() converte correttamente UNITS -> LOTS tramite trade_contract_size.
+- GBPUSD 76213.55 units = 0.76 MT5 lots.
+- EURUSD 100000 units = 1.00 MT5 lot.
+- BTCUSD 0.10 units = 0.10 MT5 lots.
+- Nessun order_send durante i test.
+- E76.41 CHIUSO: nessuna correzione necessaria.
+
