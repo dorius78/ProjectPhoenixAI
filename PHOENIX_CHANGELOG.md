@@ -130,3 +130,21 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - Nessun ordine MT5.
 - Nessun LIVE.
 - E76.49 SUPERATO.
+
+## E76.50 - Paper Loop Position Management
+- Audit Paper Loop: PASS.
+- Paper Position Lifecycle: PASS.
+- Position Open: PASS.
+- Price Update: PASS.
+- Break Even: PASS.
+- Take Profit: PASS.
+- Position Close: PASS.
+- PnL finale: +200.00.
+- Balance finale: 10200.00.
+- Equity finale: 10200.00.
+- Position state finale: False.
+- Risk/Reward: 2.0.
+- Nessun order_send.
+- Nessun ordine MT5.
+- Nessun LIVE.
+- E76.50 SUPERATO.
