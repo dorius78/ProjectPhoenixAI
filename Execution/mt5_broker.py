@@ -261,6 +261,8 @@ class MT5Broker:
 
     def execute(self, trade, dry_run=False):
 
+        # E76 SAFETY:
+        # nessun ordine puo' essere inviato durante un dry-run.
         if dry_run:
 
             Logger.info(
