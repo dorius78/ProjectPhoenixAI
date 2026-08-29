@@ -117,3 +117,16 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - Nessun ordine MT5.
 - Nessun LIVE.
 - E76.48 SUPERATO.
+
+## E76.49 - Paper Autonomous Loop
+- Implementato run_loop() nel PaperDecisionBridge.
+- Loop continuo PAPER con run_once().
+- Configurazione predefinita: BTC-USD / 1h / delay 30 secondi.
+- Candle Duplicate Guard mantenuto.
+- Gestione KeyboardInterrupt verificata.
+- Gestione eccezioni verificata.
+- Test E76.49.8: PASS.
+- Nessun order_send.
+- Nessun ordine MT5.
+- Nessun LIVE.
+- E76.49 SUPERATO.

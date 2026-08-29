@@ -394,3 +394,69 @@ class PaperDecisionBridge:
             "position": position
         }
 
+
+    # =================================
+    # PAPER AUTONOMOUS LOOP
+    # =================================
+
+    def run_loop(
+        self,
+        symbol=SYMBOL,
+        period="5d",
+        interval="1h",
+        delay=30
+    ):
+
+        import time
+
+        print()
+        print("=" * 90)
+        print("PHOENIX AI - PAPER AUTONOMOUS LOOP")
+        print("=" * 90)
+        print("SYMBOL =", symbol)
+        print("INTERVAL =", interval)
+        print("DELAY =", delay)
+        print("MODE = PAPER")
+        print("NESSUN ORDER_SEND")
+        print("NESSUN ORDINE MT5")
+        print("NESSUN LIVE")
+
+        while True:
+
+            try:
+
+                result = self.run_once(
+                    symbol=symbol,
+                    period=period,
+                    interval=interval
+                )
+
+                status = result.get("status")
+
+                if status == "WAIT":
+                    print("[PAPER LOOP] WAIT")
+
+                elif status == "TRADE_OPENED":
+                    print("[PAPER LOOP] TRADE_OPENED")
+
+                elif status == "NO_TRADE":
+                    print("[PAPER LOOP] NO_TRADE")
+
+                elif status == "ERROR":
+                    print("[PAPER LOOP] ERROR:", result.get("reason"))
+
+                time.sleep(delay)
+
+            except KeyboardInterrupt:
+
+                print()
+                print("[PAPER LOOP] ARRESTO MANUALE")
+                print("NESSUN ORDER_SEND")
+                print("NESSUN ORDINE MT5")
+                print("NESSUN LIVE")
+                break
+
+            except Exception as e:
+
+                print("[PAPER LOOP] ERROR:", e)
+                time.sleep(delay)

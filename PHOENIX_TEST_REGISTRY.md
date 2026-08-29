@@ -89,3 +89,15 @@ Ogni nuova modifica deve essere verificata contro i test già certificati.
 - Paper Trading: PASS
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
+
+## E76.49 - Paper Autonomous Loop
+- run_loop(): PASS
+- Continuous Loop: PASS
+- run_once Integration: PASS
+- Default Symbol: PASS (BTC-USD)
+- Interval: PASS (1h)
+- Delay: PASS (30s default)
+- KeyboardInterrupt: PASS
+- Exception Handling: PASS
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO
