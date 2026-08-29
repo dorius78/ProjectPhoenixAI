@@ -171,3 +171,16 @@ Ogni nuova modifica deve essere verificata contro i test già certificati.
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
 
+
+## E76.62 - Paper Autonomous Position Cycle
+- Position open: PASS
+- MT5 current price: PASS
+- Price -> Paper Position: PASS
+- update_price(): PASS
+- STOP LOSS auto-close: PASS
+- Position removed: PASS
+- Balance: PASS (9900.0)
+- Equity: PASS (9900.0)
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO
+
