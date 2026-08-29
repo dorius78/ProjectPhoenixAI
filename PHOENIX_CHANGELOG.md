@@ -220,3 +220,13 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
 
+
+## E76.63 - Paper Price Failure Safety
+- MT5 price unavailable handling: PASS
+- Paper position preserved when price unavailable: PASS
+- Balance preserved: PASS (10000.0)
+- Equity preserved: PASS (10000.0)
+- No crash on missing price: PASS
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO
+

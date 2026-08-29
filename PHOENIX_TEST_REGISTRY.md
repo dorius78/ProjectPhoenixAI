@@ -184,3 +184,14 @@ Ogni nuova modifica deve essere verificata contro i test già certificati.
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
 
+
+## E76.63 - Paper Price Failure Safety
+- Price unavailable simulation: PASS
+- PRICE RESULT = None: PASS
+- Position remains OPEN: PASS
+- Balance unchanged: PASS (10000.0)
+- Equity unchanged: PASS (10000.0)
+- Safety handling: PASS
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO
+
