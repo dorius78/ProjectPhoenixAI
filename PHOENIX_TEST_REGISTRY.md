@@ -1,4 +1,4 @@
-﻿# PROJECT PHOENIX AI â€” TEST REGISTRY
+# PROJECT PHOENIX AI — TEST REGISTRY
 
 ## TEST SUPERATI
 
@@ -23,7 +23,7 @@
 ## REGOLA
 
 Un test precedente non viene considerato perso.
-Ogni nuova modifica deve essere verificata contro i test giÃ  certificati.
+Ogni nuova modifica deve essere verificata contro i test già certificati.
 
 ## E76.44 - PAPER TRADING END-TO-END
 - Tests.test_end_to_end: PASS
@@ -62,5 +62,19 @@ Ogni nuova modifica deve essere verificata contro i test giÃ  certificati.
 - Paper Position: PASS
 - run_once(): PASS
 - Status: TRADE_OPENED
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO
+
+## E76.47 - Paper Position Lifecycle Integration
+- Existing Position Guard: PASS
+- Second Position Prevention: PASS
+- Price Update: PASS
+- Break Even: PASS
+- Trailing Stop: PASS
+- Take Profit: PASS
+- Position Close: PASS
+- PnL: PASS (+200.00)
+- Balance: PASS (10200.00)
+- Portfolio Removal: PASS
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO

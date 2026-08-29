@@ -85,3 +85,21 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - Nessun ordine MT5.
 - Nessun LIVE.
 - E76.46 SUPERATO.
+
+## E76.47 - Paper Position Lifecycle Integration
+- Verificata gestione posizione Paper già esistente.
+- Posizione BUY BTC-USD aperta correttamente.
+- Nuovo run_once() con posizione già presente: nessuna seconda posizione aperta.
+- Price Update: PASS.
+- Break Even: PASS.
+- Trailing Stop: PASS.
+- Take Profit: PASS.
+- Position Close: PASS.
+- PnL finale: +200.00.
+- Balance finale: 10200.00.
+- Posizione rimossa correttamente dal Portfolio.
+- Nessun order_send.
+- Nessun ordine MT5.
+- Nessun LIVE.
+- Git verificato pulito.
+- E76.47 SUPERATO.
