@@ -126,3 +126,24 @@ Ogni nuova modifica deve essere verificata contro i test già certificati.
 - Position Controller: PASS
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
+
+## E76.54 - Paper Auto Take Profit
+- Position Open: PASS
+- Take Profit: PASS
+- Position Close: PASS
+- PnL: PASS (+200.00)
+- Balance: PASS (10200.00)
+- Portfolio Removal: PASS
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO
+
+
+## E76.55 - Paper Auto Stop Loss
+- Position Open: PASS
+- Stop Loss: PASS
+- Position Close: PASS
+- PnL: PASS (-100.00)
+- Balance: PASS (9900.00)
+- Portfolio Removal: PASS
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO

@@ -160,3 +160,28 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - Nessun ordine MT5.
 - Nessun LIVE.
 - E76.51 SUPERATO.
+
+## E76.54 - Paper Auto Take Profit
+- Auto Take Profit: PASS.
+- BUY BTC-USD 100000 -> 102000.
+- PnL: +200.00.
+- Balance finale: 10200.00.
+- Position Close: PASS.
+- Portfolio Removal: PASS.
+- Nessun order_send.
+- Nessun ordine MT5.
+- Nessun LIVE.
+- E76.54 SUPERATO.
+
+
+## E76.55 - Paper Auto Stop Loss
+- Auto Stop Loss: PASS.
+- BUY BTC-USD 100000 -> 99000.
+- PnL: -100.00.
+- Balance finale: 9900.00.
+- Position Close: PASS.
+- Portfolio Removal: PASS.
+- Nessun order_send.
+- Nessun ordine MT5.
+- Nessun LIVE.
+- E76.55 SUPERATO.
