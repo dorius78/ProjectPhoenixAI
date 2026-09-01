@@ -230,3 +230,15 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
 
+
+## E76.65 - Paper Closed Position Re-Entry
+- First BUY position: PASS
+- TAKE PROFIT close: PASS
+- Position removal: PASS
+- Balance update: PASS (10200.0)
+- Re-entry after closed position: PASS
+- Second SELL position: PASS
+- Duplicate entry protection preserved: PASS
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO
+

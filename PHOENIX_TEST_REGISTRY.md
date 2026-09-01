@@ -195,3 +195,17 @@ Ogni nuova modifica deve essere verificata contro i test già certificati.
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
 
+
+## E76.65 - Paper Closed Position Re-Entry
+- Initial position open: PASS
+- Automatic close: PASS
+- Position cleared: PASS
+- Balance after first trade: PASS (10200.0)
+- New position after close: PASS
+- SELL re-entry: PASS
+- Final position status: OPEN
+- Final balance: PASS (10200.0)
+- Final equity: PASS (10200.0)
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO
+
