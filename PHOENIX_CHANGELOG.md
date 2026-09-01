@@ -276,3 +276,15 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
 
+
+## E76.68 - Paper SELL Break Even and Trailing Stop
+- SELL Break Even: PASS
+- SELL Break Even activation: PASS
+- SELL stop moved to entry: PASS
+- SELL Trailing Stop: PASS
+- SELL trailing stop moved to 99000.0: PASS
+- Position remained OPEN: PASS
+- Equity updated correctly: PASS (10200.0)
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO
+
