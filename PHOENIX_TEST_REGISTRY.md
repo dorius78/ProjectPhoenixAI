@@ -209,3 +209,17 @@ Ogni nuova modifica deve essere verificata contro i test già certificati.
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
 
+
+## E76.66 - Paper Close to Re-Entry Cycle
+- First BUY position: PASS
+- TAKE PROFIT: PASS
+- Position closed: PASS
+- Position removed: PASS
+- Balance after close: PASS (10200.0)
+- SELL re-entry: PASS
+- Position after re-entry: PASS
+- Final balance: PASS (10200.0)
+- Final equity: PASS (10200.0)
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO
+
