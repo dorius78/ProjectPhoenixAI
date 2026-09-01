@@ -234,3 +234,13 @@ Ogni nuova modifica deve essere verificata contro i test già certificati.
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
 
+
+## E76.67 - Paper Break Even and Trailing Stop
+- BUY Break Even: PASS
+- BUY Break Even stop: PASS (100000.0)
+- BUY Trailing Stop: PASS
+- BUY Trailing stop after 102000: PASS (101000.0)
+- Position status: PASS (OPEN)
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO
+
