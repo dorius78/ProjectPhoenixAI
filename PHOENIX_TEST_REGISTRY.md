@@ -255,3 +255,16 @@ Ogni nuova modifica deve essere verificata contro i test già certificati.
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
 
+
+## E76.69 - Paper Trailing Stop Exit
+- BUY Break Even: PASS
+- BUY Trailing Stop: PASS (101000.0)
+- Price reversal: PASS (100900.0)
+- STOP LOSS auto-close: PASS
+- Close reason: PASS (STOP LOSS)
+- Position removed: PASS
+- Balance: PASS (10100.0)
+- Equity: PASS (10100.0)
+- MT5 order_send: NON UTILIZZATO
+- LIVE: NON UTILIZZATO
+
