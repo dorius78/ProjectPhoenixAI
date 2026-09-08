@@ -326,3 +326,19 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - Nessun trading LIVE.
 - RISULTATO: PASS.
 
+
+## E76.71 - Paper Trading Full E2E Validation
+
+- Audit iniziale del PaperDecisionBridge completato con esito PASS.
+- Verificato collegamento `PaperDecisionBridge -> PaperTradingEngine -> phoenix_paper.db`.
+- Verificato ciclo completo: OPEN -> MONITOR -> BREAK EVEN / TRAILING -> TAKE PROFIT -> CLOSE -> BALANCE -> DATABASE.
+- Saldo iniziale: 10000.0.
+- Saldo finale: 10200.0.
+- PnL test: +200.0.
+- Persistenza database verificata.
+- `phoenix_paper.db` correttamente escluso da Git tramite `.gitignore`.
+- Nessun `ORDER_SEND`.
+- Nessun ordine MT5.
+- Nessun trading LIVE.
+- RISULTATO: PASS.
+

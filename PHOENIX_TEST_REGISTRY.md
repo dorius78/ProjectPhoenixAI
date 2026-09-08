@@ -1,4 +1,4 @@
-# PROJECT PHOENIX AI — TEST REGISTRY
+﻿# PROJECT PHOENIX AI â€” TEST REGISTRY
 
 ## TEST SUPERATI
 
@@ -23,7 +23,7 @@
 ## REGOLA
 
 Un test precedente non viene considerato perso.
-Ogni nuova modifica deve essere verificata contro i test già certificati.
+Ogni nuova modifica deve essere verificata contro i test giÃ  certificati.
 
 ## E76.44 - PAPER TRADING END-TO-END
 - Tests.test_end_to_end: PASS
@@ -293,9 +293,9 @@ Ogni nuova modifica deve essere verificata contro i test già certificati.
 
 **RESULT:** PASS
 
-**Database:** `phoenix_paper.db`  
-**Bridge Database:** `DatabaseManager`  
-**Engine Database:** `True`  
+**Database:** `phoenix_paper.db`
+**Bridge Database:** `DatabaseManager`
+**Engine Database:** `True`
 **Mode:** `PAPER`
 
 **Test trade:**
@@ -309,6 +309,37 @@ Ogni nuova modifica deve essere verificata contro i test già certificati.
 - Reason: TAKE PROFIT
 
 **Database persistence:** VERIFIED
+
+**Safety:**
+- ORDER_SEND: NO
+- MT5 ORDER: NO
+- LIVE: NO
+
+
+## E76.71 - PAPER TRADING FULL E2E VALIDATION
+
+**RESULT:** PASS
+
+**Initial balance:** 10000.0
+**Final balance:** 10200.0
+**PnL:** +200.0
+**Database:** `phoenix_paper.db`
+**Database persistence:** VERIFIED
+**Git database tracking:** EXCLUDED (`*.db`)
+
+**Validated flow:**
+
+OPEN -> MONITOR -> BREAK EVEN / TRAILING -> TAKE PROFIT -> CLOSE -> BALANCE -> DATABASE
+
+**Trade:**
+- Symbol: BTC-USD
+- Side: BUY
+- Entry: 100000.0
+- Exit: 102000.0
+- Size: 0.1
+- PnL: 200.0
+- Status: CLOSED
+- Reason: TAKE PROFIT
 
 **Safety:**
 - ORDER_SEND: NO
