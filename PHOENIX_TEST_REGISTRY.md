@@ -1,4 +1,4 @@
-﻿# PROJECT PHOENIX AI â€” TEST REGISTRY
+# PROJECT PHOENIX AI — TEST REGISTRY
 
 ## TEST SUPERATI
 
@@ -23,7 +23,7 @@
 ## REGOLA
 
 Un test precedente non viene considerato perso.
-Ogni nuova modifica deve essere verificata contro i test giÃ  certificati.
+Ogni nuova modifica deve essere verificata contro i test già certificati.
 
 ## E76.44 - PAPER TRADING END-TO-END
 - Tests.test_end_to_end: PASS
@@ -293,9 +293,9 @@ Ogni nuova modifica deve essere verificata contro i test giÃ  certificati.
 
 **RESULT:** PASS
 
-**Database:** `phoenix_paper.db`
-**Bridge Database:** `DatabaseManager`
-**Engine Database:** `True`
+**Database:** `phoenix_paper.db`  
+**Bridge Database:** `DatabaseManager`  
+**Engine Database:** `True`  
 **Mode:** `PAPER`
 
 **Test trade:**
