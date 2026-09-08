@@ -1,4 +1,4 @@
-import pandas as pd
+﻿import pandas as pd
 
 from Core.analysis_engine import AnalysisEngine
 
@@ -59,13 +59,13 @@ def test_risk_gate_is_present():
 def test_risk_gate_blocks_trade():
     engine = AnalysisEngine()
 
-    engine.risk_manager.evaluate = lambda analysis: {
+    engine.risk_manager.evaluate = lambda analysis, regime: {
         "risk_level": "ALTO",
         "risk_score": 0,
         "allow_trade": False
     }
 
-    engine.phoenix_brain.think = lambda analysis, risk: {
+    engine.phoenix_brain.think = lambda analysis, risk, regime: {
         "action": "STRONG BUY",
         "score": 95,
         "confidence": 100,
@@ -100,3 +100,6 @@ if __name__ == "__main__":
     test_risk_gate_blocks_trade()
 
     print("TEST ANALYSIS: OK")
+
+
+

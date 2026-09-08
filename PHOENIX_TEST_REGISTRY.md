@@ -372,3 +372,25 @@ Chiusura bloccata: MODE=DEMO
 
 In MODE=DEMO, Phoenix cannot open or close MT5 positions through the broker order_send() path.
 
+
+## E76.73 - ACTIVE TEST SUITE STABILIZATION
+
+**RESULT:** PASS
+
+**Validated:**
+- pytest.ini presente nella root del progetto.
+- Directory Archive/ esclusa dalla raccolta pytest.
+- Tests/test_analysis.py aggiornato alle firme correnti.
+- Test Analysis: 3/3 PASS.
+- Suite attiva completa: 91/91 PASS.
+- 0 failed.
+- Nessuna modifica al codice di produzione.
+- PHOENIX DEMO SAFETY GATE: ACTIVE.
+- ORDER_SEND: NO.
+- MT5 ORDER: NO.
+- LIVE: NO.
+
+**Conclusion:**
+
+La suite attiva di PROJECT PHOENIX AI è completamente verde: 91/91 test PASS.
+I test storici presenti in Archive/ rimangono preservati ma non vengono più raccolti dalla suite attiva.

@@ -357,3 +357,18 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - Nessun trading LIVE.
 - RISULTATO: PASS.
 
+
+## E76.73 - Active Test Suite Stabilization
+
+- Aggiunto pytest.ini nella root del progetto.
+- Esclusa la directory Archive/ dalla raccolta automatica di pytest.
+- Aggiornato Tests/test_analysis.py alle firme correnti di Risk Manager e Phoenix Brain.
+- Test Analysis: 3/3 PASS.
+- Suite attiva completa: 91/91 PASS.
+- Risultato finale: 91 passed, 0 failed.
+- Nessuna modifica al codice di produzione.
+- Hard Safety Gate MT5 invariato e attivo.
+- Nessun ordine MT5 inviato.
+- Nessun trading LIVE.
+
+- RISULTATO: PASS.
