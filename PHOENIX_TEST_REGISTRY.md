@@ -288,3 +288,30 @@ Ogni nuova modifica deve essere verificata contro i test già certificati.
 - MT5 ORDER: NO
 - LIVE: NO
 
+
+## E76.70.8 - PAPER DECISION BRIDGE DATABASE E2E
+
+**RESULT:** PASS
+
+**Database:** `phoenix_paper.db`  
+**Bridge Database:** `DatabaseManager`  
+**Engine Database:** `True`  
+**Mode:** `PAPER`
+
+**Test trade:**
+- Symbol: BTC-USD
+- Side: BUY
+- Entry: 100000.0
+- Exit: 102000.0
+- Size: 0.1
+- PnL: 200.0
+- Status: CLOSED
+- Reason: TAKE PROFIT
+
+**Database persistence:** VERIFIED
+
+**Safety:**
+- ORDER_SEND: NO
+- MT5 ORDER: NO
+- LIVE: NO
+

@@ -1,5 +1,6 @@
 from Core.analysis_engine import AnalysisEngine
 from Core.paper_trading_engine import PaperTradingEngine
+from Database.database_manager import DatabaseManager
 from Data.mt5_provider import MT5Provider
 from Config.settings import SYMBOL
 
@@ -12,7 +13,8 @@ class PaperDecisionBridge:
         self.last_processed_candle = None
         self.analysis_engine = AnalysisEngine()
 
-        self.paper_engine = PaperTradingEngine()
+        self.paper_database = DatabaseManager("phoenix_paper.db")
+        self.paper_engine = PaperTradingEngine(database=self.paper_database)
 
     # =====================================
     # SINGOLA ITERAZIONE

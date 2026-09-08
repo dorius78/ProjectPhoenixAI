@@ -313,3 +313,16 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - Nessun ordine MT5.
 - Nessun LIVE.
 
+
+## E76.70.8 - Paper Decision Bridge Database E2E
+
+- PaperDecisionBridge collegato a `DatabaseManager("phoenix_paper.db")`.
+- PaperTradingEngine riceve il database tramite dependency injection.
+- Test E2E eseguito con apertura BUY e chiusura TAKE PROFIT.
+- Verificata persistenza reale del trade nella tabella `trades`.
+- Record verificato: BTC-USD / BUY / entry 100000 / exit 102000 / size 0.1 / PnL +200 / CLOSED / TAKE PROFIT.
+- Nessun `ORDER_SEND`.
+- Nessun ordine MT5.
+- Nessun trading LIVE.
+- RISULTATO: PASS.
+
