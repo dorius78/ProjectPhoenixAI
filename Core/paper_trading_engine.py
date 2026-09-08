@@ -6,7 +6,7 @@ from datetime import datetime
 
 class PaperTradingEngine:
 
-    def __init__(self):
+    def __init__(self, database=None):
 
         self.position_controller = PositionController()
         self.portfolio = PortfolioManager()
@@ -16,7 +16,7 @@ class PaperTradingEngine:
         # Database opzionale:
         # Paper Trading continua a funzionare
         # anche senza database esplicito.
-        self.database = None
+        self.database = database
 
     # =====================================
     # APERTURA PAPER POSITION

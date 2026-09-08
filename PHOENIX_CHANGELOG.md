@@ -301,3 +301,15 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - MT5 order_send: NON UTILIZZATO
 - LIVE: NON UTILIZZATO
 
+
+## E76.70 - Paper Trading Database Integration
+- PaperTradingEngine reso compatibile con DatabaseManager tramite dependency injection.
+- Implementato collegamento del Paper Trading al database dedicato phoenix_paper.db.
+- Verificata chiusura Paper con TAKE PROFIT.
+- Verificato salvataggio reale del trade nella tabella 	rades.
+- Test E76.70.7: 1 trade registrato correttamente.
+- Record verificato: BTC-USD / BUY / entry 100000 / exit 102000 / PnL +200 / CLOSED / TAKE PROFIT.
+- Nessun ORDER_SEND.
+- Nessun ordine MT5.
+- Nessun LIVE.
+
