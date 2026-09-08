@@ -342,3 +342,18 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - Nessun trading LIVE.
 - RISULTATO: PASS.
 
+
+## E76.72 - MT5 DEMO Hard Safety Gate Validation
+
+- Implementato/verificato Hard Safety Gate Phoenix sul percorso di apertura MT5.
+- Implementato/verificato Hard Safety Gate Phoenix sul percorso di chiusura MT5.
+- Con MODE=DEMO, gli ordini MT5 vengono bloccati prima di order_send().
+- Test apertura MT5: PASS.
+- Test chiusura MT5: PASS.
+- executed=False.
+- dry_run=True.
+- Nessun ORDER_SEND.
+- Nessun ordine MT5.
+- Nessun trading LIVE.
+- RISULTATO: PASS.
+

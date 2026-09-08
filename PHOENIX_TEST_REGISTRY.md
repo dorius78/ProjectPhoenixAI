@@ -346,3 +346,29 @@ OPEN -> MONITOR -> BREAK EVEN / TRAILING -> TAKE PROFIT -> CLOSE -> BALANCE -> D
 - MT5 ORDER: NO
 - LIVE: NO
 
+
+## E76.72 - MT5 DEMO HARD SAFETY GATE VALIDATION
+
+**RESULT:** PASS
+
+**MODE:** DEMO
+
+**Validated protections:**
+- MT5 opening order blocked
+- MT5 closing order blocked
+- executed: False
+- dry_run: True
+- PHOENIX DEMO SAFETY GATE: ACTIVE
+- ORDER_SEND: NOT EXECUTED
+- LIVE: NO
+
+**Opening test result:**
+Ordine bloccato: MODE=DEMO
+
+**Closing test result:**
+Chiusura bloccata: MODE=DEMO
+
+**Safety conclusion:**
+
+In MODE=DEMO, Phoenix cannot open or close MT5 positions through the broker order_send() path.
+
