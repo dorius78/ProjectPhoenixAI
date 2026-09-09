@@ -557,6 +557,12 @@ class ExitManager:
             # STOP LOSS
             # -----------------------------
 
+            if evaluated_trailing_stop is not None:
+
+                if low <= evaluated_trailing_stop:
+
+                    return "TRAILING STOP"
+
             if low <= stop_loss:
 
                 if position.get(
@@ -604,6 +610,12 @@ class ExitManager:
             # -----------------------------
             # STOP LOSS
             # -----------------------------
+
+            if evaluated_trailing_stop is not None:
+
+                if high >= evaluated_trailing_stop:
+
+                    return "TRAILING STOP"
 
             if high >= stop_loss:
 

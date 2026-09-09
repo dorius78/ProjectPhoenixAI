@@ -424,3 +424,27 @@ def test_sell_intrabar_stop_loss_has_priority_over_take_profit():
     assert result == "STOP LOSS"
 
 from Core.exit_manager import ExitManager
+
+def test_trailing_stop_buy_exit_reason():
+    manager = ExitManager()
+
+    position = {
+        "symbol": "BTC-USD",
+        "side": "BUY",
+        "entry": 100000.0,
+        "stop_loss": 101000.0,
+        "take_profit": 104000.0,
+        "trailing_stop": 101000.0,
+        "size": 0.01,
+        "status": "OPEN",
+        "break_even": True
+    }
+
+    result = manager.evaluate(
+        position,
+        101000.0,
+        high=102000.0,
+        low=100900.0
+    )
+
+    assert result == "TRAILING STOP"

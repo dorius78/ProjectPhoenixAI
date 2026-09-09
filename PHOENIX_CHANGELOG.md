@@ -372,3 +372,21 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - Nessun trading LIVE.
 
 - RISULTATO: PASS.
+
+## E76.74 - TRAILING STOP EXIT CLASSIFICATION FIX
+
+- Corretto `Core/exit_manager.py` per classificare correttamente le uscite generate da Trailing Stop.
+- Il controllo del Trailing Stop ora utilizza lo snapshot `evaluated_trailing_stop` prima della valutazione generica dello Stop Loss.
+- Applicata la correzione sia al lato BUY sia al lato SELL.
+- Preservata la logica esistente di Break Even e Stop Loss.
+- Aggiunto test di regressione per la classificazione `TRAILING STOP` BUY.
+- Verifica manuale della classificazione `TRAILING STOP` SELL: PASS.
+- Exit Manager: 18/18 PASS.
+- Suite attiva completa: 92/92 PASS.
+- 0 failed.
+- PHOENIX DEMO SAFETY GATE: ACTIVE.
+- ORDER_SEND: NO.
+- MT5 ORDER: NO.
+- LIVE: NO.
+
+- RISULTATO: PASS.
