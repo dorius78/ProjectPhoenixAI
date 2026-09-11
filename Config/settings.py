@@ -31,7 +31,7 @@ SYMBOL = "BTC-USD"
 
 PERIOD = "5d"
 
-INTERVAL = "1h"
+INTERVAL = "4h"
 
 CURRENCIES = [
     "EURUSD",

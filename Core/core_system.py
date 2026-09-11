@@ -23,6 +23,7 @@ from Core.performance_analytics import PerformanceAnalytics
 
 from Execution.execution_engine import ExecutionEngine
 from Config.settings import (
+    INTERVAL,
     MODE,
     LIVE_DATABASE,
     BACKTEST_DATABASE
@@ -175,7 +176,7 @@ class CoreSystem:
 
                 period="5d",
 
-                interval="1h"
+                interval=INTERVAL
 
             )
 
@@ -300,7 +301,7 @@ class CoreSystem:
                 data = self.candles.get_candles(
                     symbol,
                     period="5d",
-                    interval="1h"
+                    interval=INTERVAL
                 )
 
                 if data is None or len(data) == 0:
@@ -393,7 +394,7 @@ class CoreSystem:
 
             self.live_engine.start(
                 symbol=symbol,
-                interval="1h",
+                interval=INTERVAL,
                 delay=30
             )
 
@@ -458,7 +459,7 @@ class CoreSystem:
 
             demo_engine.start(
                 symbol=symbol,
-                interval="1h",
+                interval=INTERVAL,
                 delay=30
             )
 
@@ -518,7 +519,7 @@ class CoreSystem:
 
             live_engine.start(
                 symbol=symbol,
-                interval="1h",
+                interval=INTERVAL,
                 delay=30
             )
 
@@ -538,7 +539,7 @@ class CoreSystem:
     # BACKTEST
     # =====================================
 
-    def run_backtest(self, symbol="BTC-USD", period="3mo", interval="1h"):
+    def run_backtest(self, symbol="BTC-USD", period="3mo", interval=INTERVAL):
 
         Logger.section("BACKTEST")
 

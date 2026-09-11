@@ -51,7 +51,7 @@ def main():
 
         if simbolo == "":
 
-            simbolo = "BTC-USD"
+            simbolo = None
 
         core.run_live_trading(
 
