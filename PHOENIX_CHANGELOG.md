@@ -390,3 +390,48 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - LIVE: NO.
 
 - RISULTATO: PASS.
+
+## E76.75 - H4 TIMEFRAME CONSOLIDATION AND AUTONOMOUS MARKET SELECTION
+
+- Consolidato il timeframe operativo H4 nei flussi interessati.
+- Consolidata la selezione autonoma dello strumento di mercato.
+- Verificata la compatibilità del flusso multi-market con la logica autonoma.
+- Preservata la modalità DEMO e la protezione contro ordini LIVE non autorizzati.
+- Suite attiva: PASS.
+- Nessun ordine LIVE eseguito.
+
+- RISULTATO: PASS.
+
+## E76.76 - PHOENIXAI V3.21 MT5 NATIVE SOURCE
+
+- Aggiunta al progetto la sorgente nativa MT5 `PhoenixAI_v3_21.mq5`.
+- Versione EA: 3.21.
+- Verificata la struttura nativa di esecuzione MT5.
+- Verificata la gestione BUY/SELL, SL/TP, Break Even e Trailing Stop.
+- Verificata la gestione del rischio, del margine e dei limiti operativi.
+- Sorgente compilata in MetaEditor: 0 errori, 0 warning.
+- Nessun ordine LIVE eseguito.
+
+- RISULTATO: PASS.
+
+## E76.77 - MT5 ORDERCHECK VALIDATION FIX
+
+- Identificato un errore nella validazione del risultato di `OrderCheck()`.
+- La logica precedente richiedeva erroneamente `TRADE_RETCODE_DONE`.
+- Corretta la verifica: `OrderCheck()` viene considerato riuscito quando `check.retcode == 0`.
+- `PhoenixAI_v3_21.mq5` ricompilato in MetaEditor: 0 errori, 0 warning.
+- Sorgente corretto sincronizzato anche nella directory nativa MT5.
+- Strategy Tester EURUSD H4, real ticks, 01/01/2026–10/09/2026: esecuzione ordini verificata.
+- Aperture BUY/SELL verificate.
+- Stop Loss e Take Profit verificati.
+- Break Even verificato.
+- Trailing Stop verificato.
+- Chiusure automatiche tramite Stop Loss / Take Profit verificate.
+- Chiusura per fine test distinta correttamente dalle chiusure autonome dell'EA.
+- Strategy Tester: 215 operazioni di trading / 430 deal.
+- Risultato tecnico del ciclo operativo: PASS.
+- Il risultato economico negativo del test non viene considerato un malfunzionamento tecnico.
+- Nessun ordine su conto LIVE.
+- Test MT5 eseguito in ambiente Demo/Tester.
+
+- RISULTATO: PASS.

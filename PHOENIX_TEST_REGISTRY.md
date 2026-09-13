@@ -417,3 +417,50 @@ I test storici presenti in Archive/ rimangono preservati ma non vengono più rac
 
 La classificazione delle uscite Trailing Stop � stata corretta e verificata su BUY e SELL.
 La suite attiva di PROJECT PHOENIX AI � completamente verde: 92/92 test PASS.
+
+## E76.75 - H4 TIMEFRAME CONSOLIDATION AND AUTONOMOUS MARKET SELECTION
+
+**RESULT:** PASS
+
+**Validated:**
+- Timeframe operativo H4 consolidato nei flussi interessati.
+- Selezione autonoma dello strumento di mercato verificata.
+- Flusso multi-market verificato.
+- Modalità DEMO e protezioni di sicurezza preservate.
+- Nessun ordine LIVE eseguito.
+
+## E76.76 - PHOENIXAI V3.21 MT5 NATIVE SOURCE
+
+**RESULT:** PASS
+
+**Validated:**
+- Sorgente nativa MT5 `PhoenixAI_v3_21.mq5` aggiunta al progetto.
+- Versione EA: 3.21.
+- BUY/SELL, SL/TP, Break Even e Trailing Stop verificati.
+- Risk management e margin gate verificati.
+- Compilazione MetaEditor: 0 errori, 0 warning.
+- Nessun ordine LIVE eseguito.
+
+## E76.77 - MT5 ORDERCHECK VALIDATION FIX
+
+**RESULT:** PASS
+
+**Validated:**
+- Corretta la verifica del risultato `OrderCheck()`.
+- `check.retcode == 0` riconosciuto correttamente come esito positivo del controllo.
+- EA PhoenixAI v3.21 ricompilato: 0 errori, 0 warning.
+- Strategy Tester EURUSD H4, real ticks, 01/01/2026–10/09/2026: PASS.
+- Aperture BUY/SELL verificate.
+- SL/TP verificati.
+- Break Even verificato.
+- Trailing Stop verificato.
+- Chiusure automatiche verificate.
+- 215 operazioni di trading / 430 deal.
+- Chiusura di fine test distinta dalle chiusure autonome dell'EA.
+- Risultato economico negativo del test separato dalla validazione tecnica.
+- Nessun ordine LIVE.
+- MT5 Demo/Tester utilizzato.
+
+**Conclusion:**
+
+Il ciclo tecnico nativo MT5 `Signal -> Risk -> OrderCheck -> Order -> Position Management -> Exit` è stato verificato con esito PASS.
