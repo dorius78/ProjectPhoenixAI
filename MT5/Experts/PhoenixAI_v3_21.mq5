@@ -1062,7 +1062,7 @@ bool CheckOrder(
 
    if(
       check.retcode !=
-      TRADE_RETCODE_DONE
+      0
    )
    {
       PhoenixLog(
