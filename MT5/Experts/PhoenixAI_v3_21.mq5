@@ -1733,6 +1733,27 @@ int OnInit()
          PhoenixTimeframe;
    }
 
+   if(
+      InpUseHigherTFConfirmation &&
+      PeriodSeconds(PhoenixHigherTF) <=
+      PeriodSeconds(PhoenixTimeframe)
+   )
+   {
+      Print(
+         "[PHOENIX] Higher Timeframe non valido: deve essere superiore al Main Timeframe."
+      );
+
+      Print(
+         StringFormat(
+            "[PHOENIX] MainTF=%s | HigherTF=%s",
+            EnumToString(PhoenixTimeframe),
+            EnumToString(PhoenixHigherTF)
+         )
+      );
+
+      return INIT_FAILED;
+   }
+
    if(PhoenixSymbol == "")
       PhoenixSymbol = _Symbol;
 
