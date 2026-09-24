@@ -36,7 +36,7 @@ input bool InpAllowStrongSignals = true;
 
 input group "=== PHOENIX MULTI TIMEFRAME ==="
 input bool            InpUseHigherTFConfirmation = true;
-input ENUM_TIMEFRAMES InpHigherTimeframe         = PERIOD_H1;
+input ENUM_TIMEFRAMES InpHigherTimeframe         = PERIOD_D1;
 input int             InpHigherTFWeight           = 10;
 
 input group "=== PHOENIX POSITION MANAGEMENT ==="
