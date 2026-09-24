@@ -464,3 +464,41 @@ La suite attiva di PROJECT PHOENIX AI è completamente verde: 92/92 test PASS.
 **Conclusion:**
 
 Il ciclo tecnico nativo MT5 `Signal -> Risk -> OrderCheck -> Order -> Position Management -> Exit` Ã¨ stato verificato con esito PASS.
+
+## E76.78 - HIGHER TIMEFRAME ORDERING VALIDATION
+
+**RESULT:** PASS
+
+**Validated:**
+- Controllo dell'ordine dei timeframe aggiunto nel native EA PhoenixAI v3.21.
+- PeriodSeconds() utilizzato per verificare che il Higher Timeframe sia superiore al Main Timeframe.
+- Configurazione H4 + H1 rifiutata correttamente.
+- Configurazione H4 + D1 accettata correttamente.
+- MetaEditor: 0 errori, 0 warning.
+- Nessun ordine LIVE eseguito.
+
+**Conclusion:**
+
+Il controllo dell'ordine dei timeframe è stato validato correttamente.
+
+## E76.79 - SET HIGHER TIMEFRAME TO D1
+
+**RESULT:** PASS
+
+**Validated:**
+- Higher Timeframe predefinito del native EA PhoenixAI v3.21 modificato da H1 a D1.
+- Main Timeframe: H4.
+- Higher Timeframe: D1.
+- Higher Timeframe Confirmation: ON.
+- Higher TF Weight: 10.
+- EA avviato correttamente su EURUSD H4.
+- Conferma MTF H4 -> D1 verificata nel log MT5.
+- Decision Engine operativo.
+- HTF_BEARISH=YES e CONFIRMATION=YES osservati durante il test.
+- Trading disattivato durante la validazione.
+- Nessun ordine reale inviato.
+
+**Conclusion:**
+
+La configurazione PhoenixAI v3.21 H4 -> D1 è stata validata direttamente su MT5 con esito PASS.
+

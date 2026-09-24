@@ -435,3 +435,40 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - Test MT5 eseguito in ambiente Demo/Tester.
 
 - RISULTATO: PASS.
+
+## E76.78 - HIGHER TIMEFRAME ORDERING VALIDATION
+
+**RESULT:** PASS
+
+**Validated:**
+- Aggiunto controllo di validità dell'ordine dei timeframe nel native EA PhoenixAI v3.21.
+- PeriodSeconds() utilizzato per verificare che il Higher Timeframe sia realmente superiore al Main Timeframe.
+- Configurazione non valida H4 + H1 correttamente rifiutata.
+- Configurazione H4 + D1 correttamente accettata.
+- MetaEditor: 0 errori, 0 warning.
+- Nessun ordine LIVE eseguito.
+
+**Conclusion:**
+
+Il controllo semantico del Higher Timeframe è stato aggiunto e validato.
+PhoenixAI non accetta più una configurazione nella quale il timeframe dichiarato come superiore è uguale o inferiore al Main Timeframe.
+
+## E76.79 - SET HIGHER TIMEFRAME TO D1
+
+**RESULT:** PASS
+
+**Validated:**
+- Higher Timeframe predefinito del native EA PhoenixAI v3.21 impostato da H1 a D1.
+- Main Timeframe operativo: H4.
+- Higher Timeframe operativo: D1.
+- Higher Timeframe Confirmation: ON.
+- Higher TF Weight: 10.
+- EA avviato correttamente su EURUSD H4.
+- Decision Engine operativo con conferma D1.
+- Trading mantenuto disattivato durante la validazione.
+- Nessun ordine reale inviato.
+
+**Conclusion:**
+
+La configurazione nativa PhoenixAI v3.21 è ora coerente per il flusso H4 -> D1 e il controllo Higher Timeframe risulta operativo.
+
