@@ -1786,7 +1786,7 @@ Nessun passaggio a trading LIVE reale viene effettuato automaticamente.
 
 Le principali aree ancora da completare/verificare sono:
 
-1. Audit e correzione della semantica Multi-Timeframe H4 -> H1.
+1. Audit e correzione della semantica Multi-Timeframe H4 -> D1. CONTROLLATA E VALIDATA (E76.78-E76.79).
 2. Historical Market Research.
 3. Supervisor / Devil's Advocate.
 4. Strategy Discovery.
@@ -1803,6 +1803,8 @@ La piattaforma operativa DEMO Ã¨ in fase avanzata e il ciclo tecnico nativo MT
 
 Il progetto complessivo PHOENIX AI NON Ã¨ ancora considerato concluso.
 
-La roadmap deve continuare dal checkpoint E76.77 senza ripartire da zero e senza ripetere le attivitÃ  giÃ  validate.
+La roadmap deve continuare dal checkpoint E76.79 senza ripartire da zero e senza ripetere le attivitÃ  giÃ  validate.
 
-## END CURRENT OFFICIAL STATE - E76.77
+## END CURRENT OFFICIAL STATE - E76.79
+
+
