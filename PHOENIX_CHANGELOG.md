@@ -472,3 +472,9 @@ PhoenixAI non accetta più una configurazione nella quale il timeframe dichiarato
 
 La configurazione nativa PhoenixAI v3.21 è ora coerente per il flusso H4 -> D1 e il controllo Higher Timeframe risulta operativo.
 
+
+## E71.1 - Consolidamento Backtest Engine
+- Rimossa la duplicazione accidentale dei metodi run_backtest() e get_results() in Core/backtest_engine.py.
+- Mantenuta una sola implementazione dei due metodi.
+- Test di regressione: python -m pytest .\Tests\test_backtest.py -q -> 1 passed.
+- Compilazione Python: PASS.

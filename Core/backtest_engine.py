@@ -1,4 +1,4 @@
-"""
+﻿"""
 ========================================
 PROJECT PHOENIX AI
 Backtest Engine
@@ -309,35 +309,6 @@ class BacktestEngine:
             "market_bias": market_bias
 
         }
-
-    # =====================================
-    # E71 HISTORICAL RESEARCH
-    # =====================================
-
-    def run_backtest(self, trades=None):
-        """
-        E71: esegue il calcolo storico utilizzando
-        i trade forniti al BacktestEngine.
-
-        Il motore non esegue ordini reali.
-        """
-
-        if trades is not None:
-            self.history = list(trades)
-
-        return self.run()
-
-    # =====================================
-    # RISULTATI E71
-    # =====================================
-
-    def get_results(self):
-        """
-        Restituisce i risultati dell'ultima analisi
-        storica eseguita.
-        """
-
-        return self.run()
 
     # =====================================
     # E71 HISTORICAL RESEARCH

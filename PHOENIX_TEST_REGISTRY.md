@@ -502,3 +502,10 @@ Il controllo dell'ordine dei timeframe è stato validato correttamente.
 
 La configurazione PhoenixAI v3.21 H4 -> D1 è stata validata direttamente su MT5 con esito PASS.
 
+
+## E71.1 - Backtest Engine Consolidation
+- Test: python -m pytest .\Tests\test_backtest.py -q
+- Risultato: 1 passed.
+- Verifica: run_backtest() e get_results() presenti una sola volta.
+- py_compile: PASS.
+- Esito: PASS.
