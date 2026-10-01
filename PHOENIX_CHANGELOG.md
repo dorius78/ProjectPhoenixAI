@@ -478,3 +478,20 @@ La configurazione nativa PhoenixAI v3.21 è ora coerente per il flusso H4 -> D1 e
 - Mantenuta una sola implementazione dei due metodi.
 - Test di regressione: python -m pytest .\Tests\test_backtest.py -q -> 1 passed.
 - Compilazione Python: PASS.
+
+## E71.2 - Smart Money Swing Confirmation
+- Test di conferma temporale degli swing: PASS.
+- Test combinati backtest, analysis e Smart Money: 5 passed.
+
+## E71.3 - PhoenixAI v3.21
+- Corretta etichetta interna del Decision Engine.
+- Compilazione MetaEditor: 0 errors, 0 warnings.
+- Versione v3.21 verificata nel Journal MT5.
+
+## E71.4 - MT5 DEMO Autonomous Trading
+- PepperstoneUK-Demo, EURUSD H4, conferma D1.
+- Ordine SELL automatico eseguito con SL e TP.
+- OrderCheck, OrderSend e Trade Transaction: PASS.
+- Monitoraggio posizione e chiusura osservati.
+- Nessuna operazione LIVE.
+- Validazione iniziale DEMO: PASS.

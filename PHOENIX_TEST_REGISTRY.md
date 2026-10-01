@@ -509,3 +509,31 @@ La configurazione PhoenixAI v3.21 H4 -> D1 è stata validata direttamente su MT5 
 - Verifica: run_backtest() e get_results() presenti una sola volta.
 - py_compile: PASS.
 - Esito: PASS.
+
+
+## E71.2 - Smart Money Swing Confirmation Test
+- Test: python -m pytest .\Tests\test_smart_money_structure.py -q
+- Risultato: 1 passed.
+- Verificato che lo swing diventa disponibile solo dopo le candele di conferma richieste.
+- Test combinati backtest + analysis + Smart Money: 5 passed.
+- Esito: PASS.
+
+## E71.3 - PhoenixAI v3.21 MT5 Compilation
+- Versione sorgente: 3.21.
+- Decision Engine: v3.21.
+- Compilazione MetaEditor: 0 errors, 0 warnings.
+- EX5 rigenerato e verificato su MT5.
+- Esito: PASS.
+
+## E71.4 - MT5 DEMO Autonomous Trading Initial Validation
+- Ambiente: PepperstoneUK-Demo.
+- Simbolo: EURUSD H4.
+- Higher Timeframe: D1.
+- Trading automatico DEMO attivato con Risk 1%, RR 2.0 e MaxPositions 1.
+- Decisione SELL confermata da D1.
+- OrderCheck: OK.
+- Ordine SELL eseguito correttamente sul conto DEMO con SL e TP.
+- Trade Transaction ricevuta con Magic Number 260813.
+- Position Controller operativo; successiva chiusura della posizione osservata.
+- Nessun passaggio LIVE eseguito.
+- Esito: PASS per la validazione iniziale del ciclo automatico DEMO.
