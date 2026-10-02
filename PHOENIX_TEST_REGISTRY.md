@@ -415,8 +415,8 @@ I test storici presenti in Archive/ rimangono preservati ma non vengono piÃ¹ rac
 
 **Conclusion:**
 
-La classificazione delle uscite Trailing Stop è stata corretta e verificata su BUY e SELL.
-La suite attiva di PROJECT PHOENIX AI è completamente verde: 92/92 test PASS.
+La classificazione delle uscite Trailing Stop ï¿½ stata corretta e verificata su BUY e SELL.
+La suite attiva di PROJECT PHOENIX AI ï¿½ completamente verde: 92/92 test PASS.
 
 ## E76.75 - H4 TIMEFRAME CONSOLIDATION AND AUTONOMOUS MARKET SELECTION
 
@@ -479,7 +479,7 @@ Il ciclo tecnico nativo MT5 `Signal -> Risk -> OrderCheck -> Order -> Position M
 
 **Conclusion:**
 
-Il controllo dell'ordine dei timeframe è stato validato correttamente.
+Il controllo dell'ordine dei timeframe ï¿½ stato validato correttamente.
 
 ## E76.79 - SET HIGHER TIMEFRAME TO D1
 
@@ -500,7 +500,7 @@ Il controllo dell'ordine dei timeframe è stato validato correttamente.
 
 **Conclusion:**
 
-La configurazione PhoenixAI v3.21 H4 -> D1 è stata validata direttamente su MT5 con esito PASS.
+La configurazione PhoenixAI v3.21 H4 -> D1 ï¿½ stata validata direttamente su MT5 con esito PASS.
 
 
 ## E71.1 - Backtest Engine Consolidation
@@ -537,3 +537,12 @@ La configurazione PhoenixAI v3.21 H4 -> D1 è stata validata direttamente su MT5 
 - Position Controller operativo; successiva chiusura della posizione osservata.
 - Nessun passaggio LIVE eseguito.
 - Esito: PASS per la validazione iniziale del ciclo automatico DEMO.
+
+## E71.5 - Phoenix Brain Parameter Centralization
+- Test: python -m pytest .\Tests\test_phoenix_parameters.py .\Tests\test_analysis.py .\Tests\test_signal.py .\Tests\test_backtest.py .\Tests\test_smart_money_structure.py -q
+- Risultato: 21 passed.
+- Phoenix Brain parameters import: PASS.
+- Phoenix Brain behavioral test: PASS.
+- py_compile: PASS.
+- git diff --check: PASS.
+- Esito: PASS.

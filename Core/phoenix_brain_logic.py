@@ -7,6 +7,7 @@ Versione 4.0
 """
 
 from Logs.logger import Logger
+from Config import settings
 
 
 class PhoenixBrainLogic:
@@ -35,7 +36,7 @@ class PhoenixBrainLogic:
 
         if analysis.get("trend_bullish"):
 
-            bullish_score += 20
+            bullish_score += settings.PHOENIX_WEIGHT_TREND
 
             bullish_reasons.append(
                 "Trend rialzista"
@@ -43,7 +44,7 @@ class PhoenixBrainLogic:
 
         if analysis.get("trend_bearish"):
 
-            bearish_score += 20
+            bearish_score += settings.PHOENIX_WEIGHT_TREND
 
             bearish_reasons.append(
                 "Trend ribassista"
@@ -55,7 +56,7 @@ class PhoenixBrainLogic:
 
         if analysis.get("ema_alignment_bullish"):
 
-            bullish_score += 10
+            bullish_score += settings.PHOENIX_WEIGHT_EMA
 
             bullish_reasons.append(
                 "EMA allineate al rialzo"
@@ -63,7 +64,7 @@ class PhoenixBrainLogic:
 
         if analysis.get("ema_alignment_bearish"):
 
-            bearish_score += 10
+            bearish_score += settings.PHOENIX_WEIGHT_EMA
 
             bearish_reasons.append(
                 "EMA allineate al ribasso"
@@ -75,7 +76,7 @@ class PhoenixBrainLogic:
 
         if analysis.get("macd_buy"):
 
-            bullish_score += 10
+            bullish_score += settings.PHOENIX_WEIGHT_MACD
 
             bullish_reasons.append(
                 "MACD BUY"
@@ -83,7 +84,7 @@ class PhoenixBrainLogic:
 
         if analysis.get("macd_sell"):
 
-            bearish_score += 10
+            bearish_score += settings.PHOENIX_WEIGHT_MACD
 
             bearish_reasons.append(
                 "MACD SELL"
@@ -99,7 +100,7 @@ class PhoenixBrainLogic:
 
         if rsi < 30:
 
-            bullish_score += 15
+            bullish_score += settings.PHOENIX_WEIGHT_RSI
 
             bullish_reasons.append(
                 "RSI ipervenduto"
@@ -107,7 +108,7 @@ class PhoenixBrainLogic:
 
         elif rsi > 70:
 
-            bearish_score += 15
+            bearish_score += settings.PHOENIX_WEIGHT_RSI
 
             bearish_reasons.append(
                 "RSI ipercomprato"
@@ -121,7 +122,7 @@ class PhoenixBrainLogic:
 
             if analysis.get("trend_bullish"):
 
-                bullish_score += 10
+                bullish_score += settings.PHOENIX_WEIGHT_ADX
 
                 bullish_reasons.append(
                     "Trend forte (rialzista)"
@@ -129,7 +130,7 @@ class PhoenixBrainLogic:
 
             elif analysis.get("trend_bearish"):
 
-                bearish_score += 10
+                bearish_score += settings.PHOENIX_WEIGHT_ADX
 
                 bearish_reasons.append(
                     "Trend forte (ribassista)"
@@ -143,7 +144,7 @@ class PhoenixBrainLogic:
 
             if analysis.get("trend_bullish"):
 
-                bullish_score += 10
+                bullish_score += settings.PHOENIX_WEIGHT_VOLUME
 
                 bullish_reasons.append(
                     "Volume elevato (conferma rialzo)"
@@ -151,7 +152,7 @@ class PhoenixBrainLogic:
 
             elif analysis.get("trend_bearish"):
 
-                bearish_score += 10
+                bearish_score += settings.PHOENIX_WEIGHT_VOLUME
 
                 bearish_reasons.append(
                     "Volume elevato (conferma ribasso)"
@@ -163,7 +164,7 @@ class PhoenixBrainLogic:
 
         if analysis.get("bos_bullish"):
 
-            bullish_score += 15
+            bullish_score += settings.PHOENIX_WEIGHT_BOS
 
             bullish_reasons.append(
                 "BOS Rialzista"
@@ -171,7 +172,7 @@ class PhoenixBrainLogic:
 
         if analysis.get("bos_bearish"):
 
-            bearish_score += 15
+            bearish_score += settings.PHOENIX_WEIGHT_BOS
 
             bearish_reasons.append(
                 "BOS Ribassista"
@@ -183,7 +184,7 @@ class PhoenixBrainLogic:
 
         if analysis.get("choch_bullish"):
 
-            bullish_score += 10
+            bullish_score += settings.PHOENIX_WEIGHT_CHOCH
 
             bullish_reasons.append(
                 "CHoCH Rialzista"
@@ -191,7 +192,7 @@ class PhoenixBrainLogic:
 
         if analysis.get("choch_bearish"):
 
-            bearish_score += 10
+            bearish_score += settings.PHOENIX_WEIGHT_CHOCH
 
             bearish_reasons.append(
                 "CHoCH Ribassista"
@@ -203,7 +204,7 @@ class PhoenixBrainLogic:
 
         if analysis.get("fvg_bullish"):
 
-            bullish_score += 8
+            bullish_score += settings.PHOENIX_WEIGHT_FVG
 
             bullish_reasons.append(
                 "Fair Value Gap Rialzista"
@@ -211,7 +212,7 @@ class PhoenixBrainLogic:
 
         if analysis.get("fvg_bearish"):
 
-            bearish_score += 8
+            bearish_score += settings.PHOENIX_WEIGHT_FVG
 
             bearish_reasons.append(
                 "Fair Value Gap Ribassista"
@@ -223,7 +224,7 @@ class PhoenixBrainLogic:
 
         if analysis.get("order_block_bullish"):
 
-            bullish_score += 10
+            bullish_score += settings.PHOENIX_WEIGHT_ORDER_BLOCK
 
             bullish_reasons.append(
                 "Order Block Rialzista"
@@ -231,7 +232,7 @@ class PhoenixBrainLogic:
 
         if analysis.get("order_block_bearish"):
 
-            bearish_score += 10
+            bearish_score += settings.PHOENIX_WEIGHT_ORDER_BLOCK
 
             bearish_reasons.append(
                 "Order Block Ribassista"
@@ -243,7 +244,7 @@ class PhoenixBrainLogic:
 
         if analysis.get("liquidity_bullish"):
 
-            bullish_score += 8
+            bullish_score += settings.PHOENIX_WEIGHT_LIQUIDITY
 
             bullish_reasons.append(
                 "Liquidity Sweep Rialzista"
@@ -251,7 +252,7 @@ class PhoenixBrainLogic:
 
         if analysis.get("liquidity_bearish"):
 
-            bearish_score += 8
+            bearish_score += settings.PHOENIX_WEIGHT_LIQUIDITY
 
             bearish_reasons.append(
                 "Liquidity Sweep Ribassista"
@@ -275,7 +276,7 @@ class PhoenixBrainLogic:
         # =====================================
 
         conflict = (
-            abs(bullish_score - bearish_score) < 15
+            abs(bullish_score - bearish_score) < settings.PHOENIX_CONFLICT_THRESHOLD
         )
 
 
@@ -334,10 +335,10 @@ class PhoenixBrainLogic:
             )
 
         if not conflict:
-            confidence += 10
+            confidence += settings.PHOENIX_CONFIDENCE_NO_CONFLICT_BONUS
 
         if conflict:
-            confidence -= 10
+            confidence -= settings.PHOENIX_CONFIDENCE_CONFLICT_PENALTY
 
         # =====================================
         # PENALITÀ CONFLITTO
@@ -345,7 +346,7 @@ class PhoenixBrainLogic:
 
         if conflict:
 
-            confidence -= 10
+            confidence -= settings.PHOENIX_CONFIDENCE_CONFLICT_PENALTY
 
         # =====================================
         # PENALITÀ RISCHIO
@@ -358,17 +359,16 @@ class PhoenixBrainLogic:
 
         if risk_level == "MEDIO":
 
-            confidence -= 10
+            confidence -= settings.PHOENIX_CONFIDENCE_RISK_MEDIUM_PENALTY
 
         elif risk_level == "ALTO":
 
-            confidence -= 20
+            confidence -= settings.PHOENIX_CONFIDENCE_RISK_HIGH_PENALTY
 
         confidence = max(
             0,
             min(confidence, 100)
         )
-
         # =====================================
         # OUTPUT
         # =====================================

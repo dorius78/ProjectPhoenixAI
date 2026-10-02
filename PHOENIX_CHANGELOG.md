@@ -87,9 +87,9 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 - E76.46 SUPERATO.
 
 ## E76.47 - Paper Position Lifecycle Integration
-- Verificata gestione posizione Paper già esistente.
+- Verificata gestione posizione Paper giï¿½ esistente.
 - Posizione BUY BTC-USD aperta correttamente.
-- Nuovo run_once() con posizione già presente: nessuna seconda posizione aperta.
+- Nuovo run_once() con posizione giï¿½ presente: nessuna seconda posizione aperta.
 - Price Update: PASS.
 - Break Even: PASS.
 - Trailing Stop: PASS.
@@ -441,7 +441,7 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 **RESULT:** PASS
 
 **Validated:**
-- Aggiunto controllo di validità dell'ordine dei timeframe nel native EA PhoenixAI v3.21.
+- Aggiunto controllo di validitï¿½ dell'ordine dei timeframe nel native EA PhoenixAI v3.21.
 - PeriodSeconds() utilizzato per verificare che il Higher Timeframe sia realmente superiore al Main Timeframe.
 - Configurazione non valida H4 + H1 correttamente rifiutata.
 - Configurazione H4 + D1 correttamente accettata.
@@ -450,8 +450,8 @@ con `dry_run=False`, causando un ordine reale BTCUSD SELL 0.45.
 
 **Conclusion:**
 
-Il controllo semantico del Higher Timeframe è stato aggiunto e validato.
-PhoenixAI non accetta più una configurazione nella quale il timeframe dichiarato come superiore è uguale o inferiore al Main Timeframe.
+Il controllo semantico del Higher Timeframe ï¿½ stato aggiunto e validato.
+PhoenixAI non accetta piï¿½ una configurazione nella quale il timeframe dichiarato come superiore ï¿½ uguale o inferiore al Main Timeframe.
 
 ## E76.79 - SET HIGHER TIMEFRAME TO D1
 
@@ -470,7 +470,7 @@ PhoenixAI non accetta più una configurazione nella quale il timeframe dichiarato
 
 **Conclusion:**
 
-La configurazione nativa PhoenixAI v3.21 è ora coerente per il flusso H4 -> D1 e il controllo Higher Timeframe risulta operativo.
+La configurazione nativa PhoenixAI v3.21 ï¿½ ora coerente per il flusso H4 -> D1 e il controllo Higher Timeframe risulta operativo.
 
 
 ## E71.1 - Consolidamento Backtest Engine
@@ -495,3 +495,13 @@ La configurazione nativa PhoenixAI v3.21 è ora coerente per il flusso H4 -> D1 e
 - Monitoraggio posizione e chiusura osservati.
 - Nessuna operazione LIVE.
 - Validazione iniziale DEMO: PASS.
+## E71.5 - Phoenix Brain Parameter Centralization
+- Centralizzati in Config/settings.py i pesi del Phoenix Brain.
+- Centralizzate le soglie di decisione, conflitto e confidence.
+- Integrati i parametri in Core/phoenix_brain.py e Core/phoenix_brain_logic.py.
+- Aggiunto Tests/test_phoenix_parameters.py.
+- Test comportamentale Phoenix Brain: PASS.
+- Suite di regressione: 21 passed.
+- py_compile: PASS.
+- git diff --check: PASS.
+- Nessuna modifica al percorso LIVE.

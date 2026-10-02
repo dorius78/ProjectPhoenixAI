@@ -1,4 +1,5 @@
 from Logs.logger import Logger
+from Config import settings
 
 from Core.phoenix_brain_logic import PhoenixBrainLogic
 
@@ -87,9 +88,9 @@ class PhoenixBrain:
             and
             not conflict
             and
-            net_advantage >= 15
+            net_advantage >= settings.PHOENIX_MIN_ADVANTAGE
             and
-            confidence >= 30
+            confidence >= settings.PHOENIX_MIN_CONFIDENCE
         ):
 
             action = "BUY"
@@ -103,9 +104,9 @@ class PhoenixBrain:
             and
             not conflict
             and
-            net_advantage >= 15
+            net_advantage >= settings.PHOENIX_MIN_ADVANTAGE
             and
-            confidence >= 30
+            confidence >= settings.PHOENIX_MIN_CONFIDENCE
         ):
 
             action = "SELL"
@@ -119,9 +120,9 @@ class PhoenixBrain:
             and
             not conflict
             and
-            net_advantage >= 35
+            net_advantage >= settings.PHOENIX_STRONG_ADVANTAGE
             and
-            confidence >= 65
+            confidence >= settings.PHOENIX_STRONG_CONFIDENCE
         ):
 
             action = "STRONG BUY"
@@ -135,9 +136,9 @@ class PhoenixBrain:
             and
             not conflict
             and
-            net_advantage >= 35
+            net_advantage >= settings.PHOENIX_STRONG_ADVANTAGE
             and
-            confidence >= 65
+            confidence >= settings.PHOENIX_STRONG_CONFIDENCE
         ):
 
             action = "STRONG SELL"
@@ -154,7 +155,7 @@ class PhoenixBrain:
         # CONFIDENCE MOLTO BASSA
         # ---------------------------------
 
-        if confidence < 30:
+        if confidence < settings.PHOENIX_MIN_CONFIDENCE:
 
             action = "HOLD"
 
