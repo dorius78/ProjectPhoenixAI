@@ -123,3 +123,52 @@ def test_strategy_discovery_parameter_restore():
     )
 
     assert settings.PHOENIX_MIN_CONFIDENCE == original
+
+
+def test_core_system_strategy_discovery_isolation():
+
+    from Core.core_system import CoreSystem
+    from Config import settings
+
+    core = CoreSystem()
+
+    original_database = core.backtest_database
+
+    parameter_names = [
+        "PHOENIX_MIN_CONFIDENCE",
+        "PHOENIX_MIN_ADVANTAGE"
+    ]
+
+    original_parameters = {
+        name: getattr(settings, name)
+        for name in parameter_names
+    }
+
+    def fake_run_backtest(**kwargs):
+
+        return {
+            "net_profit": (
+                settings.PHOENIX_MIN_ADVANTAGE
+                + settings.PHOENIX_MIN_CONFIDENCE
+            )
+        }
+
+    core.run_backtest = fake_run_backtest
+
+    results = core.run_strategy_discovery(
+        {
+            "PHOENIX_MIN_CONFIDENCE": [30, 60],
+            "PHOENIX_MIN_ADVANTAGE": [15, 30]
+        }
+    )
+
+    assert len(results) == 4
+
+    assert core.backtest_database is original_database
+
+    assert {
+        name: getattr(settings, name)
+        for name in parameter_names
+    } == original_parameters
+
+    assert results[0]["result"]["net_profit"] >=            results[-1]["result"]["net_profit"]

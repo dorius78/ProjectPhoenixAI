@@ -832,51 +832,62 @@ class CoreSystem:
         }
 
         original_backtest_database = self.backtest_database
-        discovery_database = DatabaseManager(':memory:')
-        self.backtest_database = discovery_database
-
         results = []
 
-        for index, candidate in enumerate(candidates, start=1):
+        try:
 
-            Logger.info(
-                f"Valutazione candidato {index}/{len(candidates)}: "
-                f"{candidate}"
+            for index, candidate in enumerate(candidates, start=1):
+
+                Logger.info(
+                    f"Valutazione candidato {index}/{len(candidates)}: "
+                    f"{candidate}"
+                )
+
+                discovery_database = DatabaseManager(':memory:')
+
+                try:
+
+                    self.backtest_database = discovery_database
+
+                    self.strategy_discovery.apply_parameters(
+                        candidate
+                    )
+
+                    stats = self.run_backtest(
+                        symbol=symbol,
+                        period=period,
+                        interval=interval
+                    )
+
+                    if not isinstance(stats, dict):
+
+                        stats = {
+                            metric: 0
+                        }
+
+                    results.append(
+                        self.strategy_discovery.evaluate_candidate(
+                            candidate,
+                            lambda _: stats
+                        )
+                    )
+
+                finally:
+
+                    self.strategy_discovery.restore_parameters(
+                        original_parameters
+                    )
+
+                    self.backtest_database = original_backtest_database
+                    discovery_database.connection.close()
+
+        finally:
+
+            self.strategy_discovery.restore_parameters(
+                original_parameters
             )
 
-            try:
-
-                self.strategy_discovery.apply_parameters(
-                    candidate
-                )
-
-                stats = self.run_backtest(
-                    symbol=symbol,
-                    period=period,
-                    interval=interval
-                )
-
-                if not isinstance(stats, dict):
-
-                    stats = {
-                        metric: 0
-                    }
-
-                results.append(
-                    self.strategy_discovery.evaluate_candidate(
-                        candidate,
-                        lambda _: stats
-                    )
-                )
-
-            finally:
-
-                self.strategy_discovery.restore_parameters(
-                    original_parameters
-                )
-
-        self.backtest_database = original_backtest_database
-        discovery_database.connection.close()
+            self.backtest_database = original_backtest_database
 
         ranked = self.strategy_discovery.rank_candidates(
             results,
