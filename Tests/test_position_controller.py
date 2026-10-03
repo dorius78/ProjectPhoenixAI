@@ -198,3 +198,30 @@ if __name__ == "__main__":
     test_reset()
 
     print("TEST POSITION CONTROLLER: OK")
+def test_position_preserves_market_regime():
+    controller = PositionController()
+
+    result = controller.open_position(
+        side="BUY",
+        entry=100000.0,
+        stop_loss=99000.0,
+        take_profit=102000.0,
+        symbol="BTC-USD"
+    )
+
+    assert result is True
+
+    position = controller.get_position()
+    position["regime"] = {
+        "regime": "TRENDING",
+        "confidence": 0.8
+    }
+
+    closed = controller.close_position(
+        reason="TEST",
+        current_price=101000.0
+    )
+
+    assert closed is not None
+    assert closed["regime"]["regime"] == "TRENDING"
+    assert closed["regime"]["confidence"] == 0.8

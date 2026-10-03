@@ -1,4 +1,4 @@
-"""
+﻿"""
 ========================================
 PROJECT PHOENIX AI
 Core System
@@ -153,7 +153,7 @@ class CoreSystem:
 
         Logger.section("PROJECT PHOENIX AI")
 
-        Logger.info("Modalità LIVE SCANNER")
+        Logger.info("ModalitÃ  LIVE SCANNER")
 
         self.market.load_markets()
 
@@ -277,7 +277,7 @@ class CoreSystem:
     def select_best_market(self):
 
         # E69: esegue la scansione autonoma dei mercati
-        # utilizzando la pipeline di analisi già esistente.
+        # utilizzando la pipeline di analisi giÃ  esistente.
         self.scanner.reset()
 
         symbols = self.scanner.get_symbols()
@@ -681,6 +681,10 @@ class CoreSystem:
                         )
 
                         if opened:
+
+                            position = self.position_controller.get_position()
+                            if position is not None:
+                                position["regime"] = result_analysis.get("regime", {})
 
                             self.portfolio.add(
                                 order["symbol"],
