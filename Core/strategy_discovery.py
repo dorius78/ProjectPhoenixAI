@@ -1,4 +1,4 @@
-﻿"""
+"""
 ========================================
 PROJECT PHOENIX AI
 Strategy Discovery
@@ -9,6 +9,7 @@ E75
 from itertools import product
 
 from Logs.logger import Logger
+from Config import settings
 
 
 class StrategyDiscovery:
@@ -146,6 +147,36 @@ class StrategyDiscovery:
 
         return ranked[0]
 
+    # =====================================
+    # PARAMETRI PHOENIX
+    # =====================================
+
+    def apply_parameters(self, parameters):
+
+        if not isinstance(parameters, dict):
+            raise ValueError(
+                "parameters deve essere un dizionario."
+            )
+
+        for key, value in parameters.items():
+
+            if not hasattr(settings, key):
+                raise ValueError(
+                    f"Parametro Phoenix non esistente: {key}"
+                )
+
+            setattr(settings, key, value)
+
+    def restore_parameters(self, original_parameters):
+
+        if not isinstance(original_parameters, dict):
+            raise ValueError(
+                "original_parameters deve essere un dizionario."
+            )
+
+        for key, value in original_parameters.items():
+
+            setattr(settings, key, value)
     # =====================================
     # RESET
     # =====================================

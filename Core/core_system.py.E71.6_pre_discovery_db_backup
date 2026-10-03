@@ -153,7 +153,7 @@ class CoreSystem:
 
         Logger.section("PROJECT PHOENIX AI")
 
-        Logger.info("Modalità LIVE SCANNER")
+        Logger.info("ModalitÃ  LIVE SCANNER")
 
         self.market.load_markets()
 
@@ -277,7 +277,7 @@ class CoreSystem:
     def select_best_market(self):
 
         # E69: esegue la scansione autonoma dei mercati
-        # utilizzando la pipeline di analisi già esistente.
+        # utilizzando la pipeline di analisi giÃ  esistente.
         self.scanner.reset()
 
         symbols = self.scanner.get_symbols()
@@ -831,10 +831,6 @@ class CoreSystem:
             for key in parameter_keys
         }
 
-        original_backtest_database = self.backtest_database
-        discovery_database = DatabaseManager(':memory:')
-        self.backtest_database = discovery_database
-
         results = []
 
         for index, candidate in enumerate(candidates, start=1):
@@ -874,9 +870,6 @@ class CoreSystem:
                 self.strategy_discovery.restore_parameters(
                     original_parameters
                 )
-
-        self.backtest_database = original_backtest_database
-        discovery_database.connection.close()
 
         ranked = self.strategy_discovery.rank_candidates(
             results,
