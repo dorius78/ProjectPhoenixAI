@@ -1,4 +1,4 @@
-﻿"""
+"""
 ========================================
 PROJECT PHOENIX AI
 Market Research Engine
@@ -7,6 +7,7 @@ Versione 1.0
 """
 
 from collections import defaultdict
+from datetime import datetime
 
 from Logs.logger import Logger
 
@@ -66,6 +67,14 @@ class MarketResearch:
 
         durations = []
         risk_rewards = []
+        hours = defaultdict(
+            lambda: {
+                "trades": 0,
+                "profit": 0.0,
+                "wins": 0,
+                "losses": 0
+            }
+        )
 
         for trade in trades:
 
@@ -76,8 +85,25 @@ class MarketResearch:
             regime = trade[17]
             duration = float(trade[14])
             risk_reward = float(trade[16])
+            open_time = str(trade[12])
 
             durations.append(duration)
+
+            try:
+                hour = datetime.fromisoformat(
+                    open_time.replace("Z", "+00:00")
+                ).strftime("%H")
+            except ValueError:
+                hour = "N/A"
+
+            if hour != "N/A":
+                hours[hour]["trades"] += 1
+                hours[hour]["profit"] += pnl
+
+                if pnl > 0:
+                    hours[hour]["wins"] += 1
+                elif pnl < 0:
+                    hours[hour]["losses"] += 1
             risk_rewards.append(risk_reward)
 
             overview["trades"] += 1
@@ -133,6 +159,15 @@ class MarketResearch:
             "overview": overview,
             "duration": duration_stats,
             "risk_reward": risk_reward_stats,
+            "hours": {
+                hour: {
+                    "trades": info["trades"],
+                    "profit": round(info["profit"], 2),
+                    "wins": info["wins"],
+                    "losses": info["losses"]
+                }
+                for hour, info in dict(hours).items()
+            },
             "symbols": dict(symbols),
             "sides": dict(sides),
             "reasons": dict(reasons),

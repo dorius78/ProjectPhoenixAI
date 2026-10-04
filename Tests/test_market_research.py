@@ -265,3 +265,71 @@ def test_market_research_duration_and_risk_reward():
 
 if __name__ == "__main__":
     test_market_research_duration_and_risk_reward()
+
+def test_market_research_hourly():
+
+    from Core.market_research import MarketResearch
+    from Database.database_manager import DatabaseManager
+
+    research = MarketResearch()
+    database = DatabaseManager(":memory:")
+
+    database.save_trade({
+        "symbol": "BTC-USD",
+        "side": "BUY",
+        "entry": 100,
+        "exit": 110,
+        "stop_loss": 95,
+        "take_profit": 110,
+        "pnl": 100,
+        "status": "CLOSED",
+        "reason": "TAKE PROFIT",
+        "open_time": "2026-01-01 10:30:00",
+        "close_time": "2026-01-01 12:00:00",
+        "duration": 5400,
+        "result": "WIN",
+        "risk_reward": 2.0,
+        "initial_stop_loss": 95,
+        "size": 1,
+        "regime": "TRENDING"
+    })
+
+    database.save_trade({
+        "symbol": "BTC-USD",
+        "side": "SELL",
+        "entry": 100,
+        "exit": 105,
+        "stop_loss": 105,
+        "take_profit": 90,
+        "pnl": -50,
+        "status": "CLOSED",
+        "reason": "STOP LOSS",
+        "open_time": "2026-01-01 15:45:00",
+        "close_time": "2026-01-01 16:30:00",
+        "duration": 2700,
+        "result": "LOSS",
+        "risk_reward": 1.5,
+        "initial_stop_loss": 105,
+        "size": 1,
+        "regime": "SIDEWAYS"
+    })
+
+    result = research.analyze(database)
+
+    # =====================================
+    # FASCIA ORARIA
+    # =====================================
+
+    assert "hours" in result
+
+    assert result["hours"]["10"]["trades"] == 1
+    assert result["hours"]["10"]["profit"] == 100
+    assert result["hours"]["10"]["wins"] == 1
+
+    assert result["hours"]["15"]["trades"] == 1
+    assert result["hours"]["15"]["profit"] == -50
+    assert result["hours"]["15"]["losses"] == 1
+
+
+if __name__ == "__main__":
+    test_market_research_hourly()
