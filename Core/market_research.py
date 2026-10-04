@@ -64,6 +64,9 @@ class MarketResearch:
             }
         )
 
+        durations = []
+        risk_rewards = []
+
         for trade in trades:
 
             symbol = trade[1]
@@ -71,6 +74,11 @@ class MarketResearch:
             pnl = float(trade[9])
             reason = trade[11]
             regime = trade[17]
+            duration = float(trade[14])
+            risk_reward = float(trade[16])
+
+            durations.append(duration)
+            risk_rewards.append(risk_reward)
 
             overview["trades"] += 1
             overview["profit"] += pnl
@@ -101,8 +109,30 @@ class MarketResearch:
             2
         )
 
+        duration_stats = {
+            "trades": len(durations),
+            "average": round(
+                sum(durations) / len(durations),
+                2
+            ) if durations else 0,
+            "minimum": min(durations) if durations else 0,
+            "maximum": max(durations) if durations else 0
+        }
+
+        risk_reward_stats = {
+            "trades": len(risk_rewards),
+            "average": round(
+                sum(risk_rewards) / len(risk_rewards),
+                2
+            ) if risk_rewards else 0,
+            "minimum": min(risk_rewards) if risk_rewards else 0,
+            "maximum": max(risk_rewards) if risk_rewards else 0
+        }
+
         return {
             "overview": overview,
+            "duration": duration_stats,
+            "risk_reward": risk_reward_stats,
             "symbols": dict(symbols),
             "sides": dict(sides),
             "reasons": dict(reasons),
