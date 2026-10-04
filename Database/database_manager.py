@@ -74,6 +74,7 @@ class DatabaseManager:
         self.connection.commit()
 
         self.migrate_schema_v6()
+        self.migrate_schema_v7()
 
     # =====================================
     # DATABASE SCHEMA V6
@@ -113,6 +114,33 @@ class DatabaseManager:
         self.connection.commit()
 
     # =====================================
+    # DATABASE SCHEMA V7
+    # =====================================
+
+    def migrate_schema_v7(self):
+
+        self.cursor.execute(
+            "PRAGMA table_info(trades)"
+        )
+
+        columns = {
+            row[1]
+            for row in self.cursor.fetchall()
+        }
+
+        if "regime" not in columns:
+
+            self.cursor.execute(
+                "ALTER TABLE trades ADD COLUMN regime TEXT"
+            )
+
+            Logger.info(
+                "Database Schema V7: aggiunta regime."
+            )
+
+        self.connection.commit()
+
+    # =====================================
     # SALVA
     # =====================================
 
@@ -139,13 +167,14 @@ class DatabaseManager:
                 close_time,
                 duration,
                 result,
-                risk_reward
+                risk_reward,
+                regime
 
             )
 
             VALUES(
 
-                ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
+                ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
 
             )
 
@@ -171,7 +200,12 @@ class DatabaseManager:
                 str(trade["close_time"]),
                 trade["duration"],
                 trade["result"],
-                trade["risk_reward"]
+                trade["risk_reward"],
+                (
+                    trade.get("regime", {}).get("regime")
+                    if isinstance(trade.get("regime"), dict)
+                    else trade.get("regime")
+                )
 
             )
 

@@ -645,7 +645,8 @@ class CoreSystem:
                         "close_time": report["close_time"],
                         "duration": duration,
                         "result": result,
-                        "risk_reward": rr
+                        "risk_reward": rr,
+                        "regime": closed.get("regime", {})
                     }
 
                     self.backtest_database.save_trade(trade)
