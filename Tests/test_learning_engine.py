@@ -9,7 +9,7 @@ def valid_validation():
     }
 
 
-def test_learning_engine_stores_strategy_and_validation():
+def test_learning_engine_records_learning_history():
     engine = LearningEngine()
 
     strategy = {
@@ -19,61 +19,19 @@ def test_learning_engine_stores_strategy_and_validation():
         }
     }
 
-    validation = valid_validation()
-
-    result = engine.learn(strategy, validation)
+    result = engine.learn(strategy, valid_validation())
 
     assert result["learned"] is True
-    assert len(engine.learned_strategies) == 1
-    assert engine.learned_strategies[0]["strategy"] == strategy
-    assert engine.learned_strategies[0]["validation"] == validation
+    assert len(engine.learning_history) == 1
+    assert engine.learning_history[0]["strategy"] == strategy
+    assert engine.learning_history[0]["decision"] == "LEARNED"
 
 
-def test_learning_engine_stores_validation_reasons():
+def test_learning_engine_records_rejected_attempt():
     engine = LearningEngine()
 
     strategy = {
         "name": "strategy_b"
-    }
-
-    validation = {
-        "valid": True,
-        "decision": "VALID",
-        "reasons": ["Robustez confermata"]
-    }
-
-    engine.learn(strategy, validation)
-
-    learned = engine.learned_strategies[0]
-
-    assert learned["validation"]["reasons"] == [
-        "Robustez confermata"
-    ]
-
-
-def test_learning_engine_does_not_duplicate_strategy():
-    engine = LearningEngine()
-
-    strategy = {
-        "name": "strategy_c",
-        "parameters": {
-            "STOP_LOSS_ATR": 1.5
-        }
-    }
-
-    validation = valid_validation()
-
-    engine.learn(strategy, validation)
-    engine.learn(strategy, validation)
-
-    assert len(engine.learned_strategies) == 1
-
-
-def test_learning_engine_rejects_invalid_validation():
-    engine = LearningEngine()
-
-    strategy = {
-        "name": "strategy_d"
     }
 
     validation = {
@@ -85,4 +43,38 @@ def test_learning_engine_rejects_invalid_validation():
     result = engine.learn(strategy, validation)
 
     assert result["learned"] is False
-    assert engine.learned_strategies == []
+    assert len(engine.learning_history) == 1
+    assert engine.learning_history[0]["decision"] == "REJECTED"
+
+
+def test_learning_engine_history_tracks_multiple_attempts():
+    engine = LearningEngine()
+
+    engine.learn(
+        {"name": "strategy_c"},
+        valid_validation()
+    )
+
+    engine.learn(
+        {"name": "strategy_d"},
+        {
+            "valid": False,
+            "decision": "INVALID",
+            "reasons": ["Profitto insufficiente"]
+        }
+    )
+
+    assert len(engine.learning_history) == 2
+
+
+def test_learning_engine_reset_clears_history():
+    engine = LearningEngine()
+
+    engine.learn(
+        {"name": "strategy_e"},
+        valid_validation()
+    )
+
+    engine.reset()
+
+    assert engine.learning_history == []

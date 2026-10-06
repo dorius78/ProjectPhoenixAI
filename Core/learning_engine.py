@@ -5,16 +5,17 @@ class LearningEngine:
     """
     PROJECT PHOENIX AI
     Learning Engine
-    E76.96
+    E76.97
 
     Approva e memorizza strategie già validate,
-    conservando anche il risultato della validazione.
+    conservando strategia, validazione e cronologia.
     Nessuna modifica autonoma dei parametri.
     Nessuna esecuzione ordini.
     """
 
     def __init__(self):
         self.learned_strategies = []
+        self.learning_history = []
 
         Logger.success("Learning Engine V1 inizializzato.")
 
@@ -53,11 +54,27 @@ class LearningEngine:
         approval = self.approve(strategy, validation)
 
         if not approval["approved"]:
-            return {
+            result = {
                 "learned": False,
                 "decision": "REJECTED",
                 "reasons": approval["reasons"]
             }
+
+            self.learning_history.append({
+                "strategy": (
+                    strategy.copy()
+                    if isinstance(strategy, dict)
+                    else strategy
+                ),
+                "validation": (
+                    validation.copy()
+                    if isinstance(validation, dict)
+                    else validation
+                ),
+                "decision": "REJECTED"
+            })
+
+            return result
 
         entry = {
             "strategy": strategy.copy(),
@@ -70,11 +87,20 @@ class LearningEngine:
         ):
             self.learned_strategies.append(entry)
 
-        return {
+        result = {
             "learned": True,
             "decision": "LEARNED",
             "reasons": []
         }
 
+        self.learning_history.append({
+            "strategy": strategy.copy(),
+            "validation": validation.copy(),
+            "decision": "LEARNED"
+        })
+
+        return result
+
     def reset(self):
         self.learned_strategies.clear()
+        self.learning_history.clear()
