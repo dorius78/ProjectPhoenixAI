@@ -5,14 +5,16 @@ class LearningEngine:
     """
     PROJECT PHOENIX AI
     Learning Engine
-    E76.94
+    E76.95
 
-    Primo livello: approvazione controllata delle strategie validate.
+    Approva e memorizza strategie già validate.
     Nessuna modifica autonoma dei parametri.
     Nessuna esecuzione ordini.
     """
 
     def __init__(self):
+        self.learned_strategies = []
+
         Logger.success("Learning Engine V1 inizializzato.")
 
     def approve(self, strategy, validation):
@@ -45,3 +47,25 @@ class LearningEngine:
             "decision": "APPROVED",
             "reasons": []
         }
+
+    def learn(self, strategy, validation):
+        approval = self.approve(strategy, validation)
+
+        if not approval["approved"]:
+            return {
+                "learned": False,
+                "decision": "REJECTED",
+                "reasons": approval["reasons"]
+            }
+
+        if strategy not in self.learned_strategies:
+            self.learned_strategies.append(strategy.copy())
+
+        return {
+            "learned": True,
+            "decision": "LEARNED",
+            "reasons": []
+        }
+
+    def reset(self):
+        self.learned_strategies.clear()

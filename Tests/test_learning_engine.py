@@ -1,26 +1,38 @@
 ﻿from Core.learning_engine import LearningEngine
 
 
-def test_learning_engine_approves_valid_strategy():
-    engine = LearningEngine()
-
-    validation = {
+def valid_validation():
+    return {
         "valid": True,
         "decision": "VALID",
         "reasons": []
     }
 
-    result = engine.approve(
-        {"name": "strategy_a"},
-        validation
-    )
 
-    assert result["approved"] is True
-    assert result["decision"] == "APPROVED"
-
-
-def test_learning_engine_rejects_invalid_strategy():
+def test_learning_engine_stores_approved_strategy():
     engine = LearningEngine()
+
+    strategy = {
+        "name": "strategy_a",
+        "parameters": {
+            "STOP_LOSS_ATR": 1.5
+        }
+    }
+
+    result = engine.learn(strategy, valid_validation())
+
+    assert result["learned"] is True
+    assert result["decision"] == "LEARNED"
+    assert len(engine.learned_strategies) == 1
+    assert engine.learned_strategies[0] == strategy
+
+
+def test_learning_engine_does_not_store_rejected_strategy():
+    engine = LearningEngine()
+
+    strategy = {
+        "name": "strategy_b"
+    }
 
     validation = {
         "valid": False,
@@ -28,45 +40,37 @@ def test_learning_engine_rejects_invalid_strategy():
         "reasons": ["net_profit insufficiente"]
     }
 
-    result = engine.approve(
-        {"name": "strategy_b"},
-        validation
-    )
+    result = engine.learn(strategy, validation)
 
-    assert result["approved"] is False
+    assert result["learned"] is False
     assert result["decision"] == "REJECTED"
+    assert engine.learned_strategies == []
 
 
-def test_learning_engine_does_not_approve_without_validation():
-    engine = LearningEngine()
-
-    result = engine.approve(
-        {"name": "strategy_c"},
-        None
-    )
-
-    assert result["approved"] is False
-    assert result["decision"] == "REJECTED"
-
-
-def test_learning_engine_does_not_modify_strategy():
+def test_learning_engine_does_not_duplicate_strategy():
     engine = LearningEngine()
 
     strategy = {
-        "name": "strategy_d",
+        "name": "strategy_c",
         "parameters": {
             "STOP_LOSS_ATR": 1.5
         }
     }
 
-    validation = {
-        "valid": True,
-        "decision": "VALID",
-        "reasons": []
+    engine.learn(strategy, valid_validation())
+    engine.learn(strategy, valid_validation())
+
+    assert len(engine.learned_strategies) == 1
+
+
+def test_learning_engine_reset_clears_learned_strategies():
+    engine = LearningEngine()
+
+    strategy = {
+        "name": "strategy_d"
     }
 
-    original = strategy.copy()
+    engine.learn(strategy, valid_validation())
+    engine.reset()
 
-    engine.approve(strategy, validation)
-
-    assert strategy == original
+    assert engine.learned_strategies == []
