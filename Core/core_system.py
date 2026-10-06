@@ -844,6 +844,14 @@ class CoreSystem:
             market_regime_analysis
         )
 
+    def get_learned_strategies(self):
+        """Restituisce le strategie apprese in sola lettura."""
+        return self.learning_engine.get_learned_strategies()
+
+    def get_learning_history(self):
+        """Restituisce la cronologia del Learning Engine in sola lettura."""
+        return self.learning_engine.get_learning_history()
+
     def validate_strategy_result(self, result, criteria):
         return self.strategy_validator.validate(
             result,
