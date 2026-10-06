@@ -9,48 +9,41 @@ def valid_validation():
     }
 
 
-def test_learning_engine_returns_learned_strategies():
+def test_learning_engine_returns_history():
     engine = LearningEngine()
 
-    strategy = {
-        "name": "strategy_a",
-        "parameters": {
-            "STOP_LOSS_ATR": 1.5
-        }
-    }
+    strategy = {"name": "strategy_a"}
 
     engine.learn(strategy, valid_validation())
 
-    result = engine.get_learned_strategies()
+    result = engine.get_learning_history()
 
     assert len(result) == 1
     assert result[0]["strategy"] == strategy
+    assert result[0]["decision"] == "LEARNED"
 
 
-def test_learning_engine_returns_empty_list_when_nothing_learned():
+def test_learning_engine_returns_empty_history_initially():
     engine = LearningEngine()
 
-    result = engine.get_learned_strategies()
-
-    assert result == []
+    assert engine.get_learning_history() == []
 
 
-def test_learning_engine_returns_copy_of_learned_strategies():
+def test_learning_engine_returns_history_copy():
     engine = LearningEngine()
 
-    strategy = {
-        "name": "strategy_b"
-    }
+    engine.learn(
+        {"name": "strategy_b"},
+        valid_validation()
+    )
 
-    engine.learn(strategy, valid_validation())
-
-    result = engine.get_learned_strategies()
+    result = engine.get_learning_history()
     result.clear()
 
-    assert len(engine.learned_strategies) == 1
+    assert len(engine.learning_history) == 1
 
 
-def test_learning_engine_does_not_return_rejected_strategies():
+def test_learning_engine_history_includes_rejected_attempts():
     engine = LearningEngine()
 
     engine.learn(
@@ -62,4 +55,7 @@ def test_learning_engine_does_not_return_rejected_strategies():
         }
     )
 
-    assert engine.get_learned_strategies() == []
+    result = engine.get_learning_history()
+
+    assert len(result) == 1
+    assert result[0]["decision"] == "REJECTED"

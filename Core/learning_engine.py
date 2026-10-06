@@ -112,6 +112,24 @@ class LearningEngine:
             for item in self.learned_strategies
         ]
 
+    def get_learning_history(self):
+        return [
+            {
+                "strategy": (
+                    item["strategy"].copy()
+                    if isinstance(item["strategy"], dict)
+                    else item["strategy"]
+                ),
+                "validation": (
+                    item["validation"].copy()
+                    if isinstance(item["validation"], dict)
+                    else item["validation"]
+                ),
+                "decision": item["decision"]
+            }
+            for item in self.learning_history
+        ]
+
     def reset(self):
         self.learned_strategies.clear()
         self.learning_history.clear()
