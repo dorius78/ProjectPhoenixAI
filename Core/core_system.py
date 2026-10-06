@@ -818,6 +818,12 @@ class CoreSystem:
     # STRATEGY DISCOVERY / AI OPTIMIZATION
     # =====================================
 
+    def validate_strategy_result(self, result, criteria):
+        return self.strategy_validator.validate(
+            result,
+            criteria
+        )
+
     def run_strategy_discovery(
         self,
         parameter_space,
