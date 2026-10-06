@@ -883,6 +883,41 @@ class CoreSystem:
 
         return validated
 
+    def learn_validated_strategies(self, validated_results):
+        """
+        E76.106 - Invia al Learning Engine solo strategie validate.
+        """
+        if not isinstance(validated_results, list):
+            return []
+
+        learned = []
+
+        for item in validated_results:
+            if not isinstance(item, dict):
+                continue
+
+            validation = item.get("validation", {})
+
+            if validation.get("valid") is not True:
+                continue
+
+            strategy = item.get("strategy", {})
+            result = item.get("result", {})
+
+            learning = self.learning_engine.learn(
+                strategy,
+                validation
+            )
+
+            learned.append({
+                "strategy": strategy,
+                "result": result,
+                "validation": validation,
+                "learning": learning
+            })
+
+        return learned
+
     def run_strategy_discovery(
         self,
         parameter_space,
