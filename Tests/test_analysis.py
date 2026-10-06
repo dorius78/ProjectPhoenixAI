@@ -103,3 +103,38 @@ if __name__ == "__main__":
 
 
 
+
+def test_supervisor_gate_blocks_conflicting_trade():
+
+    engine = AnalysisEngine()
+
+    engine.risk_manager.evaluate = lambda analysis, regime: {
+        "risk_level": "BASSO",
+        "risk_score": 100,
+        "allow_trade": True
+    }
+
+    engine.phoenix_brain.think = lambda analysis, risk, regime: {
+        "action": "BUY",
+        "score": 80,
+        "confidence": 80,
+        "strength": 80,
+        "risk": risk["risk_level"],
+        "bullish_score": 50,
+        "bearish_score": 40,
+        "net_advantage": 10,
+        "conflict": True,
+        "reasons": [],
+        "warnings": []
+    }
+
+    result = engine.analyze(
+        data=create_test_data(),
+        price=155,
+        symbol="BTC-USD",
+        account_balance=10000
+    )
+
+    assert result["supervision"]["allowed"] is False
+    assert result["signal"]["valid"] is False
+    assert result["trade"] is None

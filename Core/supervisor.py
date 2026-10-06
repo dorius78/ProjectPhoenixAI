@@ -124,5 +124,4 @@ class Supervisor:
                 "Nessun veto Supervisor"
             ]
         }
-`r`n
 
