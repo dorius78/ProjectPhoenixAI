@@ -18,6 +18,10 @@ from Core.backtest_engine import BacktestEngine
 from Core.strategy_discovery import StrategyDiscovery
 from Core.strategy_validator import StrategyValidator
 from Core.learning_engine import LearningEngine
+from Core.research_aggregator import ResearchAggregator
+from Core.market_regime_analysis import MarketRegimeAnalysis
+from Core.pattern_analysis import PatternAnalysis
+from Core.market_research import MarketResearch
 from Core.position_controller import PositionController
 from Core.portfolio_manager import PortfolioManager
 from Core.market_scanner import MarketScanner
@@ -62,6 +66,10 @@ class CoreSystem:
         self.strategy_discovery = StrategyDiscovery()
         self.strategy_validator = StrategyValidator()
         self.learning_engine = LearningEngine()
+        self.market_research = MarketResearch()
+        self.pattern_analysis = PatternAnalysis()
+        self.market_regime_analysis = MarketRegimeAnalysis()
+        self.research_aggregator = ResearchAggregator()
 
         self.live_database = DatabaseManager(
             LIVE_DATABASE
@@ -817,6 +825,24 @@ class CoreSystem:
     # =====================================
     # STRATEGY DISCOVERY / AI OPTIMIZATION
     # =====================================
+
+    def run_research(self):
+        """
+        E76.104 - Ricerca aggregata sui risultati del Backtest.
+        """
+        trades = self.backtest_database.load_trades()
+
+        market_research = self.market_research.analyze(
+            self.backtest_database
+        )
+        pattern_analysis = self.pattern_analysis.analyze(trades)
+        market_regime_analysis = self.market_regime_analysis.analyze(trades)
+
+        return self.research_aggregator.analyze(
+            market_research,
+            pattern_analysis,
+            market_regime_analysis
+        )
 
     def validate_strategy_result(self, result, criteria):
         return self.strategy_validator.validate(
