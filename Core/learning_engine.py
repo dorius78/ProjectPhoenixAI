@@ -5,10 +5,12 @@ class LearningEngine:
     """
     PROJECT PHOENIX AI
     Learning Engine
-    E76.97
+    E76.98
 
     Approva e memorizza strategie già validate,
     conservando strategia, validazione e cronologia.
+    Espone le strategie apprese senza permettere
+    modifiche dirette allo stato interno.
     Nessuna modifica autonoma dei parametri.
     Nessuna esecuzione ordini.
     """
@@ -100,6 +102,15 @@ class LearningEngine:
         })
 
         return result
+
+    def get_learned_strategies(self):
+        return [
+            {
+                "strategy": item["strategy"].copy(),
+                "validation": item["validation"].copy()
+            }
+            for item in self.learned_strategies
+        ]
 
     def reset(self):
         self.learned_strategies.clear()
