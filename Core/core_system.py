@@ -858,6 +858,31 @@ class CoreSystem:
             "learning": learning
         }
 
+    def validate_strategy_discovery_results(self, results, criteria):
+        """
+        E76.105 - Valida i risultati prodotti da Strategy Discovery.
+        """
+        if not isinstance(results, list):
+            return []
+
+        validated = []
+
+        for item in results:
+            if not isinstance(item, dict):
+                continue
+
+            strategy = item.get("strategy", {})
+            result = item.get("result", {})
+            validation = self.validate_strategy_result(result, criteria)
+
+            validated.append({
+                "strategy": strategy,
+                "result": result,
+                "validation": validation
+            })
+
+        return validated
+
     def run_strategy_discovery(
         self,
         parameter_space,
