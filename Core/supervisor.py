@@ -1,4 +1,4 @@
-"""
+﻿"""
 ========================================
 PROJECT PHOENIX AI
 Supervisor / Devil's Advocate
@@ -48,6 +48,17 @@ class Supervisor:
             }
 
         # =================================
+        # =================================
+        # DEVIL'S ADVOCATE - CONFLITTO
+        # =================================
+
+        if decision.get("conflict", False):
+
+            reasons.append(
+                "Conflitto tra segnali bullish e bearish"
+            )
+
+        # =================================
         # RISK
         # =================================
 
@@ -78,7 +89,7 @@ class Supervisor:
             )
 
         # =================================
-        # QUALITÀ DECISIONE
+        # QUALITÃ€ DECISIONE
         # =================================
 
         confidence = float(
@@ -113,4 +124,5 @@ class Supervisor:
                 "Nessun veto Supervisor"
             ]
         }
-        
+`r`n
+
