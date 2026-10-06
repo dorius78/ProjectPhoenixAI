@@ -685,6 +685,14 @@ class CoreSystem:
 
                             position = self.position_controller.get_position()
                             if position is not None:
+                                position["market_context"] = {
+                                    "analysis": result_analysis.get("analysis", {}),
+                                    "indicators": result_analysis.get("indicators", {}),
+                                    "risk": result_analysis.get("risk", {}),
+                                    "decision": result_analysis.get("decision", {}),
+                                    "signal": result_analysis.get("signal", {}),
+                                    "supervision": result_analysis.get("supervision", {})
+                                }
                                 position["regime"] = result_analysis.get("regime", {})
 
                             self.portfolio.add(
