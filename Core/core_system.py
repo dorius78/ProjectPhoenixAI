@@ -16,6 +16,8 @@ from Database.database_manager import DatabaseManager
 from Core.analysis_engine import AnalysisEngine
 from Core.backtest_engine import BacktestEngine
 from Core.strategy_discovery import StrategyDiscovery
+from Core.strategy_validator import StrategyValidator
+from Core.learning_engine import LearningEngine
 from Core.position_controller import PositionController
 from Core.portfolio_manager import PortfolioManager
 from Core.market_scanner import MarketScanner
@@ -58,6 +60,8 @@ class CoreSystem:
 
         self.backtest = BacktestEngine()
         self.strategy_discovery = StrategyDiscovery()
+        self.strategy_validator = StrategyValidator()
+        self.learning_engine = LearningEngine()
 
         self.live_database = DatabaseManager(
             LIVE_DATABASE
