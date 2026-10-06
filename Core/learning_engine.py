@@ -5,9 +5,10 @@ class LearningEngine:
     """
     PROJECT PHOENIX AI
     Learning Engine
-    E76.95
+    E76.96
 
-    Approva e memorizza strategie già validate.
+    Approva e memorizza strategie già validate,
+    conservando anche il risultato della validazione.
     Nessuna modifica autonoma dei parametri.
     Nessuna esecuzione ordini.
     """
@@ -58,8 +59,16 @@ class LearningEngine:
                 "reasons": approval["reasons"]
             }
 
-        if strategy not in self.learned_strategies:
-            self.learned_strategies.append(strategy.copy())
+        entry = {
+            "strategy": strategy.copy(),
+            "validation": validation.copy()
+        }
+
+        if not any(
+            item["strategy"] == strategy
+            for item in self.learned_strategies
+        ):
+            self.learned_strategies.append(entry)
 
         return {
             "learned": True,

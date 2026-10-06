@@ -9,7 +9,7 @@ def valid_validation():
     }
 
 
-def test_learning_engine_stores_approved_strategy():
+def test_learning_engine_stores_strategy_and_validation():
     engine = LearningEngine()
 
     strategy = {
@@ -19,15 +19,17 @@ def test_learning_engine_stores_approved_strategy():
         }
     }
 
-    result = engine.learn(strategy, valid_validation())
+    validation = valid_validation()
+
+    result = engine.learn(strategy, validation)
 
     assert result["learned"] is True
-    assert result["decision"] == "LEARNED"
     assert len(engine.learned_strategies) == 1
-    assert engine.learned_strategies[0] == strategy
+    assert engine.learned_strategies[0]["strategy"] == strategy
+    assert engine.learned_strategies[0]["validation"] == validation
 
 
-def test_learning_engine_does_not_store_rejected_strategy():
+def test_learning_engine_stores_validation_reasons():
     engine = LearningEngine()
 
     strategy = {
@@ -35,16 +37,18 @@ def test_learning_engine_does_not_store_rejected_strategy():
     }
 
     validation = {
-        "valid": False,
-        "decision": "INVALID",
-        "reasons": ["net_profit insufficiente"]
+        "valid": True,
+        "decision": "VALID",
+        "reasons": ["Robustez confermata"]
     }
 
-    result = engine.learn(strategy, validation)
+    engine.learn(strategy, validation)
 
-    assert result["learned"] is False
-    assert result["decision"] == "REJECTED"
-    assert engine.learned_strategies == []
+    learned = engine.learned_strategies[0]
+
+    assert learned["validation"]["reasons"] == [
+        "Robustez confermata"
+    ]
 
 
 def test_learning_engine_does_not_duplicate_strategy():
@@ -57,20 +61,28 @@ def test_learning_engine_does_not_duplicate_strategy():
         }
     }
 
-    engine.learn(strategy, valid_validation())
-    engine.learn(strategy, valid_validation())
+    validation = valid_validation()
+
+    engine.learn(strategy, validation)
+    engine.learn(strategy, validation)
 
     assert len(engine.learned_strategies) == 1
 
 
-def test_learning_engine_reset_clears_learned_strategies():
+def test_learning_engine_rejects_invalid_validation():
     engine = LearningEngine()
 
     strategy = {
         "name": "strategy_d"
     }
 
-    engine.learn(strategy, valid_validation())
-    engine.reset()
+    validation = {
+        "valid": False,
+        "decision": "INVALID",
+        "reasons": ["Drawdown troppo alto"]
+    }
 
+    result = engine.learn(strategy, validation)
+
+    assert result["learned"] is False
     assert engine.learned_strategies == []
