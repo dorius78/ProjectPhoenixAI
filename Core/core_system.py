@@ -926,6 +926,25 @@ class CoreSystem:
 
         return learned
 
+    def process_strategy_discovery_results(self, results, criteria):
+        """
+        E76.108 - Collega Strategy Discovery, Validation e Learning.
+        """
+        validated = self.validate_strategy_discovery_results(
+            results,
+            criteria
+        )
+
+        learned = self.learn_validated_strategies(
+            validated
+        )
+
+        return {
+            "results": results if isinstance(results, list) else [],
+            "validated": validated,
+            "learned": learned
+        }
+
     def run_strategy_discovery(
         self,
         parameter_space,
