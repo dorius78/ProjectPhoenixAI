@@ -447,19 +447,29 @@ class CoreSystem:
 
             server = str(
                 getattr(account, "server", "")
-            )
+            ).strip()
 
-            if "demo" not in server.lower():
+            import MetaTrader5 as mt5
 
+            trade_mode = getattr(account, "trade_mode", None)
+            demo_mode = getattr(mt5, "ACCOUNT_TRADE_MODE_DEMO", None)
+
+            if demo_mode is None or trade_mode != demo_mode:
                 Logger.warning(
-                    f"SERVER MT5 NON DEMO: {server}. "
-                    "TRADING BLOCCATO PER SICUREZZA."
+                    "CONTO MT5 NON VERIFICATO COME DEMO. "
+                    "TRADING BLOCCATO."
                 )
+                return
 
+            if server.casefold() != "tentrade-server":
+                Logger.warning(
+                    f"SERVER MT5 NON AUTORIZZATO: {server}. "
+                    "TRADING BLOCCATO."
+                )
                 return
 
             Logger.success(
-                f"MT5 DEMO verificato: {server}"
+                f"Conto MT5 DEMO verificato: server {server}"
             )
 
             demo_engine = LiveTradingEngine(
@@ -830,7 +840,28 @@ class CoreSystem:
         """
         E76.104 - Ricerca aggregata sui risultati del Backtest.
         """
-        trades = self.backtest_database.load_trades()
+        # SQLite restituisce normalmente tuple. PatternAnalysis e
+        # MarketRegimeAnalysis, invece, elaborano dizionari: convertiamo
+        # le righe usando i nomi effettivi delle colonne del database.
+        self.backtest_database.cursor.execute(
+            "SELECT * FROM trades LIMIT 0"
+        )
+        columns = [
+            description[0]
+            for description in self.backtest_database.cursor.description
+        ]
+
+        raw_trades = self.backtest_database.load_trades()
+        trades = []
+
+        for trade in raw_trades:
+            if isinstance(trade, dict):
+                trades.append(trade)
+            elif (
+                isinstance(trade, (tuple, list))
+                and len(trade) == len(columns)
+            ):
+                trades.append(dict(zip(columns, trade)))
 
         market_research = self.market_research.analyze(
             self.backtest_database

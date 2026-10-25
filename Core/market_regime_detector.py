@@ -1,4 +1,4 @@
-from Logs.logger import Logger
+﻿from Logs.logger import Logger
 
 
 class MarketRegimeDetector:
@@ -11,8 +11,8 @@ class MarketRegimeDetector:
         atr = float(indicators.get("atr", 0.0) or 0.0)
         adx = float(indicators.get("adx", 0.0) or 0.0)
 
-        upper = float(indicators.get("bollinger_upper", 0.0) or 0.0)
-        lower = float(indicators.get("bollinger_lower", 0.0) or 0.0)
+        upper = float(indicators.get("bb_upper", indicators.get("bollinger_upper", 0.0)) or 0.0)
+        lower = float(indicators.get("bb_lower", indicators.get("bollinger_lower", 0.0)) or 0.0)
         price = float(
             indicators.get("price",
             indicators.get("close", 0.0)) or 0.0
@@ -52,3 +52,4 @@ class MarketRegimeDetector:
             "volatility_ratio": round(volatility_ratio, 6),
             "bollinger_width": width
         }
+

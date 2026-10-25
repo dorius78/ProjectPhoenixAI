@@ -1085,6 +1085,32 @@ class LiveTradingEngine:
             return False
 
         # =================================
+        # MT5 TICKET SAFETY GUARD
+        # =================================
+        bridge = getattr(getattr(self, "execution", None), "mt5", None)
+        if bridge is not None:
+            mt5_result = order.get("mt5", {})
+            if not isinstance(mt5_result, dict):
+                mt5_result = {}
+
+            raw_ticket = mt5_result.get(
+                "position_ticket",
+                mt5_result.get("mt5_ticket", order.get("position_ticket", 0))
+            )
+            try:
+                ticket = int(raw_ticket or 0)
+            except (TypeError, ValueError, OverflowError):
+                ticket = 0
+
+            if ticket <= 0:
+                Logger.error(
+                    "MT5 ha segnalato un ordine senza ticket posizione "
+                    "verificato. Registrazione Phoenix annullata; "
+                    "serve riconciliazione con MT5."
+                )
+                return False
+
+        # =================================
         # POSITION CONTROLLER
         # =================================
 
@@ -1149,34 +1175,25 @@ class LiveTradingEngine:
             mt5_result = {}
 
         position["mt5_ticket"] = int(
-            mt5_result.get(
-                "position_ticket",
-                0
-            )
-            or 0
+            mt5_result.get("position_ticket", mt5_result.get("mt5_ticket", 0)) or 0
         )
-
         position["mt5_order_ticket"] = int(
             mt5_result.get(
                 "order_ticket",
-                0
-            )
-            or 0
+                mt5_result.get("mt5_order_ticket", order.get("order_ticket", 0))
+            ) or 0
         )
-
         position["mt5_deal_ticket"] = int(
             mt5_result.get(
                 "deal_ticket",
-                0
-            )
-            or 0
+                mt5_result.get("mt5_deal_ticket", order.get("deal", 0))
+            ) or 0
         )
-
         position["mt5_symbol"] = str(
-            order.get(
-                "symbol",
-                ""
-            )
+            mt5_result.get("mt5_symbol", order.get("symbol", "")) or ""
+        )
+        position["mt5_volume"] = float(
+            mt5_result.get("mt5_volume", order.get("mt5_volume", 0.0)) or 0.0
         )
 
         # =================================

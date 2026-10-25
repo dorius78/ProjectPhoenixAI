@@ -333,3 +333,86 @@ def test_market_research_hourly():
 
 if __name__ == "__main__":
     test_market_research_hourly()
+
+def test_market_research_historical_schema_column_order():
+    import sqlite3
+    from Core.market_research import MarketResearch
+
+    class HistoricalSchemaDatabase:
+        def __init__(self):
+            self.connection = sqlite3.connect(":memory:")
+            self.cursor = self.connection.cursor()
+
+            self.cursor.execute("""
+                CREATE TABLE trades (
+                    id INTEGER PRIMARY KEY,
+                    symbol TEXT,
+                    side TEXT,
+                    entry REAL,
+                    exit REAL,
+                    stop_loss REAL,
+                    take_profit REAL,
+                    pnl REAL,
+                    status TEXT,
+                    reason TEXT,
+                    open_time TEXT,
+                    close_time TEXT,
+                    duration REAL,
+                    result TEXT,
+                    risk_reward REAL,
+                    initial_stop_loss REAL,
+                    size REAL,
+                    regime TEXT
+                )
+            """)
+
+            self.cursor.executemany("""
+                INSERT INTO trades VALUES (
+                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                )
+            """, [
+                (
+                    1, "BTC-USD", "BUY", 100, 110, 95, 110,
+                    125, "CLOSED", "TAKE PROFIT",
+                    "2026-01-01 10:00:00", "2026-01-01 12:00:00",
+                    7200, "WIN", 2.5, 95, 1, "TRENDING"
+                ),
+                (
+                    2, "BTC-USD", "SELL", 100, 105, 105, 90,
+                    -25, "CLOSED", "STOP LOSS",
+                    "2026-01-02 15:00:00", "2026-01-02 16:00:00",
+                    3600, "LOSS", 1.5, 105, 1, None
+                )
+            ])
+            self.connection.commit()
+
+        def load_trades(self):
+            self.cursor.execute("SELECT * FROM trades ORDER BY id DESC")
+            return self.cursor.fetchall()
+
+        def close(self):
+            self.connection.close()
+
+    database = HistoricalSchemaDatabase()
+
+    try:
+        result = MarketResearch().analyze(database)
+
+        assert result["overview"]["trades"] == 2
+        assert result["overview"]["profit"] == 100
+
+        assert result["duration"]["average"] == 5400
+        assert result["risk_reward"]["average"] == 2.0
+
+        assert result["reasons"]["TAKE PROFIT"]["profit"] == 125
+        assert result["reasons"]["STOP LOSS"]["profit"] == -25
+
+        assert result["hours"]["10"]["profit"] == 125
+        assert result["hours"]["15"]["profit"] == -25
+
+        assert result["regimes"]["TRENDING"]["profit"] == 125
+        assert None not in result["regimes"]
+        assert "NONE" not in result["regimes"]
+
+    finally:
+        database.close()

@@ -23,6 +23,10 @@ VERSION = "0.0.1"
 
 MODE = "DEMO"          # DEMO / LIVE
 
+# Abilitazione esplicita degli ordini MT5 sul solo conto DEMO.
+# Lasciare False finch? tutti i controlli non sono verificati.
+MT5_DEMO_TRADING_ENABLED = False
+
 # ======================================
 # MERCATO
 # ======================================

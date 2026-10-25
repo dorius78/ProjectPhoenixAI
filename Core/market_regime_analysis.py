@@ -40,18 +40,15 @@ class MarketRegimeAnalysis:
             if not isinstance(trade, dict):
                 continue
 
-            regime = trade.get(
-                "regime",
-                "UNKNOWN"
-            )
+            regime = trade.get("regime")
 
             if isinstance(regime, dict):
-                regime = regime.get(
-                    "regime",
-                    "UNKNOWN"
-                )
+                regime = regime.get("regime")
 
-            regime = str(regime).upper()
+            if not isinstance(regime, str) or not regime.strip():
+                continue
+
+            regime = regime.strip().upper()
 
             pnl = float(
                 trade.get("pnl", 0.0)

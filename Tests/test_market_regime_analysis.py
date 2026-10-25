@@ -52,3 +52,30 @@ def test_market_regime_analysis():
 
     assert result["best_regime"] == "TRENDING"
     assert result["worst_regime"] == "SIDEWAYS"
+
+def test_missing_regime_is_not_classified_as_none():
+    engine = MarketRegimeAnalysis()
+    result = engine.analyze([{"regime": None, "pnl": 10}])
+
+    assert "NONE" not in result["regimes"]
+
+
+def test_absent_regime_is_not_classified_as_none():
+    engine = MarketRegimeAnalysis()
+    result = engine.analyze([{"pnl": 10}])
+
+    assert "NONE" not in result["regimes"]
+
+
+def test_empty_string_regime_is_not_classified_as_valid_regime():
+    engine = MarketRegimeAnalysis()
+    result = engine.analyze([{"regime": "", "pnl": 10}])
+
+    assert "" not in result["regimes"]
+
+
+def test_empty_dict_regime_is_not_classified_as_none():
+    engine = MarketRegimeAnalysis()
+    result = engine.analyze([{"regime": {}, "pnl": 10}])
+
+    assert "NONE" not in result["regimes"]

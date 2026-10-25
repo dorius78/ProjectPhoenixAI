@@ -25,7 +25,7 @@ IMPORTANTE:
 from datetime import datetime
 
 from Logs.logger import Logger
-from Config.settings import MODE
+from Config.settings import MODE, MT5_DEMO_TRADING_ENABLED
 
 try:
 
@@ -73,6 +73,24 @@ class MT5Broker:
     # CONNESSIONE
     # =====================================
 
+    def _is_authorized_demo_account(self):
+        """Autorizza esclusivamente il conto DEMO sul server configurato."""
+        if str(MODE).upper() != "DEMO":
+            return False
+
+        account = mt5.account_info()
+        if account is None:
+            return False
+
+        if str(getattr(account, "server", "")) != str(self.server):
+            return False
+
+        demo_mode = getattr(mt5, "ACCOUNT_TRADE_MODE_DEMO", None)
+        if demo_mode is None:
+            return False
+
+        return getattr(account, "trade_mode", None) == demo_mode
+
     def connect(self):
 
         kwargs = {}
@@ -111,12 +129,19 @@ class MT5Broker:
 
             return False
 
+        if not self._is_authorized_demo_account():
+            Logger.error(
+                "Connessione operativa rifiutata: "
+                "server o tipo di conto non autorizzato per DEMO."
+            )
+            mt5.shutdown()
+            self.connected = False
+            return False
+
         self.connected = True
 
         Logger.success(
-            f"MT5 connesso: conto {account.login} su "
-            f"{account.server} | Saldo: {account.balance} "
-            f"{account.currency}"
+            "Connessione MT5 verificata: conto DEMO sul server previsto."
         )
 
         return True
@@ -164,31 +189,108 @@ class MT5Broker:
 
     def _to_volume(self, mt5_symbol, size):
 
+        import math
+        from decimal import Decimal
+
         info = mt5.symbol_info(mt5_symbol)
 
         if info is None:
-
-            Logger.warning(
-                f"Simbolo {mt5_symbol} non trovato su MT5."
-            )
-
+            Logger.warning(f"Simbolo {mt5_symbol} non trovato su MT5.")
             return None
 
-        if not info.visible:
+        if not info.visible and not mt5.symbol_select(mt5_symbol, True):
+            Logger.warning(f"Impossibile rendere visibile {mt5_symbol}.")
+            return None
 
-            mt5.symbol_select(mt5_symbol, True)
+        try:
+            size = float(size)
+            contract_size = float(info.trade_contract_size or 0)
+            step = float(info.volume_step or 0)
+            minimum = float(info.volume_min or 0)
+            maximum = float(info.volume_max or 0)
 
-        contract_size = info.trade_contract_size or 1.0
+            if (not math.isfinite(size) or size <= 0
+                    or contract_size <= 0 or step <= 0
+                    or minimum <= 0 or maximum < minimum):
+                return None
 
-        volume = float(size) / float(contract_size)
+            requested = size / contract_size
 
-        step = info.volume_step or 0.01
+            # Mai aumentare il volume per raggiungere il minimo MT5.
+            steps = math.floor((requested + 1e-12) / step)
+            volume = float(Decimal(str(steps)) * Decimal(str(step)))
 
-        volume = round(volume / step) * step
+            if volume < minimum or volume > maximum:
+                Logger.warning(
+                    f"Volume rifiutato per {mt5_symbol}: "
+                    f"calcolato {volume}, minimo {minimum}, massimo {maximum}."
+                )
+                return None
 
-        volume = max(info.volume_min, min(volume, info.volume_max))
+            return volume
 
-        return round(volume, 2)
+        except (TypeError, ValueError, OverflowError, ArithmeticError) as exc:
+            Logger.warning(f"Calcolo volume non valido: {exc}")
+            return None
+
+    def _validate_order_risk(self, symbol, side, volume, entry, stop_loss):
+
+        import math
+        from Config.settings import MAX_RISK
+
+        account = mt5.account_info()
+        if account is None:
+            return False, "Impossibile leggere il conto MT5."
+
+        try:
+            balance = float(account.balance)
+            risk_percent = float(MAX_RISK)
+            volume = float(volume)
+            entry = float(entry)
+            stop_loss = float(stop_loss)
+
+            values = (balance, risk_percent, volume, entry, stop_loss)
+            if not all(math.isfinite(value) for value in values):
+                return False, "Dati non finiti nel controllo rischio."
+
+            if balance <= 0 or risk_percent <= 0 or volume <= 0:
+                return False, "Saldo, rischio o volume non validi."
+
+            side = str(side).upper()
+            if side == "BUY":
+                order_type = mt5.ORDER_TYPE_BUY
+                if stop_loss >= entry:
+                    return False, "Stop-loss BUY non valido."
+            elif side == "SELL":
+                order_type = mt5.ORDER_TYPE_SELL
+                if stop_loss <= entry:
+                    return False, "Stop-loss SELL non valido."
+            else:
+                return False, "Direzione ordine non valida."
+
+            estimated_pnl = mt5.order_calc_profit(
+                order_type, symbol, volume, entry, stop_loss
+            )
+            if estimated_pnl is None or not math.isfinite(float(estimated_pnl)):
+                return False, "MT5 non ha potuto stimare la perdita allo stop-loss."
+
+            estimated_loss = abs(float(estimated_pnl))
+            risk_limit = balance * risk_percent / 100.0
+
+            if estimated_loss > risk_limit + 1e-8:
+                return False, (
+                    f"Rischio stimato {estimated_loss:.2f} supera "
+                    f"il limite {risk_limit:.2f} "
+                    f"({risk_percent:.2f}% del saldo)."
+                )
+
+            return True, (
+                f"Rischio stimato {estimated_loss:.2f}; "
+                f"limite {risk_limit:.2f}."
+            )
+
+        except (TypeError, ValueError, ArithmeticError) as exc:
+            return False, f"Errore nel controllo rischio: {exc}"
 
 
     # =====================================
@@ -255,6 +357,54 @@ class MT5Broker:
             result.append(position)
 
         return result
+
+    def _resolve_position_ticket(self, deal_ticket, symbol):
+        """Resolve a position ticket from the executed deal; never use order ticket as fallback."""
+        try:
+            deal_ticket = int(deal_ticket or 0)
+        except (TypeError, ValueError, OverflowError):
+            return 0
+        if deal_ticket <= 0:
+            return 0
+        history_get = getattr(mt5, "history_deals_get", None)
+        positions_get = getattr(mt5, "positions_get", None)
+        if not callable(history_get) or not callable(positions_get):
+            return 0
+        try:
+            deals = history_get(ticket=deal_ticket)
+            positions = positions_get()
+        except Exception as error:
+            Logger.warning(f"Verifica ticket posizione MT5 fallita: {error}")
+            return 0
+        for deal in deals or ():
+            try:
+                if int(getattr(deal, "ticket", 0) or 0) != deal_ticket:
+                    continue
+                if int(getattr(deal, "magic", 0) or 0) != int(self.magic):
+                    continue
+                if str(getattr(deal, "symbol", "")) != str(symbol):
+                    continue
+                position_id = int(getattr(deal, "position_id", 0) or 0)
+            except (TypeError, ValueError, OverflowError):
+                continue
+            if position_id <= 0:
+                continue
+            matches = []
+            for pos in positions or ():
+                try:
+                    if int(getattr(pos, "magic", 0) or 0) != int(self.magic):
+                        continue
+                    if str(getattr(pos, "symbol", "")) != str(symbol):
+                        continue
+                    ticket = int(getattr(pos, "ticket", 0) or 0)
+                    identifier = int(getattr(pos, "identifier", 0) or 0)
+                    if ticket > 0 and (ticket == position_id or identifier == position_id):
+                        matches.append(ticket)
+                except (TypeError, ValueError, OverflowError):
+                    continue
+            matches = sorted(set(matches))
+            return matches[0] if len(matches) == 1 else 0
+        return 0
 
     # =====================================
     # APERTURA ORDINE
@@ -438,6 +588,26 @@ class MT5Broker:
 
         price = tick.ask if side == "BUY" else tick.bid
 
+        risk_ok, risk_message = self._validate_order_risk(
+            symbol=symbol,
+            side=side,
+            volume=volume,
+            entry=price,
+            stop_loss=float(trade["stop_loss"]),
+        )
+
+        if not risk_ok:
+            Logger.warning("MT5: ordine rifiutato dal controllo rischio. " + risk_message)
+            return {
+                "success": False,
+                "executed": False,
+                "dry_run": False,
+                "reason": risk_message,
+            }
+
+        Logger.info("MT5 controllo rischio superato: " + risk_message)
+
+
         request = {
             "action": mt5.TRADE_ACTION_DEAL,
             "symbol": symbol,
@@ -492,6 +662,14 @@ class MT5Broker:
             f"{volume} lotti @ {result.price}"
         )
 
+        order_ticket = int(getattr(result, "order", 0) or 0)
+        deal_ticket = int(getattr(result, "deal", 0) or 0)
+        position_ticket = self._resolve_position_ticket(deal_ticket, symbol)
+        if position_ticket <= 0:
+            Logger.warning(
+                "Ordine eseguito, ma ticket posizione non verificato; "
+                "il ticket ordine non verr?? usato come sostituto."
+            )
         return {
             "success": True,
             "symbol": trade["symbol"],
@@ -500,7 +678,12 @@ class MT5Broker:
             "stop_loss": float(trade["stop_loss"]),
             "take_profit": float(trade["take_profit"]),
             "size": trade.get("size", 1.0),
-            "mt5_ticket": result.order,
+            "position_ticket": position_ticket,
+            "order_ticket": order_ticket,
+            "deal_ticket": deal_ticket,
+            "mt5_ticket": position_ticket,
+            "mt5_order_ticket": order_ticket,
+            "mt5_deal_ticket": deal_ticket,
             "mt5_symbol": symbol,
             "mt5_volume": volume
         }
@@ -584,15 +767,123 @@ class MT5Broker:
                 "close_time": closed_position.get("close_time") or datetime.now()
             }
 
-        position = positions[0]
+        # Chiusura sicura: usare esclusivamente il ticket Phoenix.
+        requested_ticket = closed_position.get("mt5_ticket")
+
+        if requested_ticket is None:
+            Logger.warning(
+                "Chiusura MT5 annullata: ticket Phoenix mancante."
+            )
+            return {
+                "success": False,
+                "executed": False,
+                "reason": "Ticket MT5 Phoenix mancante",
+                "mt5_symbol": mt5_symbol,
+            }
+
+        try:
+            requested_ticket = int(requested_ticket)
+        except (TypeError, ValueError, OverflowError):
+            Logger.warning(
+                "Chiusura MT5 annullata: ticket Phoenix non valido."
+            )
+            return {
+                "success": False,
+                "executed": False,
+                "reason": "Ticket MT5 Phoenix non valido",
+                "mt5_symbol": mt5_symbol,
+            }
+
+        matching_positions = [
+            candidate
+            for candidate in positions
+            if int(getattr(candidate, "ticket", 0) or 0)
+            == requested_ticket
+        ]
+
+        if len(matching_positions) != 1:
+            Logger.warning(
+                "Chiusura MT5 annullata: il ticket Phoenix "
+                f"#{requested_ticket} non identifica una posizione "
+                f"univoca su {mt5_symbol}."
+            )
+            return {
+                "success": False,
+                "executed": False,
+                "reason": "Posizione MT5 non corrispondente al ticket",
+                "mt5_ticket": requested_ticket,
+                "mt5_symbol": mt5_symbol,
+            }
+
+        position = matching_positions[0]
+
+        position_magic = int(
+            getattr(position, "magic", 0) or 0
+        )
+
+        if position_magic != self.magic:
+            Logger.warning(
+                "Chiusura MT5 annullata: magic number non "
+                f"corrispondente per il ticket #{requested_ticket}."
+            )
+            return {
+                "success": False,
+                "executed": False,
+                "reason": "Magic number non corrispondente",
+                "mt5_ticket": requested_ticket,
+                "mt5_symbol": mt5_symbol,
+            }
+
+        if getattr(position, "symbol", None) != mt5_symbol:
+            Logger.warning(
+                "Chiusura MT5 annullata: simbolo non corrispondente "
+                f"per il ticket #{requested_ticket}."
+            )
+            return {
+                "success": False,
+                "executed": False,
+                "reason": "Simbolo MT5 non corrispondente",
+                "mt5_ticket": requested_ticket,
+                "mt5_symbol": mt5_symbol,
+            }
 
         tick = mt5.symbol_info_tick(mt5_symbol)
+
+        if tick is None:
+            Logger.warning(
+                f"Chiusura MT5 bloccata: tick non disponibile per {mt5_symbol}."
+            )
+            return {
+                "success": False,
+                "executed": False,
+                "reason": "Prezzo MT5 non disponibile",
+                "mt5_ticket": requested_ticket,
+                "mt5_symbol": mt5_symbol,
+            }
 
         is_buy = position.type == mt5.ORDER_TYPE_BUY
 
         close_type = mt5.ORDER_TYPE_SELL if is_buy else mt5.ORDER_TYPE_BUY
 
         price = tick.bid if is_buy else tick.ask
+
+        try:
+            price = float(price)
+        except (TypeError, ValueError, OverflowError):
+            price = 0.0
+
+        import math
+        if not math.isfinite(price) or price <= 0:
+            Logger.warning(
+                f"Chiusura MT5 bloccata: prezzo non valido per {mt5_symbol}."
+            )
+            return {
+                "success": False,
+                "executed": False,
+                "reason": "Prezzo MT5 non valido",
+                "mt5_ticket": requested_ticket,
+                "mt5_symbol": mt5_symbol,
+            }
 
         request = {
             "action": mt5.TRADE_ACTION_DEAL,
