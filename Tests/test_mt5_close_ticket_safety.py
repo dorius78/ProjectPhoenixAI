@@ -120,3 +120,26 @@ def test_close_rejects_symbol_mismatch(monkeypatch):
     assert fake.sent_requests == []
     assert result is not None
     assert result.get("success") is False
+
+def test_close_is_blocked_in_demo_mode(monkeypatch):
+    broker, fake = make_broker(monkeypatch, [])
+    monkeypatch.setattr(broker_module, "MODE", "DEMO")
+
+    result = broker.close(closed_position(222))
+
+    assert result["success"] is False
+    assert result["executed"] is False
+    assert result["dry_run"] is True
+    assert fake.sent_requests == []
+
+def test_execute_is_blocked_in_demo_mode(monkeypatch):
+    broker, fake = make_broker(monkeypatch, [])
+    monkeypatch.setattr(broker_module, "MODE", "DEMO")
+
+    result = broker.execute({})
+
+    assert result["success"] is False
+    assert result["executed"] is False
+    assert result["dry_run"] is True
+    assert "DEMO SAFETY GATE" in result["reason"]
+    assert fake.sent_requests == []
